@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAVAGE BIDE - Administration & Gestion des Tarifs</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS Personnalisé (Thème Bleu Marine, Bleu Ciel & Blanc) -->
+    <link rel="stylesheet" href="admin.css">
+
+    <!-- Module d'Authentification & Garde de Sécurité -->
+    <script src="auth.js"></script>
+    <script>
+        // Contrôle d'accès strict au rôle Administrateur
+        checkPageAccess('admin');
+    </script>
+</head>
+
+<body>
+
+<!-- =========================================================
+     TOP HEADER NAVBAR (BOOTSTRAP 5 DASHBOARD HEADER)
+========================================================= -->
+<header class="navbar sticky-top navbar-bide flex-md-nowrap p-0 shadow-sm">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 d-flex align-items-center" href="#overview">
+        <img src="logo.jpg" alt="Logo Lavage BIDE" class="navbar-logo me-2">
+        <span class="fw-bold tracking-tight">LAVAGE BIDE</span>
+        <span class="badge bg-light text-dark ms-2 fs-7 fw-semibold">Admin</span>
+    </a>
+
+    <!-- BOUTON MENU MOBILE TOGGLE -->
+    <ul class="navbar-nav flex-row d-md-none">
+        <li class="nav-item text-nowrap">
+            <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+        </li>
+    </ul>
+
+    <!-- BARRE DE RECHERCHE RAPIDE CENTRALE -->
+    <div id="navbarSearch" class="navbar-search w-100 px-3 d-none d-md-block">
+        <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white border-0 text-muted ps-3">
+                <i class="bi bi-search"></i>
+            </span>
+            <input class="form-control bg-white border-0 rounded-end-pill py-2" type="text" id="adminQuickSearch" placeholder="Rechercher une transaction, plaque, ticket..." aria-label="Recherche">
+        </div>
+    </div>
+
+    <!-- PROFIL UTILISATEUR & ACTIONS RAPIDES -->
+    <div class="d-none d-md-flex align-items-center gap-2 px-3 text-nowrap">
+        <span class="badge bg-light text-dark px-3 py-2 border d-inline-flex align-items-center gap-2">
+            <i class="bi bi-shield-lock-fill text-primary"></i>
+            <span id="currentUserName" class="fw-semibold">Directeur Général</span>
+        </span>
+        <button class="btn btn-sm btn-outline-light d-flex align-items-center btn-logout" id="logoutBtn" title="Se déconnecter">
+            <i class="bi bi-box-arrow-right me-1"></i> Déconnexion
+        </button>
+    </div>
+</header>
+
+<!-- =========================================================
+     ALERTES NOTIFICATIONS FLOTTANTES
+========================================================= -->
+<div id="alertContainer" class="container-fluid position-fixed top-0 start-50 translate-middle-x alert-container" style="z-index: 9999; max-width: 600px; padding-top: 15px;"></div>
+
+<!-- =========================================================
+     CONTENEUR PRINCIPAL DU DASHBOARD
+========================================================= -->
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- =====================================================
+             SIDEBAR DE NAVIGATION GAUCHE (BOOTSTRAP OFFCANVAS)
+        ====================================================== -->
+        <div class="sidebar border-end col-md-3 col-lg-2 p-0 bg-white">
+            <div class="offcanvas-md offcanvas-start bg-white" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                
+                <div class="offcanvas-header border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="logo.jpg" alt="Logo BIDE" class="navbar-logo">
+                        <h5 class="offcanvas-title fw-bold text-navy mb-0" id="sidebarMenuLabel">LAVAGE BIDE</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Fermer"></button>
+                </div>
+
+                <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                    
+                    <!-- MENU PRINCIPAL -->
+                    <ul class="nav flex-column px-2">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#overview">
+                                <i class="bi bi-speedometer2"></i>
+                                <span>Tableau de Bord</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#tarifs">
+                                <i class="bi bi-tags-fill"></i>
+                                <span>Tarifs par Roues</span>
+                                <span class="badge bg-primary-subtle text-primary ms-auto">9 Types</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#transactions">
+                                <i class="bi bi-receipt"></i>
+                                <span>Transactions & Activité</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#feedbacks">
+                                <i class="bi bi-chat-heart-fill"></i>
+                                <span>Avis & Feedbacks</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#backup">
+                                <i class="bi bi-database-check"></i>
+                                <span>Sauvegarde Système</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- SECTION RAPPORTS & ANALYSES -->
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-uppercase small text-muted fw-bold">
+                        <span>Rapports & Vues</span>
+                        <i class="bi bi-graph-up-arrow text-primary"></i>
+                    </h6>
+
+                    <ul class="nav flex-column px-2 mb-auto">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#analyticsSection" onclick="filterChartPeriod('today')">
+                                <i class="bi bi-clock-history"></i>
+                                <span>Recettes du Jour</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#analyticsSection" onclick="filterChartPeriod('week')">
+                                <i class="bi bi-calendar-week"></i>
+                                <span>Bilan Hebdomadaire</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#tarifs">
+                                <i class="bi bi-car-front-fill"></i>
+                                <span>Catégories par Roues</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <hr class="my-3 border-secondary border-opacity-25 mx-3">
+
+                    <!-- PROFIL ET SESSION (FOOTER SIDEBAR) -->
+                    <div class="px-3 pb-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-person-circle fs-4 text-primary"></i>
+                                <div>
+                                    <div class="fw-bold text-dark small auth-user-name">Directeur Général</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Session Admin Active</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-1 btn-logout">
+                                <i class="bi bi-box-arrow-right"></i> Déconnexion
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             ZONE DE CONTENU PRINCIPALE (MAIN DASHBOARD)
+        ====================================================== -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-3" id="overview">
+
+            <!-- BARRE D'ACTION ET TITRE SUPÉRIEUR DU DASHBOARD -->
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom">
+                <div>
+                    <h1 class="h3 fw-bold text-navy mb-0 d-flex align-items-center gap-2">
+                        <i class="bi bi-speedometer2 text-primary"></i>
+                        Tableau de Bord Administrateur
+                    </h1>
+                    <small class="text-muted">Supervision globale, gestion tarifaire des engins par roues et flux de trésorerie.</small>
+                </div>
+                
+                <div class="btn-toolbar mb-2 mb-md-0 gap-2 align-items-center mt-2 mt-md-0">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="exportReportBtn" onclick="exportQuickSummaryReport()">
+                            <i class="bi bi-file-earmark-arrow-down me-1"></i> Exporter Rapport
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="loadAdminStats()">
+                            <i class="bi bi-arrow-clockwise me-1"></i> Actualiser
+                        </button>
+                    </div>
+                    <select class="form-select form-select-sm w-auto border-secondary-subtle" id="statsPeriodSelect" onchange="filterChartPeriod(this.value)">
+                        <option value="today">Aujourd'hui</option>
+                        <option value="week" selected>Cette semaine</option>
+                        <option value="month">Ce mois</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- =====================================================
+                 4 CARTES KPI STATISTIQUES (RESPONSIVE GRID)
+            ====================================================== -->
+            <div class="row g-3 mb-4">
+                
+                <!-- RECETTES DU JOUR -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card stat-kpi-card border-0 shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-muted small fw-semibold text-uppercase">Recettes Jour</span>
+                                <div class="stat-icon-wrap bg-primary-subtle text-primary">
+                                    <i class="bi bi-cash-stack"></i>
+                                </div>
+                            </div>
+                            <h3 class="fw-bold text-navy mb-1" id="statTodayRevenue">0 FCFA</h3>
+                            <div class="small text-success d-flex align-items-center gap-1">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                <span id="statRevenueSub">Synchronisé avec Caisse</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOTAL VÉHICULES LAVÉS -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card stat-kpi-card border-0 shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-muted small fw-semibold text-uppercase">Véhicules Lavés</span>
+                                <div class="stat-icon-wrap bg-info-subtle text-info">
+                                    <i class="bi bi-car-front-fill"></i>
+                                </div>
+                            </div>
+                            <h3 class="fw-bold text-navy mb-1" id="statTodayVehicles">0</h3>
+                            <div class="small text-muted d-flex align-items-center gap-1">
+                                <i class="bi bi-check2-all text-success"></i>
+                                <span id="statVehiclesSub">9 Catégories d'engins</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANIER MOYEN -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card stat-kpi-card border-0 shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-muted small fw-semibold text-uppercase">Panier Moyen</span>
+                                <div class="stat-icon-wrap bg-warning-subtle text-warning">
+                                    <i class="bi bi-calculator"></i>
+                                </div>
+                            </div>
+                            <h3 class="fw-bold text-navy mb-1" id="statAverageTicket">0 FCFA</h3>
+                            <div class="small text-muted d-flex align-items-center gap-1">
+                                <i class="bi bi-pie-chart text-warning"></i>
+                                <span>Par lavage enregistré</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOTE SATISFACTION CLIENT -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card stat-kpi-card border-0 shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-muted small fw-semibold text-uppercase">Satisfaction</span>
+                                <div class="stat-icon-wrap bg-success-subtle text-success">
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                            </div>
+                            <h3 class="fw-bold text-navy mb-1" id="statRatingScore">4.9 / 5</h3>
+                            <div class="small text-warning d-flex align-items-center gap-1">
+                                <i class="bi bi-stars"></i>
+                                <span id="statFeedbackCount" class="text-muted">Avis clients vérifiés</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- =====================================================
+                 SECTION GRAPHIQUE ANALYTIQUE (CHART.JS)
+            ====================================================== -->
+            <div class="card border-0 shadow-sm mb-4" id="analyticsSection">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold text-navy mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-graph-up text-primary"></i>
+                            Évolution des Recettes & Fréquentation
+                        </h5>
+                        <small class="text-muted">Graphique interactif des flux financiers par tranche horaire et journée.</small>
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-outline-primary active" id="chartTypeLineBtn" onclick="toggleChartType('line')">Ligne</button>
+                        <button type="button" class="btn btn-outline-primary" id="chartTypeBarBtn" onclick="toggleChartType('bar')">Barres</button>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <div style="position: relative; height: 320px; width: 100%;">
+                        <canvas id="adminAnalyticsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =====================================================
+                 TABLEAU DES TRANSACTIONS & ENCAISSEMENTS RÉCENTS
+            ====================================================== -->
+            <div class="card border-0 shadow-sm mb-4" id="transactions">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold text-navy mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-receipt-cutoff text-primary"></i>
+                            Journal des Dernières Transactions
+                        </h5>
+                        <small class="text-muted">Historique synchronisé en temps réel avec le poste d'encaissement Caisse.</small>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success px-3 py-2">
+                        <i class="bi bi-arrow-repeat me-1"></i> Direct Caisse
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive small">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Heure / Date</th>
+                                    <th scope="col">Ticket</th>
+                                    <th scope="col">Immatriculation</th>
+                                    <th scope="col">Catégorie Engin (Roues)</th>
+                                    <th scope="col">Formule</th>
+                                    <th scope="col">Montant</th>
+                                    <th scope="col">Paiement</th>
+                                    <th scope="col">Client</th>
+                                    <th scope="col">Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTransactionsTable">
+                                <tr>
+                                    <td colspan="9" class="text-center py-4 text-muted">
+                                        <i class="bi bi-hourglass-split me-1"></i> Chargement des transactions...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =====================================================
+                 SECTION GESTION DES TARIFS PAR ROUES (9 CATÉGORIES)
+            ====================================================== -->
+            <section id="tarifs" class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+                    <div>
+                        <h5 class="fw-bold text-navy mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-tags-fill text-primary"></i>
+                            Grille Tarifaire Complète (Classée par Roues)
+                        </h5>
+                        <small class="text-muted">Configurez les prix des 9 catégories d'engins. Les modifications s'appliquent immédiatement à la caisse.</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="resetDefaultTariffsBtn" class="btn btn-outline-secondary btn-sm" title="Réinitialiser les tarifs recommandés">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Valeurs recommandées
+                        </button>
+                        <button id="saveTariffsBtn" class="btn btn-primary btn-sm px-3">
+                            <i class="bi bi-check-circle-fill me-1"></i> Enregistrer
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- FILTRE VISUEL RAPIDE -->
+                    <div class="mb-4 d-flex flex-wrap gap-2 align-items-center">
+                        <span class="fw-bold text-muted small me-2"><i class="bi bi-funnel me-1"></i>Catégories :</span>
+                        <span class="wheel-filter-badge"><i class="bi bi-bicycle"></i> 2 Roues (Vélo, Moto)</span>
+                        <span class="wheel-filter-badge"><i class="bi bi-ev-front"></i> 3 Roues (Tricycle / Tuk-Tuk)</span>
+                        <span class="wheel-filter-badge"><i class="bi bi-car-front"></i> 4 Roues (Berline/BMW, SUV, Minibus)</span>
+                        <span class="wheel-filter-badge"><i class="bi bi-truck"></i> 6 Roues (Camion Moyen)</span>
+                        <span class="wheel-filter-badge"><i class="bi bi-train-freight-front"></i> 8+ Roues & Spéciaux (Semi, Chantier)</span>
+                    </div>
+
+                    <div class="row g-3">
+
+                        <!-- 1. VÉLO / VTT (2 ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-bicycle"></i>
+                                            </div>
+                                            <div>
+                                                <div>Vélo / VTT</div>
+                                                <small class="text-muted fw-normal">Engin 2 Roues</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">2 Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Extérieur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="velo" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Ext. + Dégraissage</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="velo" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Traitement chaîne</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="velo" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. MOTO / SCOOTER (2 ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-scooter"></i>
+                                            </div>
+                                            <div>
+                                                <div>Moto / Scooter</div>
+                                                <small class="text-muted fw-normal">Deux-roues motorisé</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">2 Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Karcher simple</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="moto" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Mousse + Moteur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="moto" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Brillant + Cire</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="moto" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. TRICYCLE / TUK-TUK (3 ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-ev-front"></i>
+                                            </div>
+                                            <div>
+                                                <div>Tricycle / Tuk-Tuk</div>
+                                                <small class="text-muted fw-normal">Engin à 3 roues / Bajaj</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">3 Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Extérieur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="tricycle" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Intérieur cabine + Ext.</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="tricycle" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Désinfection banquettes</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="tricycle" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. BERLINE / BMW (4 ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card border-primary-subtle">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap text-primary bg-primary-subtle">
+                                                <i class="bi bi-car-front-fill"></i>
+                                            </div>
+                                            <div>
+                                                <div>Berline / BMW</div>
+                                                <small class="text-muted fw-normal">Voiture de tourisme 4R</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">4 Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Extérieur express</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="berline" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Intérieur + Extérieur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="berline" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Cire + Lustrage</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="berline" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. SUV / 4X4 (4 ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-truck-front-fill"></i>
+                                            </div>
+                                            <div>
+                                                <div>SUV / 4x4 / Pick-up</div>
+                                                <small class="text-muted fw-normal">Grand véhicule 4R</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">4 Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Karcher haute pression</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="suv" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Châssis + Int./Ext.</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="suv" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Rénovation plastique/cuir</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="suv" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6. MINIBUS / VAN (4 ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-bus-front-fill"></i>
+                                            </div>
+                                            <div>
+                                                <div>Minibus / Fourgon</div>
+                                                <small class="text-muted fw-normal">Transport & utilitaire 4R</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">4 Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Extérieur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="minibus" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Grand habitacle + Coffre</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="minibus" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Shampouinage sièges</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="minibus" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. CAMION MOYEN (6 ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-truck"></i>
+                                            </div>
+                                            <div>
+                                                <div>Camion Moyen / Benne</div>
+                                                <small class="text-muted fw-normal">Poids intermédiaire 6 Roues</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">6 Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Karcher benne/cabine</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="camion6" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Châssis + Cabine int.</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="camion6" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Dégraissage ponts/moteur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="camion6" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 8. POIDS LOURD / SEMI (8+ ROUES) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-train-freight-front"></i>
+                                            </div>
+                                            <div>
+                                                <div>Poids Lourd / Semi</div>
+                                                <small class="text-muted fw-normal">Tracteur routier 8+ Roues</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">8+ Roues</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Lavage tracteur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="poidslourd" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Ensemble articulé complet</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="poidslourd" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Dégraissage citerne</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="poidslourd" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 9. ENGIN DE CHANTIER (SPÉCIAL) -->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="tariff-card">
+                                <div>
+                                    <div class="tariff-card-header">
+                                        <div class="tariff-title">
+                                            <div class="tariff-icon-wrap">
+                                                <i class="bi bi-gear-wide-connected"></i>
+                                            </div>
+                                            <div>
+                                                <div>Engin Spécial / Chantier</div>
+                                                <small class="text-muted fw-normal">Tracteur, Pelleteuse, Grue</small>
+                                            </div>
+                                        </div>
+                                        <span class="wheel-filter-badge">Spécial</span>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage simple</span>
+                                            <span class="package-badge-simple">Décrottage rapide</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="chantier" data-package="simple">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            <span>Lavage complet</span>
+                                            <span class="package-badge-complet">Lavage haute puissance</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="chantier" data-package="complet">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="form-label">
+                                            <span>Premium</span>
+                                            <span class="package-badge-premium">Dégraissage chenilles/moteur</span>
+                                        </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" min="0" step="100" class="form-control tariff-input" data-category="chantier" data-package="premium">
+                                            <span class="input-group-text">FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BOUTON ENREGISTRER EN BAS DE GRILLE -->
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                        <span class="text-muted small">
+                            <i class="bi bi-info-circle me-1"></i> Les modifications tarifaires sont immédiatement effectives sur l'écran d'encaissement Caisse.
+                        </span>
+                        <button id="saveTariffsBtnBottom" class="btn btn-primary px-4">
+                            <i class="bi bi-save me-2"></i> Enregistrer les tarifs
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 SECTION AVIS & FEEDBACKS CLIENTS
+            ====================================================== -->
+            <section id="feedbacks" class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold text-navy mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-chat-heart-fill text-warning"></i>
+                            Feedbacks & Avis Clients
+                        </h5>
+                        <small class="text-muted">Retours d'expérience et notes de satisfaction laissés par les usagers.</small>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm" onclick="loadFeedbacks()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Actualiser les avis
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div id="feedbacksList" class="feedback-list"></div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 SECTION SAUVEGARDE & RESTAURATION SYSTÈME
+            ====================================================== -->
+            <section id="backup" class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold text-navy mb-0 d-flex align-items-center gap-2">
+                        <i class="bi bi-database-check text-success"></i>
+                        Sauvegarde & Restauration Système
+                    </h5>
+                    <small class="text-muted">Exportez ou restaurez l'intégralité des tarifs par roues, transactions et historiques.</small>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        
+                        <!-- EXPORT -->
+                        <div class="col-md-6">
+                            <div class="backup-card">
+                                <div class="backup-icon bg-success-subtle mb-3">
+                                    <i class="bi bi-cloud-arrow-down text-success"></i>
+                                </div>
+                                <h5 class="fw-bold text-navy">Exporter la base de données</h5>
+                                <p class="text-muted small">
+                                    Générez un fichier JSON horodaté comprenant tous les paramètres, tarifs par roues et historiques de caisse.
+                                </p>
+                                <button id="exportDataBtn" class="btn btn-success">
+                                    <i class="bi bi-download me-2"></i> Télécharger Sauvegarde JSON
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- IMPORT -->
+                        <div class="col-md-6">
+                            <div class="backup-card">
+                                <div class="backup-icon bg-warning-subtle mb-3">
+                                    <i class="bi bi-cloud-arrow-up text-warning"></i>
+                                </div>
+                                <h5 class="fw-bold text-navy">Restaurer depuis un fichier</h5>
+                                <p class="text-muted small">
+                                    Importez un fichier de sauvegarde pour restaurer instantanément la grille tarifaire et les données.
+                                </p>
+                                <input type="file" id="importDataInput" accept=".json,application/json" class="d-none">
+                                <button id="importDataBtn" class="btn btn-warning text-dark fw-bold">
+                                    <i class="bi bi-upload me-2"></i> Restaurer Fichier JSON
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="backup-info mt-3 p-3 bg-light rounded-3 border">
+                        <div id="backupInfo"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- =========================================================
+     SCRIPTS : BOOTSTRAP, CHART.JS ET LOGIQUE ADMIN
+========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>
