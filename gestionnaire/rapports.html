@@ -1,98 +1,59 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIDÈ - Rapports & Analytiques</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Style Custom Néon -->
-    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <script src="../auth.js"></script>
+    <title>LAVAGE BIDE - Rapports</title>
+    <link rel="icon" type="image/jpeg" href="../logo.jpg">
+    <script>checkPageAccess('gestionnaire');</script>
 </head>
-<body class="bg-dark text-white d-flex flex-column min-vh-100">
+<body>
+<nav class="navbar navbar-expand-lg navbar-bide sticky-top shadow-sm">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="dashboard.html"><img src="../logo.jpg" alt="Logo" class="navbar-logo me-2"><span>LAVAGE BIDE</span><span class="badge bg-light text-dark ms-2 fs-6 fw-semibold">Gestion</span></a>
+        <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarG"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarG">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+                <li class="nav-item"><a class="nav-link " href="dashboard.html"><i class="bi-speedometer2 me-1"></i> Tableau de bord</a></li>
+<li class="nav-item"><a class="nav-link " href="commandes.html"><i class="bi-receipt me-1"></i> Commandes</a></li>
+<li class="nav-item"><a class="nav-link " href="laveurs.html"><i class="bi-people me-1"></i> Laveurs</a></li>
+<li class="nav-item"><a class="nav-link active" href="rapports.html"><i class="bi-graph-up me-1"></i> Rapports</a></li>
+<li class="nav-item"><a class="nav-link " href="utilisateurs.html"><i class="bi-person-gear me-1"></i> Utilisateurs</a></li>
+<li class="nav-item"><a class="nav-link " href="profil.html"><i class="bi-person-circle me-1"></i> Profil</a></li>
 
-    <!-- En-tête / Navigation -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
-                    <img src="../images/frt.png" alt="BIDÈ Logo" height="40" class="rounded">
-                    <span class="fw-bold">BIDÈ | GESTION</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="commandes.html">Commandes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="laveurs.html">Laveurs</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="rapports.html">Rapports</a></li>
-                        <li class="nav-item"><a class="nav-link" href="utilisateurs.html">Utilisateurs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="profil.html">Profil</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Contenu Principal -->
-    <main class="container my-4">
-        <h2 class="text-gradient mb-4">Rapports d'Activité</h2>
-
-        <!-- Cartes d'indicateurs (KPIs) -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <div class="card card-bide-neon text-white p-3">
-                    <small class="text-muted text-uppercase">Total Commandes</small>
-                    <h3 class="text-info my-1" id="kpi-total-commandes">0</h3>
-                    <small class="text-success">Enregistrées en session</small>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-bide-neon text-white p-3">
-                    <small class="text-muted text-uppercase">Véhicules Lavés</small>
-                    <h3 class="text-success my-1" id="kpi-total-laves">0</h3>
-                    <small class="text-muted">Prêts pour la caisse</small>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-bide-neon text-white p-3">
-                    <small class="text-muted text-uppercase">En attente / En cours</small>
-                    <h3 class="text-warning my-1" id="kpi-en-cours">0</h3>
-                    <small class="text-muted">Sur la piste</small>
-                </div>
+            </ul>
+            <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                <span class="badge bg-light text-dark px-3 py-2 border d-inline-flex align-items-center gap-2"><i class="bi bi-clipboard2-data-fill text-primary"></i><span id="currentManagerName" class="fw-semibold">Gestionnaire</span></span>
+                <button class="btn btn-sm btn-outline-light d-flex align-items-center btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right me-1"></i> Deconnexion</button>
             </div>
         </div>
-
-        <!-- Ventilation par Type d'Engin -->
-        <div class="card card-bide-neon p-4">
-            <h5 class="text-info mb-3">Répartition par Type d'Engin</h5>
-            <div class="table-responsive">
-                <table class="table table-dark table-hover align-middle mb-0">
-                    <thead>
-                        <tr class="border-bottom border-primary">
-                            <th>Catégorie d'Engin</th>
-                            <th class="text-end">Nombre de Véhicules</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-rapports-body">
-                        <!-- Généré par JS -->
-                    </tbody>
-                </table>
-            </div>
+    </div>
+</nav>
+<div id="alertContainer" class="container-fluid position-fixed top-0 start-50 translate-middle-x" style="z-index: 9999; padding-top: 15px;"></div>
+<main class="container-fluid px-4 py-4">
+    <div class="page-header"><h1 class="fw-bold mb-1"><i class="bi bi-graph-up-arrow text-primary me-2"></i>Rapports d'Activite</h1><p class="text-muted mb-0">Indicateurs de performance et repartition par type d'engin.</p></div>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4"><div class="card stat-card border-0 shadow-sm h-100"><div class="card-body p-4"><div class="d-flex justify-content-between align-items-start"><div><p class="text-muted mb-1 fw-semibold">Total Commandes</p><h3 class="fw-bold mb-0 text-primary" id="kpi-total-commandes">0</h3></div><div class="stat-icon bg-primary-subtle text-primary"><i class="bi bi-receipt"></i></div></div></div></div></div>
+        <div class="col-md-4"><div class="card stat-card border-0 shadow-sm h-100"><div class="card-body p-4"><div class="d-flex justify-content-between align-items-start"><div><p class="text-muted mb-1 fw-semibold">Vehicules Laves</p><h3 class="fw-bold mb-0 text-success" id="kpi-total-laves">0</h3></div><div class="stat-icon bg-success-subtle text-success"><i class="bi bi-car-front-fill"></i></div></div></div></div></div>
+        <div class="col-md-4"><div class="card stat-card border-0 shadow-sm h-100"><div class="card-body p-4"><div class="d-flex justify-content-between align-items-start"><div><p class="text-muted mb-1 fw-semibold">En attente / En cours</p><h3 class="fw-bold mb-0 text-warning" id="kpi-en-cours">0</h3></div><div class="stat-icon bg-warning-subtle text-warning"><i class="bi bi-hourglass-split"></i></div></div></div></div></div>
+    </div>
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3 border-0"><h5 class="fw-bold text-navy mb-0"><i class="bi bi-pie-chart text-primary me-2"></i> Repartition par Type d'Engin</h5></div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Categorie d'Engin</th><th class="text-end">Nombre de Vehicules</th></tr></thead>
+                <tbody id="table-rapports-body"><tr><td colspan="2" class="text-center text-muted py-4">Chargement...</td></tr></tbody>
+            </table>
         </div>
-    </main>
-
-    <!-- Pied de page -->
-    <footer class="text-center py-3 border-top border-secondary mt-auto">
-        <small class="text-muted">&copy; 2026 BIDÈ - Académie Digitale Numérique</small>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', genererRapports);
-    </script>
+    </div>
+</main>
+<footer class="py-3"><div class="container-fluid text-center"><small class="text-muted">&copy; 2026 BIDE -- Module Gestionnaire</small></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/script.js"></script>
+<script>document.addEventListener('DOMContentLoaded', genererRapports);</script>
 </body>
 </html>

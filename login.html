@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - LAVAGE BIDE (Auto & Moto)</title>
-    <link rel="icon" type="image/jpeg" href="lo.jpeg">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
 
     <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                     <img src="logo.jpg" alt="Logo Officiel Lavage BIDE" class="img-fluid">
                 </div>
 
-                <!-- LES 4 ENGAGEMENTS BIDÈ -->
+                <!-- LES 4 ENGAGEMENTS BIDE -->
                 <div class="row g-2 pt-3 border-top border-secondary border-opacity-50 text-center">
                     <div class="col-6">
                         <div class="small fw-semibold text-info d-flex align-items-center justify-content-center gap-1">
@@ -75,23 +75,39 @@
                 
                 <!-- HEADER DU FORMULAIRE AVEC MINI LOGO -->
                 <div class="text-center mb-4">
-                    <img src="logo.jpg" alt="Logo Mini BIDÈ" class="brand-mini-logo mb-2">
+                    <img src="logo.jpg" alt="Logo Mini BIDE" class="brand-mini-logo mb-2">
                     <h3 class="login-title mb-1">Espace de Connexion</h3>
                     <p class="text-muted small">
                         Veuillez vous authentifier pour accéder à votre espace de travail.
                     </p>
                 </div>
 
-                <!-- SÉLECTEUR DE PORTAIL / RÔLE -->
+                <!-- =====================================================
+                     SÉLECTEUR DE PORTAIL / RÔLE (4 ONGLETS)
+                ====================================================== -->
                 <ul class="nav nav-pills nav-fill portal-tabs mb-4" id="portalTabs" role="tablist">
+                    <!-- Onglet Caisse -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="tab-caisse" data-role="caisse" type="button">
-                            <i class="bi bi-cash-coin me-1"></i> Espace Caisse
+                            <i class="bi bi-cash-coin me-1"></i> Caisse
                         </button>
                     </li>
+                    <!-- Onglet Administration -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="tab-admin" data-role="admin" type="button">
-                            <i class="bi bi-shield-lock-fill me-1"></i> Administration
+                            <i class="bi bi-shield-lock-fill me-1"></i> Admin
+                        </button>
+                    </li>
+                    <!-- Onglet Gestionnaire (nouveau) -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-gestionnaire" data-role="gestionnaire" type="button">
+                            <i class="bi bi-clipboard2-data me-1"></i> Gestion
+                        </button>
+                    </li>
+                    <!-- Onglet Laveur (nouveau) -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-laveur" data-role="laveur" type="button">
+                            <i class="bi bi-droplet me-1"></i> Laveur
                         </button>
                     </li>
                 </ul>
@@ -99,7 +115,9 @@
                 <!-- ZONE D'ALERTE -->
                 <div id="loginAlert" class="alert d-none py-2 px-3 small rounded-3 mb-3" role="alert"></div>
 
-                <!-- FORMULAIRE -->
+                <!-- =====================================================
+                     FORMULAIRE D'AUTHENTIFICATION
+                ====================================================== -->
                 <form id="loginForm" autocomplete="off">
                     
                     <!-- IDENTIFIANT -->
@@ -137,19 +155,31 @@
                     </button>
                 </form>
 
-                <!-- BOÎTE DE CONNEXION RAPIDE / TEST -->
+                <!-- =====================================================
+                     BOÎTE DE CONNEXION RAPIDE / TEST (4 RÔLES)
+                ====================================================== -->
                 <div class="quick-login-card mt-2">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="small fw-bold text-dark">
                             <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Connexions rapides (Démo) :
                         </span>
                     </div>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <!-- Bouton Démo Caissier -->
                         <button type="button" class="btn btn-quick-test btn-quick-caisse flex-fill" id="quickCaisseBtn">
-                            <i class="bi bi-cash-stack me-1"></i> Caissier (caisse)
+                            <i class="bi bi-cash-stack me-1"></i> Caissier
                         </button>
+                        <!-- Bouton Démo Admin -->
                         <button type="button" class="btn btn-quick-test btn-quick-admin flex-fill" id="quickAdminBtn">
-                            <i class="bi bi-shield-lock me-1"></i> Admin (admin)
+                            <i class="bi bi-shield-lock me-1"></i> Admin
+                        </button>
+                        <!-- Bouton Démo Gestionnaire (nouveau) -->
+                        <button type="button" class="btn btn-quick-test btn-quick-gestionnaire flex-fill" id="quickGestionnaireBtn">
+                            <i class="bi bi-clipboard2-data me-1"></i> Gestion
+                        </button>
+                        <!-- Bouton Démo Laveur (nouveau) -->
+                        <button type="button" class="btn btn-quick-test btn-quick-laveur flex-fill" id="quickLaveurBtn">
+                            <i class="bi bi-droplet me-1"></i> Laveur
                         </button>
                     </div>
                 </div>
@@ -159,24 +189,39 @@
         </div>
     </div>
 
-    <!-- Script Authentification -->
+    <!-- ============================================================
+         SCRIPTS JAVASCRIPT
+    ============================================================ -->
     <script src="auth.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Éléments du formulaire
             const loginForm = document.getElementById('loginForm');
             const usernameInput = document.getElementById('usernameInput');
             const passwordInput = document.getElementById('passwordInput');
             const submitBtnText = document.getElementById('submitBtnText');
             const loginAlert = document.getElementById('loginAlert');
+
+            // Onglets de rôle
             const tabCaisse = document.getElementById('tab-caisse');
             const tabAdmin = document.getElementById('tab-admin');
+            const tabGestionnaire = document.getElementById('tab-gestionnaire');
+            const tabLaveur = document.getElementById('tab-laveur');
+
+            // Boutons démo rapide
             const quickCaisseBtn = document.getElementById('quickCaisseBtn');
             const quickAdminBtn = document.getElementById('quickAdminBtn');
+            const quickGestionnaireBtn = document.getElementById('quickGestionnaireBtn');
+            const quickLaveurBtn = document.getElementById('quickLaveurBtn');
+
+            // Bascule mot de passe
             const togglePasswordBtn = document.getElementById('togglePasswordBtn');
             const togglePasswordIcon = document.getElementById('togglePasswordIcon');
 
-            // Vérifier les paramètres d'URL (erreurs ou messages)
+            // ============================================================
+            // VÉRIFICATION DES PARAMÈTRES D'URL
+            // ============================================================
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('error') === 'unauthorized') {
                 showAlert('Veuillez vous connecter pour accéder à cette page.', 'danger');
@@ -184,60 +229,129 @@
                 showAlert('Vous avez été déconnecté avec succès.', 'info');
             }
 
-            // Bascule de visibilité mot de passe
+            // ============================================================
+            // BASCULE DE VISIBILITÉ MOT DE PASSE
+            // ============================================================
             togglePasswordBtn.addEventListener('click', () => {
                 const isPassword = passwordInput.type === 'password';
                 passwordInput.type = isPassword ? 'text' : 'password';
                 togglePasswordIcon.className = isPassword ? 'bi bi-eye-slash' : 'bi bi-eye';
             });
 
-            // Gestion des onglets
-            tabCaisse.addEventListener('click', () => {
+            // ============================================================
+            // FONCTIONS DE BASCULE D'ONGLETS
+            // ============================================================
+
+            /** Active l'onglet Caisse et pré-remplit les identifiants */
+            function activateTabCaisse() {
                 tabCaisse.classList.add('active');
                 tabAdmin.classList.remove('active');
+                tabGestionnaire.classList.remove('active');
+                tabLaveur.classList.remove('active');
                 usernameInput.value = 'caisse';
                 passwordInput.value = 'caisse123';
                 submitBtnText.textContent = 'Se connecter à la Caisse';
-            });
+            }
 
-            tabAdmin.addEventListener('click', () => {
+            /** Active l'onglet Admin et pré-remplit les identifiants */
+            function activateTabAdmin() {
                 tabAdmin.classList.add('active');
                 tabCaisse.classList.remove('active');
+                tabGestionnaire.classList.remove('active');
+                tabLaveur.classList.remove('active');
                 usernameInput.value = 'admin';
                 passwordInput.value = 'admin123';
                 submitBtnText.textContent = 'Se connecter à l\'Administration';
-            });
+            }
 
-            // Boutons Démo rapide
+            /** Active l'onglet Gestionnaire et pré-remplit les identifiants */
+            function activateTabGestionnaire() {
+                tabGestionnaire.classList.add('active');
+                tabCaisse.classList.remove('active');
+                tabAdmin.classList.remove('active');
+                tabLaveur.classList.remove('active');
+                usernameInput.value = 'gestionnaire';
+                passwordInput.value = 'gestion123';
+                submitBtnText.textContent = 'Se connecter à la Gestion';
+            }
+
+            /** Active l'onglet Laveur et pré-remplit les identifiants */
+            function activateTabLaveur() {
+                tabLaveur.classList.add('active');
+                tabCaisse.classList.remove('active');
+                tabAdmin.classList.remove('active');
+                tabGestionnaire.classList.remove('active');
+                usernameInput.value = 'laveur';
+                passwordInput.value = 'laveur123';
+                submitBtnText.textContent = 'Se connecter à la Piste de Lavage';
+            }
+
+            // ============================================================
+            // ÉCOUTEURS D'ÉVÉNEMENTS — ONGLETS
+            // ============================================================
+            tabCaisse.addEventListener('click', activateTabCaisse);
+            tabAdmin.addEventListener('click', activateTabAdmin);
+            tabGestionnaire.addEventListener('click', activateTabGestionnaire);
+            tabLaveur.addEventListener('click', activateTabLaveur);
+
+            // ============================================================
+            // ÉCOUTEURS D'ÉVÉNEMENTS — BOUTONS DÉMO RAPIDE
+            // ============================================================
             quickCaisseBtn.addEventListener('click', () => {
-                tabCaisse.click();
+                activateTabCaisse();
                 executeLogin('caisse', 'caisse123');
             });
 
             quickAdminBtn.addEventListener('click', () => {
-                tabAdmin.click();
+                activateTabAdmin();
                 executeLogin('admin', 'admin123');
             });
 
-            // Soumission du formulaire
+            quickGestionnaireBtn.addEventListener('click', () => {
+                activateTabGestionnaire();
+                executeLogin('gestionnaire', 'gestion123');
+            });
+
+            quickLaveurBtn.addEventListener('click', () => {
+                activateTabLaveur();
+                executeLogin('laveur', 'laveur123');
+            });
+
+            // ============================================================
+            // SOUMISSION DU FORMULAIRE
+            // ============================================================
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 executeLogin(usernameInput.value, passwordInput.value);
             });
 
+            // ============================================================
+            // FONCTION D'EXÉCUTION DE LA CONNEXION
+            // ============================================================
+
+            /**
+             * Exécute la connexion avec les identifiants fournis.
+             * Redirige vers la page appropriée selon le rôle.
+             * @param {string} username - Identifiant
+             * @param {string} password - Mot de passe
+             */
             function executeLogin(username, password) {
                 const result = login(username, password);
 
                 if (result.success) {
-                    showAlert(`Connexion réussie ! Redirection en cours...`, 'success');
+                    showAlert('Connexion réussie ! Redirection en cours...', 'success');
                     setTimeout(() => {
-                        // Rediriger vers l'URL d'origine si spécifiée et autorisée, sinon destination par défaut
+                        // Vérifier s'il y a une URL de redirection dans les paramètres
                         const redirectParam = urlParams.get('redirect');
-                        if (redirectParam && (redirectParam.includes('admin') || redirectParam.includes('caisse'))) {
-                            if (redirectParam.includes('admin') && result.user.role !== 'admin') {
-                                window.location.href = 'caisse.html';
-                            } else {
+                        if (redirectParam) {
+                            // Vérifier que l'URL de redirection est autorisée
+                            const allowedPages = ['admin', 'caisse', 'gestionnaire', 'laveur'];
+                            const isAllowed = allowedPages.some(page => redirectParam.includes(page));
+                            
+                            if (isAllowed) {
                                 window.location.href = redirectParam;
+                            } else {
+                                window.location.href = result.redirectUrl;
                             }
                         } else {
                             window.location.href = result.redirectUrl;
@@ -248,9 +362,24 @@
                 }
             }
 
+            // ============================================================
+            // FONCTION D'AFFICHAGE D'ALERTES
+            // ============================================================
+
+            /**
+             * Affiche une alerte stylisée dans la zone d'alerte du formulaire.
+             * @param {string} message - Message à afficher
+             * @param {string} type - Type d'alerte (success, danger, info, warning)
+             */
             function showAlert(message, type) {
+                const iconMap = {
+                    success: 'bi-check-circle-fill',
+                    danger: 'bi-exclamation-triangle-fill',
+                    info: 'bi-info-circle-fill',
+                    warning: 'bi-exclamation-circle-fill'
+                };
                 loginAlert.className = `alert alert-${type} py-2 px-3 small rounded-3 mb-3 d-flex align-items-center gap-2`;
-                loginAlert.innerHTML = `<i class="bi ${type === 'success' ? 'bi-check-circle-fill' : type === 'danger' ? 'bi-exclamation-triangle-fill' : 'bi-info-circle-fill'}"></i> <div>${message}</div>`;
+                loginAlert.innerHTML = `<i class="bi ${iconMap[type] || iconMap.info}"></i> <div>${message}</div>`;
                 loginAlert.classList.remove('d-none');
             }
         });

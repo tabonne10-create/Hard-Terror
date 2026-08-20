@@ -124,15 +124,15 @@ function afficherRegistreCommandes() {
     }
 
     commandes.forEach((cmd, index) => {
-        let badgeColor = 'bg-secondary';
-        if (cmd.statut === 'En attente') badgeColor = 'bg-warning text-dark';
-        if (cmd.statut === 'En cours') badgeColor = 'bg-info text-dark';
-        if (cmd.statut === 'Lavé') badgeColor = 'bg-success';
-        if (cmd.statut === 'Payé') badgeColor = 'bg-primary';
+        let badgeColor = 'bg-secondary text-white';
+        if (cmd.statut === 'En attente') badgeColor = 'bg-warning-subtle text-warning';
+        if (cmd.statut === 'En cours') badgeColor = 'bg-info-subtle text-info';
+        if (cmd.statut === 'Lavé') badgeColor = 'bg-success-subtle text-success';
+        if (cmd.statut === 'Payé') badgeColor = 'bg-primary-subtle text-primary';
 
         tbody.innerHTML += `
             <tr>
-                <td class="fw-bold text-info">${cmd.ticket}</td>
+                <td class="fw-bold text-primary">${cmd.ticket}</td>
                 <td>${cmd.plaque}</td>
                 <td>${cmd.engin}</td>
                 <td>${cmd.formule}</td>
@@ -163,15 +163,15 @@ function filtrerCommandes() {
         const matchStatut = (filterStatut === 'TOUS') || (cmd.statut === filterStatut);
         return matchSearch && matchStatut;
     }).forEach((cmd, index) => {
-        let badgeColor = 'bg-secondary';
-        if (cmd.statut === 'En attente') badgeColor = 'bg-warning text-dark';
-        if (cmd.statut === 'En cours') badgeColor = 'bg-info text-dark';
-        if (cmd.statut === 'Lavé') badgeColor = 'bg-success';
-        if (cmd.statut === 'Payé') badgeColor = 'bg-primary';
+        let badgeColor = 'bg-secondary text-white';
+        if (cmd.statut === 'En attente') badgeColor = 'bg-warning-subtle text-warning';
+        if (cmd.statut === 'En cours') badgeColor = 'bg-info-subtle text-info';
+        if (cmd.statut === 'Lavé') badgeColor = 'bg-success-subtle text-success';
+        if (cmd.statut === 'Payé') badgeColor = 'bg-primary-subtle text-primary';
 
         tbody.innerHTML += `
             <tr>
-                <td class="fw-bold text-info">${cmd.ticket}</td>
+                <td class="fw-bold text-primary">${cmd.ticket}</td>
                 <td>${cmd.plaque}</td>
                 <td>${cmd.engin}</td>
                 <td>${cmd.formule}</td>
@@ -203,10 +203,10 @@ function afficherLaveurs() {
     laveurs.forEach((lav, index) => {
         container.innerHTML += `
             <div class="col-md-4">
-                <div class="card card-bide-neon p-3">
+                <div class="worker-card">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="text-info mb-0">${lav.nom}</h5>
-                        <span class="badge bg-success">${lav.statut}</span>
+                        <h5 class="fw-bold text-navy mb-0">${lav.nom}</h5>
+                        <span class="badge bg-success-subtle text-success">${lav.statut}</span>
                     </div>
                     <p class="text-muted small mb-3">Zone : ${lav.piste}</p>
                     <button class="btn btn-sm btn-outline-danger w-100" onclick="supprimerLaveur(${index})">Retirer</button>
@@ -261,7 +261,7 @@ function genererRapports() {
     if (tbody) {
         tbody.innerHTML = '';
         for (const [engin, count] of Object.entries(repartition)) {
-            tbody.innerHTML += `<tr><td>${engin}</td><td class="text-end fw-bold text-info">${count}</td></tr>`;
+            tbody.innerHTML += `<tr><td>${engin}</td><td class="text-end fw-bold text-primary">${count}</td></tr>`;
         }
     }
 }
@@ -277,8 +277,8 @@ function afficherUtilisateurs() {
     users.forEach((u, index) => {
         tbody.innerHTML += `
             <tr>
-                <td><strong>${u.nom}</strong></td>
-                <td><span class="badge bg-primary">${u.role}</span></td>
+                <td><strong class="text-navy">${u.nom}</strong></td>
+                <td><span class="badge bg-primary-subtle text-primary">${u.role}</span></td>
                 <td class="text-muted">${u.username}</td>
                 <td><span class="badge bg-success">${u.statut}</span></td>
                 <td class="text-end">
@@ -368,34 +368,35 @@ function chargerPisteLaveur() {
     if (commandesEnPiste.length === 0) {
         container.innerHTML = `
             <div class="col-12 text-center py-5">
-                <p class="text-muted fs-5">Aucun véhicule en attente sur la piste.</p>
+                <i class="bi bi-check-circle display-4 text-success opacity-50 d-block mb-2"></i>
+                <p class="text-muted fs-5">Aucun vehicule en attente sur la piste.</p>
             </div>`;
         return;
     }
 
     commandesEnPiste.forEach((cmd) => {
         let borderClass = 'border-secondary';
-        let badgeClass = 'bg-secondary';
+        let badgeClass = 'bg-secondary text-white';
 
         if (cmd.statut === 'En attente') {
             borderClass = 'border-warning';
-            badgeClass = 'bg-warning text-dark';
+            badgeClass = 'bg-warning-subtle text-warning';
         } else if (cmd.statut === 'En cours') {
             borderClass = 'border-info';
-            badgeClass = 'bg-info text-dark';
-        } else if (cmd.statut === 'Lavé') {
+            badgeClass = 'bg-info-subtle text-info';
+        } else if (cmd.statut === 'Lavé' || cmd.statut === 'Lave') {
             borderClass = 'border-success';
-            badgeClass = 'bg-success';
+            badgeClass = 'bg-success-subtle text-success';
         }
 
         container.innerHTML += `
             <div class="col-md-6 col-lg-4">
-                <div class="card card-bide-neon border-start border-4 ${borderClass} p-3">
+                <div class="order-card border-start border-4 ${borderClass}">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="fw-bold text-info">${cmd.ticket}</span>
+                        <span class="fw-bold text-primary">${cmd.ticket}</span>
                         <span class="badge ${badgeClass}">${cmd.statut}</span>
                     </div>
-                    <h4 class="text-white mb-1">${cmd.plaque}</h4>
+                    <h4 class="text-navy mb-1">${cmd.plaque}</h4>
                     <p class="text-muted small mb-2">${cmd.engin} — <strong>${cmd.formule}</strong></p>
                     <p class="text-muted small mb-3">Heure : ${cmd.heure}</p>
 
@@ -403,7 +404,7 @@ function chargerPisteLaveur() {
                         <button class="btn btn-sm btn-outline-warning w-50" onclick="changerStatutLavage('${cmd.ticket}', 'En cours')">En cours</button>
                         <button class="btn btn-sm btn-outline-success w-50" onclick="changerStatutLavage('${cmd.ticket}', 'Lavé')">Terminé</button>
                     </div>
-                    <a href="details-commande.html?ticket=${cmd.ticket}" class="btn btn-sm btn-info w-100">Voir Détails</a>
+                    <a href="details-commande.html?ticket=${cmd.ticket}" class="btn btn-sm btn-primary w-100">Voir Détails</a>
                 </div>
             </div>
         `;
@@ -449,21 +450,21 @@ function afficherCommandesLaveur() {
     }
 
     commandes.forEach((cmd) => {
-        let badgeClass = 'bg-secondary';
-        if (cmd.statut === 'En attente') badgeClass = 'bg-warning text-dark';
-        if (cmd.statut === 'En cours') badgeClass = 'bg-info text-dark';
-        if (cmd.statut === 'Lavé') badgeClass = 'bg-success';
-        if (cmd.statut === 'Payé') badgeClass = 'bg-primary';
+        let badgeClass = 'bg-secondary text-white';
+        if (cmd.statut === 'En attente') badgeClass = 'bg-warning-subtle text-warning';
+        if (cmd.statut === 'En cours') badgeClass = 'bg-info-subtle text-info';
+        if (cmd.statut === 'Lavé' || cmd.statut === 'Lave') badgeClass = 'bg-success-subtle text-success';
+        if (cmd.statut === 'Payé' || cmd.statut === 'Paye') badgeClass = 'bg-primary-subtle text-primary';
 
         tbody.innerHTML += `
             <tr>
-                <td class="fw-bold text-info">${cmd.ticket}</td>
+                <td class="fw-bold text-primary">${cmd.ticket}</td>
                 <td>${cmd.plaque}</td>
                 <td>${cmd.engin}</td>
                 <td>${cmd.formule}</td>
                 <td><span class="badge ${badgeClass}">${cmd.statut}</span></td>
                 <td class="text-end">
-                    <a href="details-commande.html?ticket=${cmd.ticket}" class="btn btn-sm btn-outline-info">Fiche</a>
+                    <a href="details-commande.html?ticket=${cmd.ticket}" class="btn btn-sm btn-outline-primary">Fiche</a>
                 </td>
             </tr>
         `;
@@ -493,12 +494,12 @@ function chargerDetailsCommande() {
     container.innerHTML = `
         <div class="row g-3">
             <div class="col-md-6">
-                <p class="text-muted mb-1">Numéro de Ticket</p>
-                <h4 class="text-info">${commande.ticket}</h4>
+                <p class="text-muted mb-1">Numero de Ticket</p>
+                <h4 class="text-primary">${commande.ticket}</h4>
             </div>
             <div class="col-md-6">
                 <p class="text-muted mb-1">Plaque d'immatriculation</p>
-                <h4 class="text-white">${commande.plaque}</h4>
+                <h4 class="text-navy">${commande.plaque}</h4>
             </div>
             <div class="col-md-6">
                 <p class="text-muted mb-1">Type d'Engin</p>
@@ -506,24 +507,24 @@ function chargerDetailsCommande() {
             </div>
             <div class="col-md-6">
                 <p class="text-muted mb-1">Formule choisie</p>
-                <h5><span class="badge bg-primary">${commande.formule}</span></h5>
+                <h5><span class="badge bg-primary-subtle text-primary">${commande.formule}</span></h5>
             </div>
             <div class="col-md-6">
-                <p class="text-muted mb-1">Heure d'arrivée</p>
+                <p class="text-muted mb-1">Heure d'arrivee</p>
                 <p class="fw-bold">${commande.heure}</p>
             </div>
             <div class="col-md-6">
                 <p class="text-muted mb-1">Statut actuel</p>
-                <h5><span class="badge bg-info text-dark">${commande.statut}</span></h5>
+                <h5><span class="badge bg-info-subtle text-info">${commande.statut}</span></h5>
             </div>
         </div>
-        <hr class="border-secondary my-4">
+        <hr class="my-4">
         <div class="d-flex gap-2">
             <button class="btn btn-warning" onclick="changerStatutLavage('${commande.ticket}', 'En cours')">
                 Passer en cours
             </button>
-            <button class="btn btn-success" onclick="changerStatutLavage('${commande.ticket}', 'Lavé')">
-                Marquer comme Lavé
+            <button class="btn btn-success" onclick="changerStatutLavage('${commande.ticket}', 'Lave')">
+                Marquer comme Lave
             </button>
         </div>
     `;

@@ -193,6 +193,30 @@ body {
     color: #ffffff;
 }
 
+/* Bouton Démo Gestionnaire */
+.btn-quick-gestionnaire {
+    background-color: #ede9fe;
+    color: #7c3aed;
+    border: 1px solid #c4b5fd;
+}
+
+.btn-quick-gestionnaire:hover {
+    background-color: #8b5cf6;
+    color: #ffffff;
+}
+
+/* Bouton Démo Laveur */
+.btn-quick-laveur {
+    background-color: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fcd34d;
+}
+
+.btn-quick-laveur:hover {
+    background-color: #f59e0b;
+    color: #ffffff;
+}
+
 @media (max-width: 991px) {
     .login-form-col {
         padding: 2.25rem 1.75rem;
