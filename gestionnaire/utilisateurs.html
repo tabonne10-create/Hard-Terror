@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIDÈ - Gestion des Utilisateurs</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Style Custom Néon -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-dark text-white d-flex flex-column min-vh-100">
+
+    <!-- En-tête / Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                    <img src="../images/frt.png" alt="BIDÈ Logo" height="40" class="rounded">
+                    <span class="fw-bold">BIDÈ | GESTION</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="commandes.html">Commandes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="laveurs.html">Laveurs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="rapports.html">Rapports</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="utilisateurs.html">Utilisateurs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="profil.html">Profil</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu Principal -->
+    <main class="container my-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-gradient mb-0">Gestion des Utilisateurs</h2>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUser">+ Nouvel Utilisateur</button>
+        </div>
+
+        <div class="card card-bide-neon">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle mb-0">
+                    <thead>
+                        <tr class="border-bottom border-primary text-info">
+                            <th>Nom & Prénom</th>
+                            <th>Rôle</th>
+                            <th>Identifiant</th>
+                            <th>Statut</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-users-body">
+                        <!-- Généré dynamiquement par JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Ajouter Utilisateur -->
+    <div class="modal fade" id="modalUser" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white border-primary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-gradient">Ajouter un Membre</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-user">
+                        <div class="mb-3">
+                            <label class="form-label">Nom Complet</label>
+                            <input type="text" id="user-nom" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Identifiant / Pseudo</label>
+                            <input type="text" id="user-username" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rôle</label>
+                            <select id="user-role" class="form-select bg-dark text-white border-secondary" required>
+                                <option value="Gestionnaire">Gestionnaire</option>
+                                <option value="Laveur">Laveur</option>
+                                <option value="Caissier">Caissier</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Créer le compte</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pied de page -->
+    <footer class="text-center py-3 border-top border-secondary mt-auto">
+        <small class="text-muted">&copy; 2026 BIDÈ - Académie Digitale Numérique</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', afficherUtilisateurs);
+    </script>
+</body>
+</html>

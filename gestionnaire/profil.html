@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIDÈ - Profil Gestionnaire</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Style Custom Néon -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-dark text-white d-flex flex-column min-vh-100">
+
+    <!-- En-tête / Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
+                    <img src="../images/frt.png" alt="BIDÈ Logo" height="40" class="rounded">
+                    <span class="fw-bold">BIDÈ | GESTION</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="commandes.html">Commandes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="laveurs.html">Laveurs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="rapports.html">Rapports</a></li>
+                        <li class="nav-item"><a class="nav-link" href="utilisateurs.html">Utilisateurs</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="profil.html">Profil</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu Principal -->
+    <main class="container my-4">
+        <h2 class="text-gradient mb-4">Profil Utilisateur</h2>
+
+        <div class="row g-4">
+            <!-- Carte Résumé Profil (Gauche) -->
+            <div class="col-md-4">
+                <div class="card card-bide-neon text-center p-4">
+                    <div class="mb-3">
+                        <img src="../images/frt.png" alt="Avatar" class="rounded-circle border border-primary p-1" width="100" height="100">
+                    </div>
+                    <h4 class="text-info mb-1" id="profile-card-name">Chargement...</h4>
+                    <span class="badge bg-primary mb-3" id="profile-card-role">Gestionnaire</span>
+                    <p class="text-muted small">Session active via LocalStorage</p>
+                </div>
+            </div>
+
+            <!-- Formulaire Édition (Droite) -->
+            <div class="col-md-8">
+                <div class="card card-bide-neon p-4">
+                    <h5 class="text-info mb-3">Informations Personnelles</h5>
+                    <form id="form-profil">
+                        <div class="mb-3">
+                            <label class="form-label">Nom Complet</label>
+                            <input type="text" id="profil-nom" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rôle / Titre</label>
+                            <input type="text" id="profil-role" class="form-control bg-dark text-white border-secondary" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Identifiant</label>
+                            <input type="text" id="profil-username" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="text-center py-3 border-top border-secondary mt-auto">
+        <small class="text-muted">&copy; 2026 BIDÈ - Académie Digitale Numérique</small>
+    </footer>
+
+    <!-- Scripts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', chargerProfil);
+    </script>
+</body>
+</html>

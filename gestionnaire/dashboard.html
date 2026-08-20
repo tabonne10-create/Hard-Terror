@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIDÈ - Dashboard Gestionnaire</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-dark text-white">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+            <img src="../images/frt.png" alt="BIDÈ Logo" height="40" class="rounded">
+            <span class="fw-bold">BIDÈ | GESTION</span>
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link active" href="dashboard.html">Dashboard</a>
+            <a class="nav-link" href="commandes.html">Commandes</a>
+            <a class="nav-link" href="laveurs.html">Laveurs</a>
+            <a class="nav-link" href="rapports.html">Rapports</a>
+            <a class="nav-link" href="profil.html">Profil</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-4">
+    <h2 class="mb-4 text-gradient">Espace Gestionnaire / Réception</h2>
+
+    <div class="row g-4">
+        <!-- Saisie Express -->
+        <div class="col-md-5">
+            <div class="card card-bide-neon text-white">
+                <div class="card-header bg-transparent border-bottom border-primary fw-bold">Saisie Express Véhicule</div>
+                <div class="card-body">
+                    <form id="form-express">
+                        <div class="mb-3">
+                            <label class="form-label">Immatriculation</label>
+                            <input type="text" id="plaque" class="form-control bg-dark text-white border-secondary text-uppercase" placeholder="ex: TG-1234-AB" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Type d'Engin</label>
+                            <select id="typeEngin" class="form-select bg-dark text-white border-secondary" required>
+                                <option value="Citadine">Citadine</option>
+                                <option value="Berline">Berline</option>
+                                <option value="SUV/4x4">SUV / 4x4</option>
+                                <option value="Moto/Tricycle">Moto / Tricycle</option>
+                                <option value="Camionnette">Camionnette</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Formule</label>
+                            <select id="formule" class="form-select bg-dark text-white border-secondary" required>
+                                <option value="Express">Lavage Express</option>
+                                <option value="Complet">Lavage Complet</option>
+                                <option value="Premium">Lavage VIP / Premium</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 font-monospace">GÉNÉRER TICKET QR</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Ticket -->
+        <div class="col-md-7">
+            <div class="card card-bide-neon text-white text-center h-100">
+                <div class="card-header bg-transparent border-bottom border-primary fw-bold">Aperçu du Ticket</div>
+                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                    <div id="qrcode-container" class="p-3 bg-white rounded mb-3"></div>
+                    <div id="ticket-info" class="text-muted">En attente d'enregistrement...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/script.js"></script>
+</body>
+</html>
