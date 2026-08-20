@@ -1,0 +1,259 @@
+/* ===== BIDE Car Wash – White & Blue Theme ===== */
+
+:root {
+  --blue-dark: #0a2463;
+  --blue-mid: #1e56a0;
+  --blue-light: #3a86ff;
+  --blue-pale: #d6e4ff;
+  --white: #ffffff;
+  --off-white: #f4f7fb;
+  --gray: #6c757d;
+  --text: #1a1a2e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background: var(--white);
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  background: var(--white) !important;
+  box-shadow: 0 2px 12px rgba(10,36,99,.08);
+  padding: .75rem 0;
+}
+.navbar-brand img { height: 48px; }
+.navbar .nav-link {
+  color: var(--blue-dark) !important;
+  font-weight: 600;
+  margin: 0 .5rem;
+  transition: color .2s;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link.active { color: var(--blue-light) !important; }
+.btn-login {
+  background: var(--blue-mid);
+  color: var(--white) !important;
+  border-radius: 24px;
+  padding: .45rem 1.6rem;
+  font-weight: 600;
+  margin-left: .5rem;
+  transition: background .25s;
+}
+.btn-login:hover { background: var(--blue-dark); }
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 100%);
+  color: var(--white);
+  padding: 6rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: var(--white);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.hero h1 { font-size: 3rem; font-weight: 800; }
+.hero p.lead { font-size: 1.25rem; opacity: .9; }
+.hero .btn-cta {
+  background: var(--white);
+  color: var(--blue-dark);
+  border-radius: 30px;
+  padding: .7rem 2.2rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: transform .2s, box-shadow .2s;
+}
+.hero .btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+.hero img {
+  max-height: 380px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+}
+
+/* ===== SECTION ===== */
+section { padding: 4rem 0; }
+.section-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.section-title h2 {
+  color: var(--blue-dark);
+  font-weight: 800;
+  font-size: 2rem;
+}
+.section-title .underline {
+  width: 60px;
+  height: 4px;
+  background: var(--blue-light);
+  border-radius: 2px;
+  margin: .5rem auto 0;
+}
+
+/* ===== FORMULE CARDS ===== */
+.formule-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  transition: transform .3s, box-shadow .3s;
+  height: 100%;
+}
+.formule-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(30,86,160,.18);
+}
+.formule-card .card-header {
+  background: var(--blue-mid);
+  color: var(--white);
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+.formule-card .card-header h5 { margin: 0; font-weight: 700; }
+.formule-card .card-body { padding: 1.5rem; }
+.formule-card .price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+}
+.formule-card .price small { font-size: .9rem; color: var(--gray); }
+
+/* ===== BANNER RÉSERVATION ===== */
+.reservation-banner {
+  background: linear-gradient(90deg, var(--blue-mid), var(--blue-light));
+  color: var(--white);
+  padding: 3rem 0;
+  text-align: center;
+  border-radius: 16px;
+  margin: 2rem 0;
+}
+.reservation-banner .btn {
+  background: var(--white);
+  color: var(--blue-dark);
+  font-weight: 700;
+  border-radius: 30px;
+  padding: .6rem 2rem;
+}
+
+/* ===== ABOUT ===== */
+.about-section img {
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.12);
+}
+.about-section .feature-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--blue-pale);
+  color: var(--blue-mid);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== TESTIMONIALS ===== */
+.testimonial-card {
+  background: var(--off-white);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.testimonial-card .stars { color: #f5a623; }
+.testimonial-card p { font-style: italic; color: var(--gray); }
+
+/* ===== FEEDBACK ===== */
+.feedback-section {
+  background: var(--blue-pale);
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+
+/* ===== TARIFS ===== */
+.tarif-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  transition: transform .3s;
+}
+.tarif-card:hover { transform: translateY(-4px); }
+.tarif-card .card-header {
+  background: var(--blue-mid);
+  color: var(--white);
+  font-weight: 700;
+}
+.tarif-card .badge-citadine { background: #3a86ff; }
+.tarif-card .badge-berline { background: #1e56a0; }
+.tarif-card .badge-suv { background: #0a2463; }
+.tarif-card .badge-moto { background: #3a86ff; }
+.tarif-card .badge-camion { background: #0a2463; }
+
+.filter-btn {
+  border: 2px solid var(--blue-mid);
+  color: var(--blue-mid);
+  background: var(--white);
+  border-radius: 24px;
+  padding: .4rem 1.2rem;
+  font-weight: 600;
+  transition: all .25s;
+  margin: .2rem;
+}
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--blue-mid);
+  color: var(--white);
+}
+
+/* ===== CONTACT ===== */
+.contact-info-card {
+  background: var(--blue-pale);
+  border-radius: 16px;
+  padding: 2rem;
+}
+.contact-info-card h5 { color: var(--blue-dark); font-weight: 700; }
+#map { height: 350px; border-radius: 16px; z-index: 0; }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--blue-dark);
+  color: var(--white);
+  padding: 3rem 0 1.5rem;
+}
+.footer a { color: var(--blue-pale); text-decoration: none; }
+.footer a:hover { color: var(--white); }
+.footer .footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.15);
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: .9rem;
+  opacity: .8;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .hero { padding: 4rem 0 3rem; }
+  .hero img { margin-top: 2rem; max-height: 250px; }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--off-white); }
+::-webkit-scrollbar-thumb { background: var(--blue-light); border-radius: 4px; }
