@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BIDE – Contact & Localisation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:var(--white);">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <img src="IMAGE/laverie.jpeg" alt="BIDÀ Logo" class="rounded-circle" style="height:48px; width:48px; object-fit:cover;">
+      <span class="fw-bold fs-4" style="color:var(--blue-dark);">BIDE</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" href="a-propos.html">À Propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="tarifs.html">Tarifs</a></li>
+        <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
+      </ul>
+      <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
+        <i class="bi bi-person-circle me-1"></i> Login
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:16px; overflow:hidden;">
+      <div class="modal-header" style="background:var(--blue-mid); color:var(--white); border:none;">
+        <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Connexion</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" placeholder="votre@email.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mot de passe</label>
+            <input type="password" class="form-control" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn w-100 text-white fw-bold" style="background:var(--blue-mid); border-radius:24px;">Se connecter</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" style="margin-top:72px;">
+  <div class="container text-center">
+    <h1><i class="bi bi-envelope-paper me-2"></i>Contact & <span style="color:var(--blue-light);">Localisation</span></h1>
+    <p class="lead mt-3">Nous sommes à votre écoute. Envoyez-nous un message ou passez nous voir !</p>
+  </div>
+</section>
+
+<!-- ===== FORMULAIRE + INFOS ===== -->
+<section>
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- FORMULAIRE -->
+      <div class="col-lg-7">
+        <div class="card" style="border-radius:16px; border:none; box-shadow:0 4px 20px rgba(0,0,0,.08);">
+          <div class="card-body p-4">
+            <h4 class="fw-bold mb-4" style="color:var(--blue-dark);"><i class="bi bi-chat-left-text me-2"></i>Envoyez-nous un message</h4>
+            <form id="contactForm" novalidate>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Nom complet *</label>
+                  <input type="text" class="form-control" id="contactName" placeholder="Votre nom" required>
+                  <div class="invalid-feedback">Veuillez entrer votre nom.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Téléphone *</label>
+                  <input type="tel" class="form-control" id="contactPhone" placeholder="+225 00 00 00 00" required>
+                  <div class="invalid-feedback">Veuillez entrer un numéro valide.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Email *</label>
+                  <input type="email" class="form-control" id="contactEmail" placeholder="votre@email.com" required>
+                  <div class="invalid-feedback">Veuillez entrer un email valide.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Sujet</label>
+                  <select class="form-select" id="contactSubject">
+                    <option value="">Choisir un sujet…</option>
+                    <option value="reservation">Réservation</option>
+                    <option value="tarif">Question sur les tarifs</option>
+                    <option value="reclamation">Réclamation</option>
+                    <option value="partenariat">Partenariat</option>
+                    <option value="autre">Autre</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Message *</label>
+                  <textarea class="form-control" id="contactMessage" rows="5" placeholder="Décrivez votre demande…" required></textarea>
+                  <div class="invalid-feedback">Veuillez entrer un message.</div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-lg w-100 text-white fw-bold" style="background:var(--blue-mid); border-radius:24px;">
+                    <i class="bi bi-send me-2"></i>Envoyer le message
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div id="contactSuccess" class="alert mt-3" style="display:none; background:var(--blue-pale); color:var(--blue-dark); border:none; border-radius:12px;">
+              <i class="bi bi-check-circle-fill me-2"></i>Merci ! Votre message a été envoyé avec succès.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFOS PRATIQUES -->
+      <div class="col-lg-5">
+        <div class="contact-info-card mb-4">
+          <h5><i class="bi bi-geo-alt me-2"></i>Adresse</h5>
+          <p class="mb-0">Zone Industrielle, Rue des Lavages<br>Lome-TOGO, ADIDOGOME</p>
+        </div>
+
+        <div class="contact-info-card mb-4">
+          <h5><i class="bi bi-telephone me-2"></i>Téléphone</h5>
+          <p class="mb-0">
+            <a href="tel:+228 98 02 22 20" style="color:var(--blue-dark);">+228 98 02 22 200</a><br>
+            <a href="tel:+228 91 11 21 11" style="color:var(--blue-dark);">+228 91 11 21 11</a>
+          </p>
+        </div>
+
+        <div class="contact-info-card mb-4">
+          <h5><i class="bi bi-envelope me-2"></i>Email</h5>
+          <p class="mb-0"><a href="mailto:contact@bide.tg" style="color:var(--blue-dark);">contact@bide.tg</a></p>
+          <p class="mb-0"><a href="mailto:info@bide.tg" style="color:var(--blue-dark);">info@bide.tg</a></p>
+        </div>
+
+        <div class="contact-info-card mb-4">
+          <h5><i class="bi bi-clock me-2"></i>Horaires d'Ouverture</h5>
+          <table class="table table-borderless mb-0" style="color:var(--blue-dark);">
+            <tbody>
+              <tr><td>Lundi – Vendredi</td><td class="text-end fw-bold">7h – 19h</td></tr>
+              <tr><td>Samedi</td><td class="text-end fw-bold">8h – 17h</td></tr>
+              <tr><td>Dimanche</td><td class="text-end fw-bold">9h – 15h</td></tr>
+              <tr><td>Jours fériés</td><td class="text-end fw-bold text-danger">Fermé</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="contact-info-card">
+          <h5><i class="bi bi-chat-dots me-2"></i>Réseaux Sociaux</h5>
+          <div class="d-flex gap-3 mt-2">
+            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-whatsapp"></i></a>
+            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-tiktok"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CARTE ===== -->
+<section style="background:var(--off-white);">
+  <div class="container">
+    <div class="section-title">
+      <h2><i class="bi bi-map me-2"></i>Notre Localisation</h2>
+      <div class="underline"></div>
+    </div>
+   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253865.21345428986!2d0.8869055867187507!3d6.178390899999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1023e227e48fffff%3A0x8755336f62347ed7!2sLe%20Champion%20Supermarch%C3%A9%20Adidogome!5e0!3m2!1sfr!2stg!4v1787219154691!5m2!1sfr!2stg" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <img src="IMAGE/laverie.jpeg" alt="BIDE" class="rounded-circle" style="height:42px;width:42px;object-fit:cover;">
+          <h5 class="mb-0 fw-bold">BIDE</h5>
+        </div>
+        <p>Lavage auto écologique et premium. Économisez l'eau, prenez soin de votre véhicule.</p>
+      </div>
+      <div class="col-lg-2">
+        <h6 class="fw-bold mb-3">Navigation</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="index.html">Accueil</a></li>
+          <li class="mb-2"><a href="a-propos.html">À Propos</a></li>
+          <li class="mb-2"><a href="tarifs.html">Tarifs</a></li>
+          <li class="mb-2"><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h6 class="fw-bold mb-3">Horaires</h6>
+        <ul class="list-unstyled" style="color:var(--blue-pale);">
+          <li class="mb-2"><i class="bi bi-clock me-2"></i>Lun – Ven : 7h – 19h</li>
+          <li class="mb-2"><i class="bi bi-clock me-2"></i>Samedi : 8h – 17h</li>
+          <li class="mb-2"><i class="bi bi-clock me-2"></i>Dimanche : 9h – 15h</li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h6 class="fw-bold mb-3">Suivez-nous</h6>
+        <div class="d-flex gap-3">
+          <a href="#" class="fs-4"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="fs-4"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="fs-4"><i class="bi bi-whatsapp"></i></a>
+          <a href="#" class="fs-4"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 BIDE – Tous droits réservés. Lavage écologique premium.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
