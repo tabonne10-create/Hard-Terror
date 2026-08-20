@@ -1,0 +1,116 @@
+/* ==========================================
+   CHARTE GRAPHIQUE NÉON & THÈME SOMBRE (BIDÈ)
+   ========================================== */
+
+:root {
+    --bg-dark: #0a0d14;
+    --card-bg: #121824;
+    --neon-cyan: #00f2fe;
+    --neon-blue: #4facfe;
+    --border-color: rgba(0, 242, 254, 0.2);
+    --border-hover: rgba(0, 242, 254, 0.6);
+    --text-muted: #8a99ad;
+}
+
+body {
+    background-color: var(--bg-dark) !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+}
+
+/* --- Gradient Texte --- */
+.text-gradient {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+/* --- Navbar & En-tête --- */
+.navbar {
+    background-color: #05070a !important;
+    box-shadow: 0 2px 15px rgba(0, 242, 254, 0.1);
+}
+
+.navbar-brand img {
+    object-fit: cover;
+}
+
+/* --- Cartes Néon (card-bide-neon) --- */
+.card-bide-neon {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease-in-out;
+}
+
+.card-bide-neon:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+}
+
+/* --- Tableaux Thème Sombre --- */
+.table-dark {
+    --bs-table-bg: var(--card-bg);
+    --bs-table-hover-bg: rgba(0, 242, 254, 0.05);
+    color: #e0e6ed;
+}
+
+.table th {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* --- Formulaires & Input Néon --- */
+.form-control, .form-select {
+    background-color: #0b0f19 !important;
+    border: 1px solid var(--border-color) !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #0d1322 !important;
+    border-color: var(--neon-cyan) !important;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3) !important;
+}
+
+/* --- Boutons Néon Custom --- */
+.btn-info {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue)) !important;
+    border: none !important;
+    color: #05070a !important;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-info:hover {
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+    transform: translateY(-1px);
+}
+
+.btn-outline-info {
+    color: var(--neon-cyan) !important;
+    border-color: var(--neon-cyan) !important;
+}
+
+.btn-outline-info:hover {
+    background-color: var(--neon-cyan) !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+}
+
+/* --- Badges --- */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+/* --- Modales --- */
+.modal-content {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--neon-cyan);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);
+}
