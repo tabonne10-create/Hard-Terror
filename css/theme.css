@@ -591,3 +591,40 @@ footer {
         height: 42px;
     }
 }
+
+
+/* =========================================================
+   FOOTER FIX — TOUJOURS VISIBLE
+========================================================= */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer,
+.site-footer {
+    background: linear-gradient(135deg, var(--bide-navy-dark) 0%, var(--bide-navy) 60%, var(--bide-navy-blue) 100%);
+    color: #94a3b8;
+    border-top: 3px solid var(--bide-sky);
+    margin-top: auto;
+    padding: 0;
+    width: 100%;
+}
+
+.site-footer .fw-bold {
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.site-footer .text-muted {
+    color: #94a3b8 !important;
+}
+
+.site-footer img {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+main {
+    flex: 1 0 auto;
+}

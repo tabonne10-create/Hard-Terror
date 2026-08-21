@@ -209,7 +209,7 @@ function searchVehicle(query) {
         (v.plate && v.plate.toUpperCase().replace(/\s+/g, '') === cleanQuery.replace(/\s+/g, ''))
     );
 
-    if (vehicle) {
+    if (vehicle && vehicle.status === 'validated') {
         const catKey = vehicle.vehicleTypeKey || 'berline';
         const pkgKey = vehicle.washPackageKey || 'simple';
         const price = calculateVehiclePrice(catKey, pkgKey);
@@ -252,7 +252,7 @@ function getGlobalStats() {
     } catch (e) {
         queue = [];
     }
-    const completedCount = queue.filter(v => v.status === 'completed' || v.status === 'paid').length;
+    const completedCount = queue.filter(v => v.status === 'validated' && !v._paid).length;
 
     return {
         todayRevenue,
@@ -394,60 +394,7 @@ function setupCaisseForms() {
         });
     }
 
-    // Formulaire création rapide
-    const quickTicketForm = document.getElementById('quickTicketForm');
-    if (quickTicketForm) {
-        quickTicketForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const catKey = document.getElementById('quickVehicleCategory').value;
-            const pkgKey = document.getElementById('quickWashPackage').value;
-            const plate = document.getElementById('quickPlate').value.trim() || `TG-${Math.floor(1000 + Math.random() * 9000)}-Z`;
-            const clientName = document.getElementById('quickClientName').value.trim() || 'Client Passage';
-
-            const newCode = `BID-${Math.floor(100 + Math.random() * 900)}`;
-            const catInfo = getCategoryInfo(catKey);
-            const price = calculateVehiclePrice(catKey, pkgKey);
-
-            const pkgLabels = {
-                simple: 'Lavage Simple',
-                complet: 'Lavage Complet',
-                premium: 'Lavage Premium'
-            };
-
-            const newVehicle = {
-                id: Date.now(),
-                code: newCode,
-                plate: plate,
-                vehicleTypeKey: catKey,
-                vehicleType: catInfo.label,
-                vehicleIcon: catInfo.icon,
-                wheels: catInfo.wheels,
-                washPackageKey: pkgKey,
-                washPackage: pkgLabels[pkgKey] || 'Lavage Complet',
-                price: price,
-                status: 'completed',
-                clientName: clientName,
-                clientPhone: '',
-                createdAt: new Date().toISOString()
-            };
-
-            // Ajouter à la file
-            let queue = [];
-            try {
-                queue = JSON.parse(localStorage.getItem('queue')) || [];
-            } catch (err) {
-                queue = [];
-            }
-            queue.push(newVehicle);
-            localStorage.setItem('queue', JSON.stringify(queue));
-
-            // Sélectionner pour encaissement
-            displayVehicleDetails(newVehicle);
-            showAlert(`Ticket ${newCode} (${catInfo.label}) créé et prêt à être encaissé.`, 'success');
-        });
-    }
-
-    // Calcul de la monnaie en direct lors de la frappe
+        // Calcul de la monnaie en direct lors de la frappe
     const amountGivenInput = document.getElementById('amountGiven');
     if (amountGivenInput) {
         amountGivenInput.addEventListener('input', updateChangeDisplay);
