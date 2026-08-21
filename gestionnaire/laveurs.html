@@ -1,92 +1,34 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIDÈ - Gestion des Laveurs</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Style Custom Néon -->
-    <link rel="stylesheet" href="../css/style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/laveur-animations.css">
+<script src="../auth.js"></script>
+<title>LAVAGE BIDÈ - Gestion des Laveurs</title>
+<link rel="icon" type="image/jpeg" href="../logo.jpg">
+<script>checkPageAccess('gestionnaire');</script>
 </head>
-<body class="bg-dark text-white d-flex flex-column min-vh-100">
+<body>
+<nav class="navbar navbar-expand-lg navbar-bide sticky-top shadow-sm"><div class="container-fluid px-4"><a class="navbar-brand fw-bold d-flex align-items-center" href="dashboard.html"><img src="../logo.jpg" alt="Logo" class="navbar-logo me-2"><span>LAVAGE BIDE</span><span class="badge bg-light text-dark ms-2 fs-6 fw-semibold">Gestion</span></a><button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarG"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarG"><ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center"><li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi-speedometer2 me-1"></i> Tableau de bord</a></li><li class="nav-item"><a class="nav-link" href="commandes.html"><i class="bi-receipt me-1"></i> Commandes</a></li><li class="nav-item"><a class="nav-link active" href="laveurs.html"><i class="bi-people me-1"></i> Laveurs</a></li><li class="nav-item"><a class="nav-link" href="rapports.html"><i class="bi-graph-up me-1"></i> Rapports</a></li><li class="nav-item"><a class="nav-link" href="utilisateurs.html"><i class="bi-person-gear me-1"></i> Utilisateurs</a></li><li class="nav-item"><a class="nav-link" href="profil.html"><i class="bi-person-circle me-1"></i> Profil</a></li></ul><div class="d-flex align-items-center gap-2 mt-3 mt-lg-0"><span class="badge bg-light text-dark px-3 py-2 border d-inline-flex align-items-center gap-2"><i class="bi bi-clipboard2-data-fill text-primary"></i><span id="currentManagerName" class="fw-semibold">Gestionnaire</span></span><button class="btn btn-sm btn-outline-light d-flex align-items-center btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right me-1"></i> Deconnexion</button></div></div></div></nav>
+<div id="alertContainer" class="container-fluid position-fixed top-0 start-50 translate-middle-x" style="z-index:9999;padding-top:15px;"></div>
+<main class="container-fluid px-4 py-4">
+<div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-md-center"><div><h1 class="fw-bold mb-1"><i class="bi bi-people text-primary me-2"></i>Equipe des Laveurs</h1><p class="text-muted mb-0">Gestion de l equipe de lavage et assignation des pistes (8 pistes max).</p></div><div class="mt-3 mt-md-0"><span id="piste-stats"></span><button class="btn btn-primary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#modalLaveur"><i class="bi bi-person-plus me-1"></i> Ajouter</button></div></div>
 
-    <!-- En-tête / Navigation -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand d-flex align-items-center gap-2" href="dashboard.html">
-                    <img src="../images/frt.png" alt="BIDÈ Logo" height="40" class="rounded">
-                    <span class="fw-bold">BIDÈ | GESTION</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="commandes.html">Commandes</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="laveurs.html">Laveurs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="rapports.html">Rapports</a></li>
-                        <li class="nav-item"><a class="nav-link" href="utilisateurs.html">Utilisateurs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="profil.html">Profil</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    
+    <!-- VUE DES 3 PISTES -->
+    <div class="row g-3 mb-4" id="pistes-vue-container"></div>
 
-    <!-- Contenu Principal -->
-    <main class="container my-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-gradient mb-0">Équipe des Laveurs</h2>
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalLaveur">+ Ajouter un Laveur</button>
-        </div>
-
-        <!-- Cartes des Laveurs -->
-        <div class="row g-4" id="container-laveurs">
-            <!-- Généré dynamiquement par JS -->
-        </div>
-    </main>
-
-    <!-- Modal Ajouter Laveur -->
-    <div class="modal fade" id="modalLaveur" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content bg-dark text-white border-primary">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title text-gradient">Nouveau Laveur</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-laveur">
-                        <div class="mb-3">
-                            <label class="form-label">Nom Complet</label>
-                            <input type="text" id="laveur-nom" class="form-control bg-dark text-white border-secondary" placeholder="ex: Marc Koffi" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Piste / Zone Assignée</label>
-                            <select id="laveur-piste" class="form-select bg-dark text-white border-secondary" required>
-                                <option value="Piste A (Auto)">Piste A (Auto)</option>
-                                <option value="Piste B (Auto)">Piste B (Auto)</option>
-                                <option value="Piste C (Moto)">Piste C (Moto)</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pied de page -->
-    <footer class="text-center py-3 border-top border-secondary mt-auto">
-        <small class="text-muted">&copy; 2026 BIDÈ - Académie Digitale Numérique</small>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', afficherLaveurs);
-    </script>
-</body>
-</html>
+    <!-- EQUIPE DES LAVEURS -->
+    <h5 class="fw-bold text-navy mb-3"><i class="bi bi-people text-primary me-2"></i> Equipe</h5>
+    <div class="row g-4" id="container-laveurs"><div class="col-12 text-center text-muted py-5">Chargement...</div></div>
+</main>
+<div class="modal fade" id="modalLaveur" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title fw-bold text-navy"><i class="bi bi-person-plus-fill text-primary me-2"></i>Nouveau Laveur</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="form-laveur"><div class="mb-3"><label class="form-label fw-semibold">Nom Complet</label><input type="text" id="laveur-nom" class="form-control" placeholder="ex: Marc Koffi" required></div><div class="mb-3"><label class="form-label fw-semibold">Piste</label><select id="laveur-piste" class="form-select" required><option value="Piste A">Piste A (Auto)</option><option value="Piste B">Piste B (Auto)</option><option value="Piste C">Piste C (Moto)</option></select></div><button type="submit" class="btn btn-primary w-100"><i class="bi bi-check-circle me-1"></i> Enregistrer</button></form></div></div></div></div>
+<div class="modal fade" id="modalAssigner" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title fw-bold text-navy"><i class="bi bi-person-check-fill text-primary me-2"></i>Assigner une Tache</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="mb-3"><label class="form-label fw-semibold">Laveur</label><div id="assign-laveur-info" class="fw-bold text-primary">-</div></div><div class="mb-3"><label class="form-label fw-semibold">Vehicule a assigner</label><select id="assign-task-select" class="form-select" required><option value="">-- Selectionner --</option></select></div><button class="btn btn-primary w-100" onclick="confirmerAssignation()"><i class="bi bi-check-circle me-1"></i> Confirmer</button></div></div></div></div>
+<footer class="site-footer mt-auto"><div class="container-fluid text-center py-4"><div class="mb-2"><img src="../logo.jpg" alt="Logo LAVAGE BIDÈ" style="width:32px;height:32px;border-radius:50%;border:2px solid #38bdf8;"></div><div class="fw-bold text-white mb-1">LAVAGE BIDÈ</div><div class="small text-muted mb-2">Plateforme de Gestion de Lavage Automobile</div><div class="small" style="color:#64748b;">&copy; 2026 BIDÈ &mdash; Module Gestionnaire</div></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/script.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){afficher3Pistes();afficherLaveurs();});</script>
+</body></html>
