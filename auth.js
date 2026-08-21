@@ -122,6 +122,42 @@ function isAuthenticated() {
     return getCurrentUser() !== null;
 }
 
+/**
+ * Construit un chemin vers une page de l'application depuis la racine.
+ * Les portails gestionnaire et laveur vivent dans des sous-dossiers.
+ * @param {string} path - Chemin de destination depuis la racine
+ * @returns {string} Chemin utilisable depuis la page courante
+ */
+function getAppPath(path) {
+    const currentPath = window.location.pathname.replace(/\\/g, '/');
+    const isNestedPortal = /\/(gestionnaire|laveur)\//.test(currentPath);
+    return isNestedPortal ? `../${path}` : path;
+}
+
+function applyBrandName() {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) textNodes.push(node);
+    textNodes.forEach(textNode => {
+        textNode.nodeValue = textNode.nodeValue.replace(/LAVAGE BIDE/g, 'LAVAGE BIDÈ');
+    });
+
+    document.querySelectorAll('[alt], [title]').forEach(element => {
+        if (element.hasAttribute('alt')) element.alt = element.alt.replace(/LAVAGE BIDE/g, 'LAVAGE BIDÈ');
+        if (element.hasAttribute('title')) element.title = element.title.replace(/LAVAGE BIDE/g, 'LAVAGE BIDÈ');
+    });
+
+    document.title = document.title.replace(/LAVAGE BIDE/g, 'LAVAGE BIDÈ');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyBrandName);
+} else {
+    applyBrandName();
+}
+
 // ============================================================
 // CONNEXION
 // ============================================================
@@ -185,7 +221,7 @@ function login(username, password) {
 function logout() {
     sessionStorage.removeItem('bide_current_user');
     localStorage.removeItem('bide_current_user');
-    window.location.href = 'login.html?logout=true';
+    window.location.href = getAppPath('login.html?logout=true');
 }
 
 // ============================================================
@@ -198,18 +234,26 @@ function logout() {
  * @returns {string} URL de destination
  */
 function getRedirectUrl(role) {
+    let path;
+
     switch (role) {
         case 'admin':
-            return 'admin.html';
+            path = 'admin.html';
+            break;
         case 'caisse':
-            return 'caisse.html';
+            path = 'caisse.html';
+            break;
         case 'gestionnaire':
-            return 'gestionnaire/dashboard.html';
+            path = 'gestionnaire/dashboard.html';
+            break;
         case 'laveur':
-            return 'laveur/dashboard.html';
+            path = 'laveur/dashboard.html';
+            break;
         default:
-            return 'login.html';
+            path = 'login.html';
     }
+
+    return getAppPath(path);
 }
 
 // ============================================================
@@ -227,8 +271,8 @@ function checkPageAccess(requiredRole) {
 
     // 1. Utilisateur non connecté → redirection vers login
     if (!user) {
-        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-        window.location.href = `login.html?redirect=${encodeURIComponent(currentPath)}&error=unauthorized`;
+        const currentPath = window.location.pathname.split('/').filter(Boolean).slice(-2).join('/') || 'index.html';
+        window.location.href = getAppPath(`login.html?redirect=${encodeURIComponent(currentPath)}&error=unauthorized`);
         return false;
     }
 
@@ -238,14 +282,14 @@ function checkPageAccess(requiredRole) {
         // L'admin peut accéder à tout, sauf les pages strictement laveur
         if (requiredRole === 'laveur') {
             alert('Accès refusé : Cette page est réservée aux agents laveurs.');
-            window.location.href = 'admin.html';
+            window.location.href = getAppPath('admin.html');
             return false;
         }
     } else if (user.role !== requiredRole) {
         // Cas spécial : le caissier peut accéder aux pages admin en lecture
         if (user.role === 'caisse' && requiredRole === 'admin') {
             alert('Accès refusé : Cette page est réservée aux administrateurs.');
-            window.location.href = 'caisse.html';
+            window.location.href = getAppPath('caisse.html');
             return false;
         }
         // Si le rôle ne correspond pas, rediriger vers sa page par défaut

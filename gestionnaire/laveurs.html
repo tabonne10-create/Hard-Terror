@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../css/theme.css">
     <link rel="stylesheet" href="../css/laveur-animations.css">
 <script src="../auth.js"></script>
-<title>LAVAGE BIDE - Gestion des Laveurs</title>
+<title>LAVAGE BIDÈ - Gestion des Laveurs</title>
 <link rel="icon" type="image/jpeg" href="../logo.jpg">
 <script>checkPageAccess('gestionnaire');</script>
 </head>
@@ -27,7 +27,7 @@
 </main>
 <div class="modal fade" id="modalLaveur" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title fw-bold text-navy"><i class="bi bi-person-plus-fill text-primary me-2"></i>Nouveau Laveur</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="form-laveur"><div class="mb-3"><label class="form-label fw-semibold">Nom Complet</label><input type="text" id="laveur-nom" class="form-control" placeholder="ex: Marc Koffi" required></div><div class="mb-3"><label class="form-label fw-semibold">Piste</label><select id="laveur-piste" class="form-select" required><option value="Piste A">Piste A (Auto)</option><option value="Piste B">Piste B (Auto)</option><option value="Piste C">Piste C (Moto)</option></select></div><button type="submit" class="btn btn-primary w-100"><i class="bi bi-check-circle me-1"></i> Enregistrer</button></form></div></div></div></div>
 <div class="modal fade" id="modalAssigner" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title fw-bold text-navy"><i class="bi bi-person-check-fill text-primary me-2"></i>Assigner une Tache</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="mb-3"><label class="form-label fw-semibold">Laveur</label><div id="assign-laveur-info" class="fw-bold text-primary">-</div></div><div class="mb-3"><label class="form-label fw-semibold">Vehicule a assigner</label><select id="assign-task-select" class="form-select" required><option value="">-- Selectionner --</option></select></div><button class="btn btn-primary w-100" onclick="confirmerAssignation()"><i class="bi bi-check-circle me-1"></i> Confirmer</button></div></div></div></div>
-<footer class="site-footer mt-auto"><div class="container-fluid text-center py-4"><div class="mb-2"><img src="../logo.jpg" alt="Logo" style="width:32px;height:32px;border-radius:50%;border:2px solid #38bdf8;"></div><div class="fw-bold text-white mb-1">LAVAGE BIDE</div><div class="small text-muted mb-2">Plateforme de Gestion de Lavage Automobile</div><div class="small" style="color:#64748b;">&copy; 2026 BIDE &mdash; Module Gestionnaire</div></div></footer>
+<footer class="site-footer mt-auto"><div class="container-fluid text-center py-4"><div class="mb-2"><img src="../logo.jpg" alt="Logo LAVAGE BIDÈ" style="width:32px;height:32px;border-radius:50%;border:2px solid #38bdf8;"></div><div class="fw-bold text-white mb-1">LAVAGE BIDÈ</div><div class="small text-muted mb-2">Plateforme de Gestion de Lavage Automobile</div><div class="small" style="color:#64748b;">&copy; 2026 BIDÈ &mdash; Module Gestionnaire</div></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/script.js"></script>
 <script>document.addEventListener('DOMContentLoaded',function(){afficher3Pistes();afficherLaveurs();});</script>

@@ -59,6 +59,17 @@ const VEHICLE_CATEGORIES = {
     } else {
         var l = JSON.parse(localStorage.getItem(STORAGE_LAVEURS)) || [];
         l.forEach(function(x) { if (x.currentTask === undefined) x.currentTask = null; });
+        if (typeof getUsers === 'function') {
+            getUsers().filter(function(user) { return user.role === 'laveur'; }).forEach(function(user) {
+                var matchingWorker = l.find(function(worker) {
+                    return worker.userId === user.id || worker.username === user.username || (worker.nom && user.fullName && worker.nom.toLowerCase() === user.fullName.toLowerCase());
+                });
+                if (matchingWorker) {
+                    matchingWorker.userId = user.id;
+                    matchingWorker.username = user.username;
+                }
+            });
+        }
         localStorage.setItem(STORAGE_LAVEURS, JSON.stringify(l));
     }
     if (!localStorage.getItem(STORAGE_USERS)) localStorage.setItem(STORAGE_USERS, JSON.stringify([{ id: 1, nom: 'WIN_NER STACK', username: 'winner_admin', role: 'Gestionnaire', statut: 'Actif' }]));
@@ -291,14 +302,100 @@ function genererRapports() {
 }
 
 // 8. Utilisateurs
+function getManagedUsers() {
+    if (typeof getUsers === 'function') return getUsers();
+    try { return JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; } catch (e) { return []; }
+}
+
+function saveManagedUsers(users) {
+    localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+}
+
+function getManagedRoleLabel(role) {
+    var labels = { admin: 'Administrateur', caisse: 'Caissier', gestionnaire: 'Gestionnaire', laveur: 'Laveur' };
+    return labels[role] || role || 'Utilisateur';
+}
+
 function afficherUtilisateurs() {
     var tb = document.getElementById('table-users-body'); if (!tb) return;
-    var u = []; try { u = JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; } catch(e) {} tb.innerHTML = '';
-    u.forEach(function(x, i) { tb.innerHTML += '<tr><td><strong class="text-navy">' + escapeHTML(x.nom) + '</strong></td><td><span class="badge bg-primary-subtle text-primary">' + escapeHTML(x.role) + '</span></td><td class="text-muted">' + escapeHTML(x.username) + '</td><td><span class="badge bg-success">' + escapeHTML(x.statut) + '</span></td><td class="text-end"><button class="btn btn-sm btn-outline-danger" onclick="supprimerUser(' + i + ')">Desactiver</button></td></tr>'; });
+    var users = getManagedUsers(); tb.innerHTML = '';
+    users.forEach(function(user, index) {
+        var name = user.fullName || user.nom || user.username;
+        var role = (user.role || '').toLowerCase();
+        var status = user.statut || 'Actif';
+        tb.innerHTML += '<tr><td><strong class="text-navy">' + escapeHTML(name) + '</strong></td><td><span class="badge bg-primary-subtle text-primary">' + escapeHTML(getManagedRoleLabel(role)) + '</span></td><td class="text-muted">' + escapeHTML(user.username) + '</td><td><span class="badge bg-success">' + escapeHTML(status) + '</span></td><td class="text-end"><div class="d-flex justify-content-end gap-2"><button class="btn btn-sm btn-outline-warning" data-action="reset-user-password" data-user-index="' + index + '">Reinitialiser</button><button class="btn btn-sm btn-outline-danger" data-action="delete-user" data-user-index="' + index + '">Desactiver</button></div></td></tr>';
+    });
 }
 var formUser = document.getElementById('form-user');
-if (formUser) { formUser.addEventListener('submit', function(e) { e.preventDefault(); var u = []; try { u = JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; } catch(er) {} u.push({ id: Date.now(), nom: document.getElementById('user-nom').value.trim(), username: document.getElementById('user-username').value.trim(), role: document.getElementById('user-role').value, statut: 'Actif' }); localStorage.setItem(STORAGE_USERS, JSON.stringify(u)); formUser.reset(); var m = bootstrap.Modal.getInstance(document.getElementById('modalUser')); if (m) m.hide(); afficherUtilisateurs(); }); }
-function supprimerUser(i) { var u = []; try { u = JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; } catch(e) {} u.splice(i, 1); localStorage.setItem(STORAGE_USERS, JSON.stringify(u)); afficherUtilisateurs(); }
+if (formUser) {
+    formUser.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var name = document.getElementById('user-nom').value.trim();
+        var username = document.getElementById('user-username').value.trim().toLowerCase();
+        var password = document.getElementById('user-password').value;
+        var role = document.getElementById('user-role').value;
+        var piste = document.getElementById('user-piste').value;
+        var users = getManagedUsers();
+
+        if (users.some(function(user) { return (user.username || '').toLowerCase() === username; })) {
+            showAlert('Cet identifiant existe deja.', 'warning');
+            return;
+        }
+
+        var user = {
+            id: 'usr-' + Date.now(),
+            username: username,
+            password: password,
+            fullName: name,
+            role: role,
+            badge: getManagedRoleLabel(role),
+            icon: role === 'laveur' ? 'bi-droplet-fill' : 'bi-person-fill',
+            avatarColor: role === 'laveur' ? '#f59e0b' : '#0284c7',
+            statut: 'Actif'
+        };
+        users.push(user);
+        saveManagedUsers(users);
+
+        if (role === 'laveur') {
+            var laveurs = getLaveurs();
+            laveurs.push({ id: user.id, userId: user.id, username: user.username, nom: user.fullName, piste: piste, statut: 'Actif', currentTask: null });
+            saveLaveurs(laveurs);
+        }
+
+        formUser.reset();
+        var m = bootstrap.Modal.getInstance(document.getElementById('modalUser')); if (m) m.hide();
+        afficherUtilisateurs();
+        showAlert('Compte cree. L utilisateur peut maintenant se connecter avec cet identifiant.', 'success');
+    });
+}
+function supprimerUser(index) {
+    var users = getManagedUsers();
+    var user = users[index];
+    if (!user) return;
+    if (typeof getCurrentUser === 'function' && getCurrentUser() && getCurrentUser().id === user.id) { showAlert('Vous ne pouvez pas desactiver votre propre compte.', 'warning'); return; }
+    if (!confirm('Desactiver ce compte ?')) return;
+    users.splice(index, 1); saveManagedUsers(users);
+    if ((user.role || '').toLowerCase() === 'laveur') saveLaveurs(getLaveurs().filter(function(lav) { return lav.userId !== user.id && lav.username !== user.username; }));
+    afficherUtilisateurs();
+}
+
+function reinitialiserMotDePasse(index) {
+    var users = getManagedUsers();
+    var user = users[index];
+    if (!user) return;
+
+    var newPassword = window.prompt('Nouveau mot de passe pour ' + (user.fullName || user.username) + ' (6 caracteres minimum) :');
+    if (newPassword === null) return;
+    if (newPassword.length < 6) {
+        showAlert('Le mot de passe doit contenir au moins 6 caracteres.', 'warning');
+        return;
+    }
+
+    user.password = newPassword;
+    users[index] = user;
+    saveManagedUsers(users);
+    showAlert('Mot de passe reinitialise. Le compte peut maintenant se reconnecter.', 'success');
+}
 
 // 9. Profil Gestionnaire
 function chargerProfil() { var f = document.getElementById('form-profil'); if (!f) return; var p = JSON.parse(localStorage.getItem(STORAGE_PROFIL)); if (p) { document.getElementById('profil-nom').value = p.nom || ''; document.getElementById('profil-role').value = p.role || ''; document.getElementById('profil-username').value = p.username || ''; var cn = document.getElementById('profile-card-name'); if (cn) cn.innerText = p.nom || ''; } }
@@ -314,7 +411,10 @@ function chargerPisteLaveur() {
     if (!container) return;
     var pl = JSON.parse(localStorage.getItem(STORAGE_PROFIL_LAVEUR)) || {};
     var ln = pl.nom || '';
-    var lv = getLaveurs().find(function(l) { return l.nom.toLowerCase() === ln.toLowerCase(); });
+    var currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    var lv = getLaveurs().find(function(l) {
+        return (currentUser && (l.userId === currentUser.id || l.username === currentUser.username)) || (!currentUser && l.nom && l.nom.toLowerCase() === ln.toLowerCase());
+    });
     var queue = getQueue();
     var mt = lv ? queue.filter(function(v) { return v.assignedTo && v.assignedTo.id === lv.id && (v.status === 'assigned' || v.status === 'in_progress' || v.status === 'completed'); }) : queue.filter(function(v) { return v.status !== 'paid' && v.status !== 'validated'; });
     container.innerHTML = '';
@@ -387,7 +487,10 @@ function terminerLavage(code) {
 function afficherCommandesLaveur() {
     var tb = document.getElementById('table-laveur-commandes-body'); if (!tb) return;
     var pl = JSON.parse(localStorage.getItem(STORAGE_PROFIL_LAVEUR)) || {};
-    var lv = getLaveurs().find(function(l) { return l.nom.toLowerCase() === (pl.nom || '').toLowerCase(); });
+    var currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    var lv = getLaveurs().find(function(l) {
+        return (currentUser && (l.userId === currentUser.id || l.username === currentUser.username)) || (!currentUser && l.nom && l.nom.toLowerCase() === (pl.nom || '').toLowerCase());
+    });
     var mc = lv ? getQueue().filter(function(v) { return v.assignedTo && v.assignedTo.id === lv.id; }) : getQueue();
     tb.innerHTML = '';
     if (mc.length === 0) { tb.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">Aucun historique.</td></tr>'; return; }
@@ -405,11 +508,41 @@ function chargerDetailsCommande() {
 
 function chargerProfilLaveur() {
     var f = document.getElementById('form-profil-laveur'); if (!f) return;
-    var p = JSON.parse(localStorage.getItem(STORAGE_PROFIL_LAVEUR));
-    if (p) { document.getElementById('laveur-profil-nom').value = p.nom || ''; document.getElementById('laveur-profil-piste').value = p.piste || 'P1'; var cn = document.getElementById('laveur-card-nom'), cp = document.getElementById('laveur-card-piste'); if (cn) cn.innerText = p.nom || ''; if (cp) cp.innerText = p.piste || 'P1'; }
+    var currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    var legacyProfile = JSON.parse(localStorage.getItem(STORAGE_PROFIL_LAVEUR)) || {};
+    var profile = getLaveurs().find(function(lav) {
+        return currentUser && (lav.userId === currentUser.id || lav.username === currentUser.username);
+    }) || legacyProfile;
+    if (profile) {
+        document.getElementById('laveur-profil-nom').value = profile.nom || (currentUser && currentUser.fullName) || '';
+        document.getElementById('laveur-profil-piste').value = profile.piste || 'Piste A';
+        var cn = document.getElementById('laveur-card-nom'), cp = document.getElementById('laveur-card-piste');
+        if (cn) cn.innerText = profile.nom || (currentUser && currentUser.fullName) || '';
+        if (cp) cp.innerText = profile.piste || 'Piste A';
+    }
 }
 var formProfilLaveur = document.getElementById('form-profil-laveur');
-if (formProfilLaveur) { formProfilLaveur.addEventListener('submit', function(e) { e.preventDefault(); var n = document.getElementById('laveur-profil-nom').value.trim(), p = document.getElementById('laveur-profil-piste').value; localStorage.setItem(STORAGE_PROFIL_LAVEUR, JSON.stringify({ nom: n, piste: p })); var cn = document.getElementById('laveur-card-nom'), cp = document.getElementById('laveur-card-piste'); if (cn) cn.innerText = n; if (cp) cp.innerText = p; showAlert('Session laveur mise a jour !', 'success'); }); }
+if (formProfilLaveur) {
+    formProfilLaveur.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var n = document.getElementById('laveur-profil-nom').value.trim();
+        var p = document.getElementById('laveur-profil-piste').value;
+        var currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+        var laveurs = getLaveurs();
+        var index = laveurs.findIndex(function(lav) { return currentUser && (lav.userId === currentUser.id || lav.username === currentUser.username); });
+        if (index !== -1) {
+            laveurs[index].nom = n;
+            laveurs[index].piste = p;
+            saveLaveurs(laveurs);
+        } else {
+            localStorage.setItem(STORAGE_PROFIL_LAVEUR, JSON.stringify({ nom: n, piste: p }));
+        }
+        var cn = document.getElementById('laveur-card-nom'), cp = document.getElementById('laveur-card-piste');
+        if (cn) cn.innerText = n;
+        if (cp) cp.innerText = p;
+        showAlert('Profil laveur mis a jour !', 'success');
+    });
+}
 
 
 // ============================================================
@@ -428,6 +561,8 @@ document.addEventListener('click', function(e) {
     else if (action === 'mark-read' && notifId) marquerLue(parseInt(notifId));
     else if (action === 'prepare-assign') preparerAssignation(parseInt(btn.getAttribute('data-laveur-id')));
     else if (action === 'delete-laveur') supprimerLaveur(parseInt(btn.getAttribute('data-laveur-id')));
+    else if (action === 'delete-user') supprimerUser(parseInt(btn.getAttribute('data-user-index')));
+    else if (action === 'reset-user-password') reinitialiserMotDePasse(parseInt(btn.getAttribute('data-user-index')));
 });
 
 // SYNCHRO MULTI-ONGLETS

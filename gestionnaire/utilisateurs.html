@@ -6,15 +6,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/laveur-animations.css">
     <script src="../auth.js"></script>
-    <title>LAVAGE BIDE - Gestion des Utilisateurs</title>
+    <title>LAVAGE BIDÈ - Gestion des Utilisateurs</title>
     <link rel="icon" type="image/jpeg" href="../logo.jpg">
     <script>checkPageAccess('gestionnaire');</script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-bide sticky-top shadow-sm">
     <div class="container-fluid px-4">
-        <a class="navbar-brand fw-bold d-flex align-items-center" href="dashboard.html"><img src="../logo.jpg" alt="Logo" class="navbar-logo me-2"><span>LAVAGE BIDE</span><span class="badge bg-light text-dark ms-2 fs-6 fw-semibold">Gestion</span></a>
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="dashboard.html"><img src="../logo.jpg" alt="Logo" class="navbar-logo me-2"><span>LAVAGE BIDÈ</span><span class="badge bg-light text-dark ms-2 fs-6 fw-semibold">Gestion</span></a>
         <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarG"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarG">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
@@ -54,12 +55,14 @@
         <form id="form-user">
             <div class="mb-3"><label class="form-label fw-semibold">Nom Complet</label><input type="text" id="user-nom" class="form-control" required></div>
             <div class="mb-3"><label class="form-label fw-semibold">Identifiant</label><input type="text" id="user-username" class="form-control" required></div>
-            <div class="mb-3"><label class="form-label fw-semibold">Role</label><select id="user-role" class="form-select" required><option value="Gestionnaire">Gestionnaire</option><option value="Laveur">Laveur</option><option value="Caissier">Caissier</option></select></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Mot de passe</label><input type="password" id="user-password" class="form-control" minlength="6" required></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Role</label><select id="user-role" class="form-select" required><option value="gestionnaire">Gestionnaire</option><option value="laveur">Laveur</option><option value="caisse">Caissier</option></select></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Piste du laveur</label><select id="user-piste" class="form-select"><option value="Piste A">Piste A (Auto)</option><option value="Piste B">Piste B (Auto)</option><option value="Piste C">Piste C (Moto)</option></select><div class="form-text">Utilisee uniquement pour un compte Laveur.</div></div>
             <button type="submit" class="btn btn-primary w-100"><i class="bi bi-check-circle me-1"></i> Creer le compte</button>
         </form>
     </div>
 </div></div></div>
-<footer class="site-footer mt-auto"><div class="container-fluid text-center py-4"><div class="mb-2"><img src="../logo.jpg" alt="Logo" style="width:32px;height:32px;border-radius:50%;border:2px solid #38bdf8;"></div><div class="fw-bold text-white mb-1">LAVAGE BIDE</div><div class="small text-muted mb-2">Plateforme de Gestion de Lavage Automobile</div><div class="small" style="color:#64748b;">&copy; 2026 BIDE &mdash; Module Gestionnaire</div></div></footer>
+<footer class="site-footer mt-auto"><div class="container-fluid text-center py-4"><div class="mb-2"><img src="../logo.jpg" alt="Logo" style="width:32px;height:32px;border-radius:50%;border:2px solid #38bdf8;"></div><div class="fw-bold text-white mb-1">LAVAGE BIDÈ</div><div class="small text-muted mb-2">Plateforme de Gestion de Lavage Automobile</div><div class="small" style="color:#64748b;">&copy; 2026 BIDÈ &mdash; Module Gestionnaire</div></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/script.js"></script>
 <script>document.addEventListener('DOMContentLoaded', afficherUtilisateurs);</script>

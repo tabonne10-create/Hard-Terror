@@ -605,8 +605,8 @@ function generateReceipt(transaction, vehicle) {
 
     const receiptHtml = `
         <div class="receipt-header text-center">
-            <img src="logo.jpg" alt="Logo Lavage BIDE" class="receipt-logo mb-2">
-            <h4 class="fw-bold mb-0">LAVAGE BIDE</h4>
+            <img src="logo.jpg" alt="Logo Lavage BIDÈ" class="receipt-logo mb-2">
+            <h4 class="fw-bold mb-0">LAVAGE BIDÈ</h4>
             <div class="small text-muted">Lavage Automobile & Moto Haute Pression</div>
             <div class="small">Lomé - Togo | Tel: +228 90 00 00 00</div>
             <div class="receipt-divider"></div>
@@ -1010,4 +1010,4 @@ function showAlert(message, type = 'info') {
             setTimeout(() => alertElement.remove(), 200);
         }
     }, 4000);
-}
+}
