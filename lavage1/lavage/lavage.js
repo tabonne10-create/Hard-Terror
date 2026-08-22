@@ -307,6 +307,9 @@ const defaultHistory = [
 const reservationForm =
     document.getElementById("reservationForm");
 
+const vehicleCount =
+    document.getElementById("vehicleCount");
+
 if (reservationForm) {
 
 const reservationMessage =
@@ -315,11 +318,102 @@ const reservationMessage =
 const historyTable =
     document.getElementById("historyTable");
 
+const historyList =
+    document.getElementById("historyList");
+
 const reservationCount =
     document.getElementById("reservationCount");
 
 const washCount =
     document.getElementById("washCount");
+
+const currentUser = JSON.parse(
+    localStorage.getItem("bideCurrentUser") || "null"
+);
+
+const accountId = currentUser && currentUser.email
+    ? currentUser.email.toLowerCase()
+    : "guest";
+
+function storageKey(name) {
+    return name + "_" + accountId;
+}
+
+const vehiclesList = document.getElementById("vehiclesList");
+const addVehicleBtn = document.getElementById("addVehicleBtn");
+const vehicleForm = document.getElementById("vehicleForm");
+const cancelVehicleBtn = document.getElementById("cancelVehicleBtn");
+
+function getVehicles() {
+    return JSON.parse(localStorage.getItem(storageKey("bideVehicles")) || "[]");
+}
+
+function displayVehicles() {
+    if (!vehiclesList) return;
+    const vehicles = getVehicles();
+    if (vehicleCount) vehicleCount.textContent = vehicles.length;
+    const trackingName = document.getElementById("trackingVehicleName");
+    const trackingPlate = document.getElementById("trackingVehiclePlate");
+    const trackingColor = document.getElementById("trackingVehicleColor");
+    if (vehicles.length === 0) {
+        vehiclesList.innerHTML = '<p class="text-muted">Aucun véhicule enregistré.</p>';
+        if (trackingName) trackingName.textContent = "Aucun véhicule sélectionné";
+        if (trackingPlate) trackingPlate.textContent = "-";
+        if (trackingColor) trackingColor.textContent = "-";
+        return;
+    }
+    if (trackingName) trackingName.textContent = vehicles[0].model;
+    if (trackingPlate) trackingPlate.textContent = vehicles[0].plate;
+    if (trackingColor) trackingColor.textContent = vehicles[0].color;
+    vehiclesList.innerHTML = vehicles.map(function(vehicle) {
+        return '<article class="saved-vehicle"><div class="saved-vehicle-icon"><i class="bi bi-car-front-fill"></i></div><div><h3>' + escapeHTML(vehicle.model) + '</h3><p>' + escapeHTML(vehicle.plate) + ' · ' + escapeHTML(vehicle.color) + ' · ' + escapeHTML(vehicle.year) + '</p></div><span class="vehicle-tag">Actif</span></article>';
+    }).join("");
+}
+
+if (addVehicleBtn) {
+    addVehicleBtn.addEventListener("click", function() {
+        if (vehicleForm) vehicleForm.classList.add("is-visible");
+        document.getElementById("vehicleModel")?.focus();
+    });
+}
+
+if (cancelVehicleBtn) {
+    cancelVehicleBtn.addEventListener("click", function() {
+        vehicleForm.reset();
+        vehicleForm.classList.remove("is-visible");
+    });
+}
+
+if (vehicleForm) {
+    vehicleForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        if (!vehicleForm.checkValidity()) {
+            vehicleForm.classList.add("was-validated");
+            return;
+        }
+        const vehicles = getVehicles();
+        vehicles.push({
+            model: document.getElementById("vehicleModel").value.trim(),
+            plate: document.getElementById("vehiclePlate").value.trim(),
+            color: document.getElementById("vehicleColor").value.trim(),
+            year: document.getElementById("vehicleYear").value.trim()
+        });
+        localStorage.setItem(storageKey("bideVehicles"), JSON.stringify(vehicles));
+        vehicleForm.reset();
+        vehicleForm.classList.remove("is-visible");
+        displayVehicles();
+    });
+}
+
+displayVehicles();
+
+let completedWashes = Number(
+    localStorage.getItem(storageKey("bideWashCount")) || 0
+);
+
+if (washCount) {
+    washCount.textContent = completedWashes;
+}
 
 const nextAppointment =
     document.getElementById("nextAppointment");
@@ -333,6 +427,16 @@ const dateInput =
 const logoutBtn =
     document.getElementById("logoutBtn");
 
+if (currentUser) {
+    const displayName = currentUser.name || "Client";
+    const clientName = document.getElementById("clientName");
+    const profileName = document.getElementById("profileName");
+    if (clientName) clientName.textContent = displayName;
+    if (profileName) profileName.textContent = displayName;
+} else {
+    window.location.href = "../../Desktop/laverie/index.html#loginModal";
+}
+
 
 /* ==========================================
    DATE MINIMUM
@@ -341,7 +445,9 @@ const logoutBtn =
 const today =
     new Date().toISOString().split("T")[0];
 
-dateInput.min = today;
+if (dateInput) {
+    dateInput.min = today;
+}
 
 
 /* ==========================================
@@ -351,7 +457,7 @@ dateInput.min = today;
 function getHistory() {
 
     const saved =
-        localStorage.getItem("bideHistory");
+        localStorage.getItem(storageKey("bideHistory"));
 
     if (saved) {
 
@@ -359,12 +465,7 @@ function getHistory() {
 
     }
 
-    localStorage.setItem(
-        "bideHistory",
-        JSON.stringify(defaultHistory)
-    );
-
-    return defaultHistory;
+    return [];
 
 }
 
@@ -375,14 +476,19 @@ function getHistory() {
 
 function displayHistory() {
 
+    if (!historyTable && !historyList) {
+        return;
+    }
+
     const history = getHistory();
 
-    historyTable.innerHTML = "";
+    if (historyTable) historyTable.innerHTML = "";
+    if (historyList) historyList.innerHTML = "";
 
 
     if (history.length === 0) {
 
-        historyTable.innerHTML = `
+        const emptyMessage = `
 
             <tr>
 
@@ -398,6 +504,8 @@ function displayHistory() {
             </tr>
 
         `;
+        if (historyTable) historyTable.innerHTML = emptyMessage;
+        if (historyList) historyList.innerHTML = '<p class="text-muted text-center py-4">Aucun passage enregistré.</p>';
 
         return;
 
@@ -443,7 +551,19 @@ function displayHistory() {
 
         `;
 
-        historyTable.appendChild(row);
+        if (historyTable) {
+            historyTable.appendChild(row);
+        }
+        if (historyList) {
+            const card = document.createElement("div");
+            card.className = "history-card";
+            card.innerHTML = `
+                <div class="history-icon"><i class="bi bi-car-front-fill"></i></div>
+                <div class="history-info"><h3>${escapeHTML(item.service)}</h3><p><i class="bi bi-calendar3 me-1"></i>${escapeHTML(item.date)}</p></div>
+                <div class="history-price"><strong>${escapeHTML(item.price)}</strong><span>${escapeHTML(item.status)}</span></div>
+            `;
+            historyList.appendChild(card);
+        }
 
     });
 
@@ -457,7 +577,7 @@ function displayHistory() {
 function getReservations() {
 
     const saved =
-        localStorage.getItem("bideReservations");
+        localStorage.getItem(storageKey("bideReservations"));
 
     if (saved) {
 
@@ -479,8 +599,10 @@ function updateReservationCount() {
     const reservations =
         getReservations();
 
-    reservationCount.textContent =
-        reservations.length;
+    if (reservationCount) {
+        reservationCount.textContent =
+            reservations.length;
+    }
 
 }
 
@@ -543,7 +665,7 @@ reservationForm.addEventListener(
 
 
         localStorage.setItem(
-            "bideReservations",
+            storageKey("bideReservations"),
             JSON.stringify(reservations)
         );
 
@@ -695,6 +817,8 @@ let progress = 0;
 
 let washInterval = null;
 
+let washCompleted = false;
+
 
 function startVehicleTracking() {
 
@@ -706,6 +830,17 @@ function startVehicleTracking() {
 
     const washStatus =
         document.getElementById("washStatus");
+
+    if (!progressBar || !progressPercent || !washStatus) {
+        return;
+    }
+
+    if (getVehicles().length === 0) {
+        washStatus.textContent = "Ajoutez un véhicule pour suivre le lavage";
+        progressPercent.textContent = "-";
+        progressBar.style.width = "0%";
+        return;
+    }
 
 
     const steps = [
@@ -727,9 +862,27 @@ function startVehicleTracking() {
             progress += 5;
 
 
+            if (progress >= 100 && !washCompleted) {
+
+                completedWashes += 1;
+                washCompleted = true;
+
+                localStorage.setItem(
+                    storageKey("bideWashCount"),
+                    completedWashes
+                );
+
+                if (washCount) {
+                    washCount.textContent = completedWashes;
+                }
+
+            }
+
+
             if (progress > 100) {
 
                 progress = 0;
+                washCompleted = false;
 
                 steps.forEach(
                     step => step.classList.remove("active")
@@ -807,7 +960,7 @@ function startVehicleTracking() {
    EFFACER HISTORIQUE
 ========================================== */
 
-clearHistory.addEventListener(
+if (clearHistory) clearHistory.addEventListener(
     "click",
     function() {
 
@@ -823,7 +976,7 @@ clearHistory.addEventListener(
 
 
         localStorage.setItem(
-            "bideHistory",
+            storageKey("bideHistory"),
             JSON.stringify([])
         );
 
@@ -832,6 +985,20 @@ clearHistory.addEventListener(
 
     }
 );
+
+const markNotificationsRead =
+    document.getElementById("markNotificationsRead");
+
+if (markNotificationsRead) {
+    markNotificationsRead.addEventListener("click", function() {
+        document.querySelectorAll(".notification-item.unread").forEach(function(item) {
+            item.classList.remove("unread");
+            const dot = item.querySelector(".notification-dot");
+            if (dot) dot.remove();
+        });
+        markNotificationsRead.textContent = "Notifications lues";
+    });
+}
 
 
 /* ==========================================
@@ -851,12 +1018,14 @@ logoutBtn.addEventListener(
 
         if (confirmation) {
 
+            localStorage.removeItem("bideCurrentUser");
+
             alert(
-                "Déconnexion simulée."
+                "Vous êtes déconnecté."
             );
 
             window.location.href =
-                "index.html";
+                "../../Desktop/laverie/index.html";
 
         }
 

@@ -1,0 +1,165 @@
+/* ==========================================
+   BIDE — Light Theme (index, contact, tarifs)
+   ========================================== */
+
+:root {
+  --blue-dark: #0a2540;
+  --blue-mid: #1a6fb5;
+  --blue-light: #4da6ff;
+  --blue-pale: #e8f4fd;
+  --blue-700: #1a5276;
+  --white: #ffffff;
+  --off-white: #f7f9fc;
+  --gray: #8899aa;
+  --radius: 14px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  background: var(--white);
+  line-height: 1.6;
+}
+
+img { max-width: 100%; display: block; }
+a { color: var(--blue-mid); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--blue-dark); }
+
+/* ===== NAVBAR ===== */
+.navbar { background: var(--white) !important; padding: 12px 0; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+.navbar-brand img { border-radius: 50%; }
+.navbar-brand span { color: var(--blue-dark); }
+.navbar-nav { gap: 8px; }
+.nav-link { color: var(--blue-dark) !important; font-weight: 500; padding: 8px 14px !important; border-radius: 8px; transition: background 0.2s, color 0.2s; }
+.nav-link:hover, .nav-link.active { color: var(--blue-mid) !important; background: var(--blue-pale); }
+.navbar-dark .navbar-toggler-icon { filter: invert(1); }
+.btn-login { border: 1.5px solid var(--blue-mid); color: var(--blue-mid); border-radius: 24px; font-weight: 600; padding: 6px 18px; background: transparent; transition: all 0.2s; }
+.btn-login:hover { background: var(--blue-mid); color: var(--white); }
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, var(--blue-pale) 0%, #dbeeff 100%);
+  padding: 80px 0 60px;
+  margin-top: 72px;
+}
+.hero h1 { color: var(--blue-dark); font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; }
+.hero .lead { color: #445566; font-size: 1.15rem; }
+
+/* ===== BUTTONS ===== */
+.btn-cta {
+  background: var(--blue-mid);
+  color: var(--white);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 24px;
+  font-weight: 700;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-cta:hover { background: var(--blue-dark); color: var(--white); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(26,111,181,.3); }
+
+/* ===== SECTION TITLES ===== */
+.section-title { text-align: center; margin-bottom: 40px; }
+.section-title h2 { color: var(--blue-dark); font-weight: 700; font-size: 1.8rem; }
+.section-title .underline { width: 60px; height: 3px; background: var(--blue-mid); margin: 12px auto 0; border-radius: 2px; }
+.section-title p { color: var(--gray); max-width: 600px; margin: 12px auto 0; }
+
+/* ===== FORMULE CARDS ===== */
+.formule-card, .tarif-card {
+  border-radius: var(--radius);
+  border: 1.5px solid #e0e8f0;
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.formule-card:hover, .tarif-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+.formule-card .card-header, .tarif-card .card-header {
+  background: var(--off-white);
+  border-bottom: 1px solid #e0e8f0;
+  padding: 16px 20px;
+}
+.formule-card .card-header h5, .tarif-card .card-header h5 {
+  margin: 0;
+  color: var(--blue-dark);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.price { font-size: 2.2rem; font-weight: 800; color: var(--blue-dark); }
+.price small { font-size: .9rem; font-weight: 500; color: var(--gray); }
+
+/* ===== TARIF BADGES ===== */
+.badge-citadine { background: #e3f2fd; color: #1565c0; }
+.badge-berline { background: #e8f5e9; color: #2e7d32; }
+.badge-suv { background: #fff3e0; color: #e65100; }
+.badge-moto { background: #fce4ec; color: #c62828; }
+.badge-camion { background: #f3e5f5; color: #6a1b9a; }
+
+/* ===== FILTER BUTTONS ===== */
+.filter-btn {
+  border: 1.5px solid #d0d8e0;
+  background: var(--white);
+  color: var(--blue-dark);
+  padding: 8px 18px;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+.filter-btn.active { background: var(--blue-mid); color: var(--white); border-color: var(--blue-mid); }
+
+/* ===== RESERVATION BANNER ===== */
+.reservation-banner {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 100%);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 50px 40px;
+  text-align: center;
+}
+.reservation-banner h2 { color: var(--white); font-weight: 700; }
+.reservation-banner p { color: rgba(255,255,255,.8); }
+.reservation-banner .btn { background: var(--white); color: var(--blue-dark); font-weight: 700; border-radius: 24px; }
+.reservation-banner .btn:hover { background: var(--blue-pale); }
+
+/* ===== CONTACT INFO CARDS ===== */
+.contact-info-card {
+  background: var(--white);
+  border: 1.5px solid #e0e8f0;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  transition: box-shadow 0.2s;
+}
+.contact-info-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+.contact-info-card h5 { color: var(--blue-dark); font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+.contact-info-card p { color: #445566; }
+
+/* ===== FAQ ===== */
+.bg-blue-light { background: var(--off-white); }
+.accordion-button { color: var(--blue-700); font-weight: 600; }
+.accordion-button:not(.collapsed) { background: var(--blue-pale); color: var(--blue-dark); }
+.accordion-button::after { filter: invert(30%) sepia(50%) saturate(500%) hue-rotate(180deg); }
+.divider { width: 60px; height: 3px; background: var(--blue-mid); margin: 12px auto; border-radius: 2px; }
+
+/* ===== FOOTER ===== */
+.footer { background: var(--blue-dark); color: rgba(255,255,255,.75); padding: 50px 0 0; }
+.footer h5, .footer h6 { color: var(--white); }
+.footer a { color: rgba(255,255,255,.75); transition: color 0.2s; }
+.footer a:hover { color: var(--blue-light); }
+.footer-bottom { text-align: center; padding: 20px 0; margin-top: 30px; border-top: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.5); font-size: .9rem; }
+
+/* ===== FORM STYLES ===== */
+.form-control, .form-select { border-radius: 8px; border: 1.5px solid #d0d8e0; }
+.form-control:focus, .form-select:focus { border-color: var(--blue-mid); box-shadow: 0 0 0 3px rgba(26,111,181,.15); }
+.form-label { font-weight: 600; color: var(--blue-dark); }
+
+/* ===== SECTION SPACING ===== */
+section { padding: 60px 0; }
+
+/* ===== SCROLL REVEAL ===== */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
