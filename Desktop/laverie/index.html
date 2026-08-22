@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIDE – Lavage Auto Premium</title>
+  <title>BIDÈ – Lavage Auto Premium</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
+  <!-- Leaflet Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
 <!-- ===== NAVBAR ===== -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:var(--white);">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-      <img src="IMAGE/laverie.jpeg" alt="BIDE Logo" class="rounded-circle" style="height:48px; width:48px; object-fit:cover;">
-      <span class="fw-bold fs-4" style="color:var(--blue-dark);">BIDE</span>
+      <img src="IMAGE/laverie.jpeg" alt="BIDÈ Logo" class="rounded-circle" style="height:40px; width:40px; object-fit:cover;">
+      <span class="fw-bold fs-4">LAVAGE BIDÈ</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
       <span class="navbar-toggler-icon"></span>
@@ -23,8 +25,10 @@
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item"><a class="nav-link active" href="index.html">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="a-propos.html">À Propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/a-propos.html">À Propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/services.html">Services</a></li>
         <li class="nav-item"><a class="nav-link" href="tarifs.html">Tarifs</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/client.html">Clients</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
       <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
@@ -37,8 +41,8 @@
 <!-- ===== LOGIN MODAL ===== -->
 <div class="modal fade" id="loginModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius:16px; overflow:hidden;">
-      <div class="modal-header" style="background:var(--blue-mid); color:var(--white); border:none;">
+    <div class="modal-content">
+      <div class="modal-header">
         <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Connexion</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
@@ -57,14 +61,12 @@
               <input class="form-check-input" type="checkbox" id="rememberMe">
               <label class="form-check-label" for="rememberMe">Se souvenir</label>
             </div>
-            <a href="#" class="text-decoration-none" style="color:var(--blue-mid); font-size:.9rem;">Mot de passe oublié ?</a>
+            <a href="#" style="font-size:.9rem;">Mot de passe oublié ?</a>
           </div>
-          <button type="submit" class="btn w-100 text-white fw-bold" style="background:var(--blue-mid); border-radius:24px;">
-            Se connecter
-          </button>
-          <hr>
-          <p class="text-center mb-0" style="color:var(--gray); font-size:.9rem;">
-            Pas encore de compte ? <a href="#" style="color:var(--blue-mid); font-weight:600;">Créer un compte</a>
+          <button type="submit" class="btn btn-cta w-100">Se connecter</button>
+          <hr style="border-color:var(--border);">
+          <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+            Pas encore de compte ? <a href="#" id="openRegisterLink" style="font-weight:600;">Créer un compte</a>
           </p>
         </form>
       </div>
@@ -72,76 +74,541 @@
   </div>
 </div>
 
+<!-- ===== REGISTER MODAL ===== -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Créer un compte</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="registerForm" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nom complet</label>
+            <input type="text" class="form-control" id="registerName" placeholder="Votre nom" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" id="registerEmail" placeholder="votre@email.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Téléphone</label>
+            <input type="tel" class="form-control" id="registerPhone" placeholder="+228 90 00 00 00" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mot de passe</label>
+            <input type="password" class="form-control" id="registerPassword" placeholder="Min. 6 caractères" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Confirmer le mot de passe</label>
+            <input type="password" class="form-control" id="registerPasswordConfirm" placeholder="••••••••" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-cta w-100">Créer mon compte</button>
+          <hr style="border-color:var(--border);">
+          <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+            Déjà un compte ? <a href="#" id="openLoginLink" style="font-weight:600;">Se connecter</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 10. POPUP OFFRE DE BIENVENUE ===== -->
+<div class="modal fade" id="welcomeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border:2px solid var(--accent); background:var(--bg-card);">
+      <div class="modal-body text-center p-5">
+        <div style="font-size:3rem; margin-bottom:10px;">🎉</div>
+        <h3 style="color:#fff; font-weight:800;">Bienvenue chez BIDÈ !</h3>
+        <p style="color:var(--text-muted); font-size:1.1rem; margin:15px 0;">Profitez de <strong style="color:var(--accent);">-20%</strong> sur votre premier lavage</p>
+        <div style="background:rgba(6,214,160,.1); border:1px dashed var(--accent); border-radius:12px; padding:15px; margin:20px 0;">
+          <small style="color:var(--text-muted);">Votre code promo</small><br>
+          <strong style="color:var(--accent); font-size:1.5rem; letter-spacing:3px;">BIDE2026</strong>
+        </div>
+        <button type="button" class="btn btn-cta w-100" data-bs-dismiss="modal">
+          <i class="bi bi-gift me-2"></i>Commencer à laver
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== HERO ===== -->
-<section class="hero" style="margin-top:72px;">
+<section class="hero" style="margin-top:62px;">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-6 mb-4 mb-lg-0">
-        <h1>Lavez <span style="color:var(--blue-light);">différemment</span> avec BIDE</h1>
+        <h1>Lavez <span>différemment</span> avec BIDÈ</h1>
         <p class="lead mt-3">Lavage écologique haut de gamme. Économisez jusqu'à 80 % d'eau tout en offrant à votre véhicule le soin qu'il mérite.</p>
         <div class="mt-4 d-flex flex-wrap gap-3">
           <a href="tarifs.html" class="btn btn-cta"><i class="bi bi-droplet-fill me-2"></i>Voir nos formules</a>
-          <a href="contact.html" class="btn btn-outline-light btn-lg rounded-pill px-4"><i class="bi bi-calendar-check me-2"></i>Réserver</a>
+          <a href="#reservation" class="btn btn-cta"><i class="bi bi-calendar-check me-2"></i>Réserver</a>
         </div>
       </div>
       <div class="col-lg-6 text-center">
-        <img src="IMAGE/voiture1.jpg (1).jpeg" alt="Lavage BIDE" class="img-fluid">
+        <img src="IMAGE/voiture1.jpg (1).jpeg" alt="Lavage BIDÈ" class="img-fluid" style="max-height:380px; border-radius:16px;">
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== FORMULES ===== -->
-<section style="background:var(--off-white);">
+<!-- ===== 1. COMPTEUR ANIMÉ ===== -->
+<section style="padding-top:0;">
+  <div class="container">
+    <div class="stats-bar">
+      <div class="row text-center">
+        <div class="col-6 col-md-3 stat-item">
+          <div class="stat-icon"><i class="bi bi-people"></i></div>
+          <div class="stat-num" data-target="5000">0</div>
+          <div class="stat-label">Clients satisfaits</div>
+        </div>
+        <div class="col-6 col-md-3 stat-item">
+          <div class="stat-icon"><i class="bi bi-droplet-half"></i></div>
+          <div class="stat-num" data-target="80" data-suffix="%">0</div>
+          <div class="stat-label">Économie d'eau</div>
+        </div>
+        <div class="col-6 col-md-3 stat-item">
+          <div class="stat-icon"><i class="bi bi-clock"></i></div>
+          <div class="stat-num" data-target="15" data-suffix=" min">0</div>
+          <div class="stat-label">Service express</div>
+        </div>
+        <div class="col-6 col-md-3 stat-item">
+          <div class="stat-icon"><i class="bi bi-star-fill"></i></div>
+          <div class="stat-num" data-target="4.8" data-decimal="true">0</div>
+          <div class="stat-label">Note moyenne /5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AVANTAGES ===== -->
+<section>
   <div class="container">
     <div class="section-title">
-      <h2>Nos Formules de Lavage</h2>
+      <h2>Pourquoi <strong>choisir BIDÈ</strong> ?</h2>
+      <div class="underline"></div>
+      <p>Une expérience de lavage réinventée pour vous et pour la planète.</p>
+    </div>
+    <div class="advantages-grid">
+      <div class="advantage-card reveal">
+        <div class="icon-circle"><i class="bi bi-droplet-half"></i></div>
+        <h5>80% d'eau économisée</h5>
+        <p>Notre technique de lavage à sec réduit drastiquement la consommation d'eau.</p>
+      </div>
+      <div class="advantage-card reveal">
+        <div class="icon-circle"><i class="bi bi-shield-check"></i></div>
+        <h5>Produits bio dégradables</h5>
+        <p>Des produits respectueux de l'environnement et de la peinture de votre véhicule.</p>
+      </div>
+      <div class="advantage-card reveal">
+        <div class="icon-circle"><i class="bi bi-lightning-charge"></i></div>
+        <h5>Express en 15 min</h5>
+        <p>Un lavage rapide sans compromis sur la qualité pour les clients pressés.</p>
+      </div>
+      <div class="advantage-card reveal">
+        <div class="icon-circle"><i class="bi bi-emoji-smile"></i></div>
+        <h5>Satisfaction garantie</h5>
+        <p>Nous ne nous arrêtons que lorsque vous êtes 100% satisfait du résultat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9. FORMULAIRE RÉSERVATION RAPIDE ===== -->
+<section id="reservation">
+  <div class="container">
+    <div class="section-title">
+      <h2>Réservez en <strong>quelques clics</strong></h2>
+      <div class="underline"></div>
+      <p>Remplissez le formulaire ci-dessous et votre créneau est réservé !</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card" style="border:1px solid var(--border); border-radius:var(--radius);">
+          <div class="card-body p-4">
+            <form id="quickReservationForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Nom complet *</label>
+                  <input type="text" class="form-control" id="resName" placeholder="Votre nom" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Téléphone *</label>
+                  <input type="tel" class="form-control" id="resPhone" placeholder="+228 90 00 00 00" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Catégorie *</label>
+                  <select class="form-select" id="resCategory" required>
+                    <option value="">Choisir…</option>
+                    <option value="moto">Moto / Scooter</option>
+                    <option value="berline">Berline / BMW</option>
+                    <option value="suv">SUV / 4x4</option>
+                    <option value="minibus">Minibus / Fourgon</option>
+                    <option value="camion6">Camion Moyen</option>
+                    <option value="poidslourd">Poids Lourd</option>
+                    <option value="chantier">Engin Chantier</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Formule *</label>
+                  <select class="form-select" id="resFormula" required>
+                    <option value="">Choisir…</option>
+                    <option value="simple">Lavage Simple</option>
+                    <option value="complet">Lavage Complet</option>
+                    <option value="premium">Premium</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Date & Heure *</label>
+                  <input type="datetime-local" class="form-control" id="resDate" required>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-cta w-100">
+                    <i class="bi bi-calendar-check me-2"></i>Réserver maintenant
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div id="resSuccess" class="alert mt-3" style="display:none; background:rgba(6,214,160,.1); color:var(--accent); border:1px solid var(--accent);">
+              <i class="bi bi-check-circle-fill me-2"></i>Votre réservation a bien été enregistrée ! Nous vous contacterons bientôt.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NOS SERVICES & TARIFS ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Nos <strong>Services</strong> & Tarifs</h2>
+      <div class="underline"></div>
+      <p>3 formules de lavage adaptées à tous les budgets. Découvrez nos tarifs par catégorie d'engin.</p>
+    </div>
+    <div class="row g-4">
+      <!-- Lavage Simple -->
+      <div class="col-md-4">
+        <div class="card formule-card h-100">
+          <div class="card-header"><h5><i class="bi bi-droplet me-2"></i>Lavage Simple</h5></div>
+          <div class="card-body text-center">
+            <div class="price">2 500 <small>FCFA</small></div>
+            <small class="text-muted d-block mb-3">À partir de • Berline</small>
+            <ul class="list-unstyled text-start">
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Lavage extérieur mousse</li>
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Rinage haute pression</li>
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Séchage microfibre</li>
+              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Vitrage intérieur</li>
+            </ul>
+            <a href="../lavage1/lavage/services.html" class="btn btn-outline-light mt-3 w-100" style="border-radius:24px;"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
+          </div>
+        </div>
+      </div>
+      <!-- Lavage Complet -->
+      <div class="col-md-4">
+        <div class="card formule-card h-100" style="border-color:var(--accent);">
+          <div class="card-header"><h5><i class="bi bi-stars me-2"></i>Lavage Complet</h5></div>
+          <div class="card-body text-center">
+            <span class="popular-badge">Populaire</span>
+            <div class="price">4 000 <small>FCFA</small></div>
+            <small class="text-muted d-block mb-3">À partir de • Berline</small>
+            <ul class="list-unstyled text-start">
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Tout le Lavage Simple</li>
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Aspiration intérieure</li>
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Nettoyage tableau de bord</li>
+              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Parfum d'ambiance</li>
+            </ul>
+            <a href="../lavage1/lavage/services.html" class="btn btn-cta mt-3 w-100"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
+          </div>
+        </div>
+      </div>
+      <!-- Premium -->
+      <div class="col-md-4">
+        <div class="card formule-card h-100">
+          <div class="card-header"><h5><i class="bi bi-gem me-2"></i>Premium</h5></div>
+          <div class="card-body text-center">
+            <div class="price">6 000 <small>FCFA</small></div>
+            <small class="text-muted d-block mb-3">À partir de • Berline</small>
+            <ul class="list-unstyled text-start">
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Tout le Lavage Complet</li>
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Cire protectrice brillante</li>
+              <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Traitement cuir & plastique</li>
+              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Parfum premium</li>
+            </ul>
+            <a href="../lavage1/lavage/services.html" class="btn btn-outline-light mt-3 w-100" style="border-radius:24px;"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="tarifs.html" class="btn btn-cta"><i class="bi bi-tags me-2"></i>Voir tous les tarifs</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. GALERIE AVANT / APRÈS ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Nos <strong>réalisations</strong></h2>
+      <div class="underline"></div>
+      <p>Le résultat de notre savoir-faire, image avant et après lavage.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card" style="border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
+          <div class="d-flex">
+            <div style="flex:1; position:relative;">
+              <img src="img/pantala sale.png" alt="Avant" style="width:100%; height:160px; object-fit:cover; filter:brightness(0.6);">
+              <span style="position:absolute; top:8px; left:8px; background:rgba(239,68,68,.8); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:700;">AVANT</span>
+            </div>
+            <div style="flex:1; position:relative;">
+              <img src="img/pantala pr.jpg" alt="Après" style="width:100%; height:160px; object-fit:cover; filter:brightness(1.1) saturate(1.2);">
+              <span style="position:absolute; top:8px; right:8px; background:rgba(6,214,160,.8); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:700;">APRÈS</span>
+            </div>
+          </div>
+          <div class="card-body p-3 text-center">
+            <h6 style="color:#fff; font-weight:700;">Berline – Lavage Complet</h6>
+            <small style="color:var(--text-muted);">Résultat en 30 minutes</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card" style="border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
+          <div class="d-flex">
+            <div style="flex:1; position:relative;">
+              <img src="img/suv sale.jpg" alt="Avant" style="width:100%; height:160px; object-fit:cover; filter:brightness(0.6);">
+              <span style="position:absolute; top:8px; left:8px; background:rgba(239,68,68,.8); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:700;">AVANT</span>
+            </div>
+            <div style="flex:1; position:relative;">
+              <img src="img/suv propre.jpg" alt="Après" style="width:100%; height:160px; object-fit:cover; filter:brightness(1.1) saturate(1.2);">
+              <span style="position:absolute; top:8px; right:8px; background:rgba(6,214,160,.8); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:700;">APRÈS</span>
+            </div>
+          </div>
+          <div class="card-body p-3 text-center">
+            <h6 style="color:#fff; font-weight:700;">SUV – Lavage Premium</h6>
+            <small style="color:var(--text-muted);">Résultat en 45 minutes</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card" style="border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
+          <div class="d-flex">
+            <div style="flex:1; position:relative;">
+              <img src="img/mt sale.jpg" alt="Avant" style="width:100%; height:160px; object-fit:cover; filter:brightness(0.6);">
+              <span style="position:absolute; top:8px; left:8px; background:rgba(239,68,68,.8); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:700;">AVANT</span>
+            </div>
+            <div style="flex:1; position:relative;">
+              <img src="img/mt pr.jpg" alt="Après" style="width:100%; height:160px; object-fit:cover; filter:brightness(1.1) saturate(1.2);">
+              <span style="position:absolute; top:8px; right:8px; background:rgba(6,214,160,.8); color:#fff; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:700;">APRÈS</span>
+            </div>
+          </div>
+          <div class="card-body p-3 text-center">
+            <h6 style="color:#fff; font-weight:700;">Moto – Express</h6>
+            <small style="color:var(--text-muted);">Résultat en 15 minutes</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. VIDÉO DE PRÉSENTATION ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Découvrez <strong>BIDÈ en vidéo</strong></h2>
+      <div class="underline"></div>
+      <p>Regardez comment nous révolutionnons le lavage auto au Togo.</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card" style="border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
+          <div class="ratio ratio-16x9">
+            <video controls preload="metadata" playsinline style="width:100%; height:100%; object-fit:cover; background:#05070a;">
+              <source src="Génération Vidéo Lavage Voiture.mp4" type="video/mp4">
+              Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+          </div>
+          <div class="card-body p-3 text-center">
+            <small style="color:var(--text-muted);"><i class="bi bi-play-circle me-1"></i>BIDÈ – Le lavage auto écologique au Togo</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. CARTE MAP INTEGRÉE ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Nous <strong>trouver</strong></h2>
+      <div class="underline"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div id="homeMap" style="height:400px; border-radius:var(--radius); border:1px solid var(--border);"></div>
+      </div>
+      <div class="col-lg-5">
+        <div class="contact-info-card mb-3">
+          <h5><i class="bi bi-geo-alt me-2"></i>Adresse</h5>
+          <p class="mb-0">Zone Industrielle, Rue des Lavages<br>Lomé-TOGO, ADIDOGOME</p>
+        </div>
+        <div class="contact-info-card mb-3">
+          <h5><i class="bi bi-clock me-2"></i>Horaires</h5>
+          <p class="mb-0">Lun-Ven : 7h – 19h | Sam : 8h – 17h | Dim : 9h – 15h</p>
+        </div>
+        <div class="contact-info-card">
+          <h5><i class="bi bi-telephone me-2"></i>Contact</h5>
+          <p class="mb-0"><a href="tel:+22890000000">+228 90 00 00 00</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. TÉMOIGNAGES AMÉLIORÉS ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Ce que disent nos <strong>clients</strong></h2>
       <div class="underline"></div>
     </div>
     <div class="row g-4">
       <div class="col-md-4">
-        <div class="card formule-card">
-          <div class="card-header"><h5><i class="bi bi-droplet me-2"></i>Express</h5></div>
-          <div class="card-body text-center">
-            <div class="price">5 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3">
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Lavage extérieur rapide</li>
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Essuyage microfibre</li>
-              <li class="py-2"><i class="bi bi-check-circle text-success me-2"></i>Parfum intérieur</li>
-            </ul>
-            <a href="tarifs.html" class="btn mt-3 w-100 fw-bold" style="background:var(--blue-pale); color:var(--blue-dark); border-radius:24px;">Choisir</a>
+        <div class="testimonial-card">
+          <div class="stars"><i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i></div>
+          <p>"Service incroyable ! Ma voiture n'a jamais été aussi propre. Le lavage écologique est une vraie plus-value."</p>
+          <div class="client">
+            <div class="avatar" style="background:linear-gradient(135deg, #0ea5e9, #06d6a0);">KA</div>
+            <div>
+              <h5 class="client-name">Kofi A.</h5>
+              <small>Client régulier • 12 lavages</small>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card formule-card" style="border:2px solid var(--blue-light);">
-          <div class="card-header" style="background:var(--blue-dark);"><h5><i class="bi bi-stars me-2"></i>Confort</h5></div>
-          <div class="card-body text-center">
-            <div class="price">10 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3">
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Tout Express +</li>
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Nettoyage intérieur</li>
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Aspiration complète</li>
-              <li class="py-2"><i class="bi bi-check-circle text-success me-2"></i>Cire protectrice</li>
-            </ul>
-            <a href="tarifs.html" class="btn mt-3 w-100 text-white fw-bold" style="background:var(--blue-mid); border-radius:24px;">Choisir</a>
+        <div class="testimonial-card">
+          <div class="stars"><i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i></div>
+          <p>"Rapide et efficace. J'ai réservé en ligne et tout était prêt à l'heure. Je recommande vivement BIDÈ."</p>
+          <div class="client">
+            <div class="avatar" style="background:linear-gradient(135deg, #f43f5e, #fb923c);">AM</div>
+            <div>
+              <h5 class="client-name">Amina M.</h5>
+              <small>Nouvelle cliente • 2 lavages</small>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card formule-card">
-          <div class="card-header"><h5><i class="bi bi-gem me-2"></i>Premium</h5></div>
-          <div class="card-body text-center">
-            <div class="price">18 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3">
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Tout Confort +</li>
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Polish & Correction</li>
-              <li class="py-2 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Cerne de pneus</li>
-              <li class="py-2"><i class="bi bi-check-circle text-success me-2"></i>Protection céramique</li>
-            </ul>
-            <a href="tarifs.html" class="btn mt-3 w-100 fw-bold" style="background:var(--blue-pale); color:var(--blue-dark); border-radius:24px;">Choisir</a>
+        <div class="testimonial-card">
+          <div class="stars"><i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-half"></i></div>
+          <p>"Le meilleur lavage auto de Lomé. L'équipe est professionnelle et les produits sont de qualité."</p>
+          <div class="client">
+            <div class="avatar" style="background:linear-gradient(135deg, #a855f7, #3b82f6);">ED</div>
+            <div>
+              <h5 class="client-name">Emmanuel D.</h5>
+              <small>Client fidèle • 25 lavages</small>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. FIDÉLITÉ / POINTS ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Programme <strong>Fidélité</strong></h2>
+      <div class="underline"></div>
+      <p>Gagnez des points à chaque lavage et profitez d'avantages exclusifs.</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="card formule-card text-center" style="border-color:var(--primary);">
+          <div class="card-body p-4">
+            <div style="width:80px; height:80px; border-radius:50%; background:rgba(14,165,233,.1); display:inline-flex; align-items:center; justify-content:center; margin-bottom:15px;">
+              <i class="bi bi-star" style="font-size:2rem; color:var(--primary);"></i>
+            </div>
+            <h5 style="color:#fff; font-weight:700;">Bronze</h5>
+            <p class="text-muted">0 – 4 lavages</p>
+            <div class="progress" style="height:8px; background:rgba(255,255,255,.06);">
+              <div class="progress-bar" style="width:20%; background:linear-gradient(90deg, #cd7f32, #e8a85c);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card formule-card text-center" style="border-color:var(--accent);">
+          <div class="card-body p-4">
+            <div style="width:80px; height:80px; border-radius:50%; background:rgba(6,214,160,.1); display:inline-flex; align-items:center; justify-content:center; margin-bottom:15px;">
+              <i class="bi bi-star-fill" style="font-size:2rem; color:var(--accent);"></i>
+            </div>
+            <h5 style="color:#fff; font-weight:700;">Argent</h5>
+            <p class="text-muted">5 – 14 lavages</p>
+            <div class="progress" style="height:8px; background:rgba(255,255,255,.06);">
+              <div class="progress-bar" style="width:50%; background:linear-gradient(90deg, #94a3b8, #e2e8f0);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card formule-card text-center" style="border-color:#fbbf24;">
+          <div class="card-body p-4">
+            <div style="width:80px; height:80px; border-radius:50%; background:rgba(251,191,36,.1); display:inline-flex; align-items:center; justify-content:center; margin-bottom:15px;">
+              <i class="bi bi-trophy-fill" style="font-size:2rem; color:#fbbf24;"></i>
+            </div>
+            <h5 style="color:#fff; font-weight:700;">Or</h5>
+            <p class="text-muted">15+ lavages</p>
+            <div class="progress" style="height:8px; background:rgba(255,255,255,.06);">
+              <div class="progress-bar" style="width:100%; background:linear-gradient(90deg, #fbbf24, #f59e0b);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMMENT ÇA MARCHE ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Comment ça <strong>marche</strong> ?</h2>
+      <div class="underline"></div>
+    </div>
+    <div class="steps-row">
+      <div class="step-card reveal">
+        <span class="step-num">1</span>
+        <div class="step-icon"><i class="bi bi-calendar-check"></i></div>
+        <h5>Réservez en ligne</h5>
+        <p>Choisissez votre formule et créneau en quelques clics.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">2</span>
+        <div class="step-icon"><i class="bi bi-car-front"></i></div>
+        <h5>Déposez votre véhicule</h5>
+        <p>Arrivez à l'heure prévue, notre équipe vous accueille.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">3</span>
+        <div class="step-icon"><i class="bi bi-droplet"></i></div>
+        <h5>Lavage premium</h5>
+        <p>Nos experts prennent soin de votre véhicule avec des produits écologiques.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">4</span>
+        <div class="step-icon"><i class="bi bi-patch-check"></i></div>
+        <h5>Récupérez brillant</h5>
+        <p>Votre véhicule est impeccable, prêt à briller sur les routes.</p>
       </div>
     </div>
   </div>
@@ -151,11 +618,9 @@
 <section>
   <div class="container">
     <div class="reservation-banner">
-      <div class="container">
-        <h2 class="mb-3"><i class="bi bi-calendar-event me-2"></i>Réservation Rapide</h2>
-        <p class="mb-4">Réservez votre créneau en ligne et gagnez du temps !</p>
-        <a href="contact.html" class="btn btn-lg"><i class="bi bi-arrow-right-circle me-2"></i>Réserver maintenant</a>
-      </div>
+      <h2 class="mb-3"><i class="bi bi-calendar-event me-2"></i>Prêt à laver ?</h2>
+      <p class="mb-4">Réservez votre créneau maintenant et rejoignez les 5 000+ clients satisfaits.</p>
+      <a href="#reservation" class="btn"><i class="bi bi-arrow-right-circle me-2"></i>Réserver maintenant</a>
     </div>
   </div>
 </section>
@@ -166,8 +631,8 @@
     <div class="row g-4">
       <div class="col-lg-4">
         <div class="d-flex align-items-center gap-2 mb-3">
-          <img src="IMAGE/laverie.jpeg" alt="BIDE" class="rounded-circle" style="height:42px;width:42px;object-fit:cover;">
-          <h5 class="mb-0 fw-bold">BIDE</h5>
+          <img src="IMAGE/laverie.jpeg" alt="BIDÈ" class="rounded-circle" style="height:42px;width:42px;object-fit:cover;">
+          <h5 class="mb-0 fw-bold">LAVAGE BIDÈ</h5>
         </div>
         <p>Lavage auto écologique et premium. Économisez l'eau, prenez soin de votre véhicule.</p>
       </div>
@@ -175,36 +640,138 @@
         <h6 class="fw-bold mb-3">Navigation</h6>
         <ul class="list-unstyled">
           <li class="mb-2"><a href="index.html">Accueil</a></li>
-          <li class="mb-2"><a href="a-propos.html">À Propos</a></li>
+          <li class="mb-2"><a href="../../lavage1/lavage/a-propos.html">À Propos</a></li>
+          <li class="mb-2"><a href="../../lavage1/lavage/services.html">Services</a></li>
           <li class="mb-2"><a href="tarifs.html">Tarifs</a></li>
+          <li class="mb-2"><a href="../../lavage1/lavage/client.html">Clients</a></li>
           <li class="mb-2"><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="col-lg-3">
         <h6 class="fw-bold mb-3">Horaires</h6>
-        <ul class="list-unstyled" style="color:var(--blue-pale);">
+        <ul class="list-unstyled">
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Lun – Ven : 7h – 19h</li>
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Samedi : 8h – 17h</li>
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Dimanche : 9h – 15h</li>
         </ul>
       </div>
       <div class="col-lg-3">
-        <h6 class="fw-bold mb-3">Suivez-nous</h6>
+        <h6 class="fw-bold mb-3">Contactez-nous</h6>
+        <a href="https://wa.me/22890000000?text=Bonjour%20BID%C3%88%2C%20je%20souhaite%20r%C3%A9server%20un%20lavage." target="_blank" rel="noopener" class="btn btn-whatsapp mb-3">
+          <i class="bi bi-whatsapp me-2"></i>WhatsApp
+        </a>
         <div class="d-flex gap-3">
-          <a href="#" class="fs-4"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-whatsapp"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 BIDE – Tous droits réservés. Lavage écologique premium.
+      &copy; 2026 BIDÈ – Tous droits réservés. Lavage écologique premium.
     </div>
   </div>
 </footer>
 
+<!-- ===== SCRIPTS ===== -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="main.js"></script>
+
+<!-- ===== ANIMATIONS SPÉCIALES INDEX ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  /* --- POPUP BIENVENUE (1ère visite) --- */
+  if (!localStorage.getItem('bide_welcomed')) {
+    setTimeout(function() {
+      var welcomeModal = document.getElementById('welcomeModal');
+      if (welcomeModal && window.bootstrap) {
+        bootstrap.Modal.getOrCreateInstance(welcomeModal).show();
+        localStorage.setItem('bide_welcomed', '1');
+      }
+    }, 2000);
+  }
+
+  /* --- COMPTEUR ANIMÉ --- */
+  var counters = document.querySelectorAll('.stat-num[data-target]');
+  var countersStarted = false;
+
+  function animateCounters() {
+    counters.forEach(function(el) {
+      var target = parseFloat(el.getAttribute('data-target'));
+      var suffix = el.getAttribute('data-suffix') || '';
+      var isDecimal = el.hasAttribute('data-decimal');
+      var duration = 2000;
+      var startTime = null;
+
+      function update(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = eased * target;
+        if (isDecimal) {
+          el.textContent = current.toFixed(1) + suffix;
+        } else {
+          el.textContent = Math.floor(current).toLocaleString('fr-FR') + suffix;
+        }
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    });
+  }
+
+  window.addEventListener('scroll', function() {
+    if (countersStarted) return;
+    var bar = document.querySelector('.stats-bar');
+    if (bar && bar.getBoundingClientRect().top < window.innerHeight - 50) {
+      countersStarted = true;
+      animateCounters();
+    }
+  });
+
+  /* --- MINI FORMULAIRE RÉSERVATION --- */
+  var quickRes = document.getElementById('quickReservationForm');
+  if (quickRes) {
+    quickRes.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var name = document.getElementById('resName').value.trim();
+      var phone = document.getElementById('resPhone').value.trim();
+      var category = document.getElementById('resCategory').value;
+      var formula = document.getElementById('resFormula').value;
+      var date = document.getElementById('resDate').value;
+      if (!name || !phone || !category || !formula || !date) {
+        alert('Veuillez remplir tous les champs.');
+        return;
+      }
+      var reservation = {
+        id: Date.now(),
+        name: name, phone: phone, category: category,
+        formula: formula, date: date,
+        createdAt: new Date().toISOString()
+      };
+      var reservations = JSON.parse(localStorage.getItem('bideReservations') || '[]');
+      reservations.push(reservation);
+      localStorage.setItem('bideReservations', JSON.stringify(reservations));
+      quickRes.reset();
+      document.getElementById('resSuccess').style.display = 'block';
+      setTimeout(function() { document.getElementById('resSuccess').style.display = 'none'; }, 5000);
+    });
+  }
+
+  /* --- MINI MAP --- */
+  var homeMapEl = document.getElementById('homeMap');
+  if (homeMapEl && typeof L !== 'undefined') {
+    var map = L.map('homeMap').setView([6.1256, 1.2254], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    L.marker([6.1256, 1.2254]).addTo(map)
+      .bindPopup('<strong>BIDÈ – Lavage Auto</strong><br>Adidogome, Lomé');
+  }
+
+});
+</script>
+
 </body>
 </html>

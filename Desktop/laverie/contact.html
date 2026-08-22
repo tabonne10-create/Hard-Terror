@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIDE – Contact & Localisation</title>
+  <title>BIDÈ – Contact & Localisation</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -12,11 +12,11 @@
 <body>
 
 <!-- ===== NAVBAR ===== -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:var(--white);">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-      <img src="IMAGE/laverie.jpeg" alt="BIDÀ Logo" class="rounded-circle" style="height:48px; width:48px; object-fit:cover;">
-      <span class="fw-bold fs-4" style="color:var(--blue-dark);">BIDE</span>
+      <img src="IMAGE/laverie.jpeg" alt="BIDÈ Logo" class="rounded-circle" style="height:40px; width:40px; object-fit:cover;">
+      <span class="fw-bold fs-4">LAVAGE BIDÈ</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
       <span class="navbar-toggler-icon"></span>
@@ -24,8 +24,10 @@
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="a-propos.html">À Propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/a-propos.html">À Propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/services.html">Services</a></li>
         <li class="nav-item"><a class="nav-link" href="tarifs.html">Tarifs</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/client.html">Clients</a></li>
         <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
       </ul>
       <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
@@ -38,22 +40,74 @@
 <!-- ===== LOGIN MODAL ===== -->
 <div class="modal fade" id="loginModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius:16px; overflow:hidden;">
-      <div class="modal-header" style="background:var(--blue-mid); color:var(--white); border:none;">
+    <div class="modal-content">
+      <div class="modal-header">
         <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Connexion</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <form novalidate>
+        <form id="loginForm" novalidate>
           <div class="mb-3">
             <label class="form-label fw-semibold">Email</label>
-            <input type="email" class="form-control" placeholder="votre@email.com" required>
+            <input type="email" class="form-control" id="loginEmail" placeholder="votre@email.com" required>
           </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">Mot de passe</label>
-            <input type="password" class="form-control" placeholder="••••••••" required>
+            <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
           </div>
-          <button type="submit" class="btn w-100 text-white fw-bold" style="background:var(--blue-mid); border-radius:24px;">Se connecter</button>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe">
+              <label class="form-check-label" for="rememberMe">Se souvenir</label>
+            </div>
+            <a href="#" style="font-size:.9rem;">Mot de passe oublié ?</a>
+          </div>
+          <button type="submit" class="btn btn-cta w-100">Se connecter</button>
+          <hr style="border-color:var(--border);">
+          <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+            Pas encore de compte ? <a href="#" id="openRegisterLink" style="font-weight:600;">Créer un compte</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REGISTER MODAL ===== -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Créer un compte</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="registerForm" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nom complet</label>
+            <input type="text" class="form-control" id="registerName" placeholder="Votre nom" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" id="registerEmail" placeholder="votre@email.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Téléphone</label>
+            <input type="tel" class="form-control" id="registerPhone" placeholder="+228 90 00 00 00" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mot de passe</label>
+            <input type="password" class="form-control" id="registerPassword" placeholder="Min. 6 caractères" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Confirmer le mot de passe</label>
+            <input type="password" class="form-control" id="registerPasswordConfirm" placeholder="••••••••" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-cta w-100">Créer mon compte</button>
+          <hr style="border-color:var(--border);">
+          <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+            Déjà un compte ? <a href="#" id="openLoginLink" style="font-weight:600;">Se connecter</a>
+          </p>
         </form>
       </div>
     </div>
@@ -61,9 +115,9 @@
 </div>
 
 <!-- ===== HERO ===== -->
-<section class="hero" style="margin-top:72px;">
+<section class="hero" style="margin-top:62px;">
   <div class="container text-center">
-    <h1><i class="bi bi-envelope-paper me-2"></i>Contact & <span style="color:var(--blue-light);">Localisation</span></h1>
+    <h1><i class="bi bi-envelope-paper me-2"></i>Contact & <span>Localisation</span></h1>
     <p class="lead mt-3">Nous sommes à votre écoute. Envoyez-nous un message ou passez nous voir !</p>
   </div>
 </section>
@@ -75,9 +129,9 @@
 
       <!-- FORMULAIRE -->
       <div class="col-lg-7">
-        <div class="card" style="border-radius:16px; border:none; box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <div class="card">
           <div class="card-body p-4">
-            <h4 class="fw-bold mb-4" style="color:var(--blue-dark);"><i class="bi bi-chat-left-text me-2"></i>Envoyez-nous un message</h4>
+            <h4 class="fw-bold mb-4"><i class="bi bi-chat-left-text me-2"></i>Envoyez-nous un message</h4>
             <form id="contactForm" novalidate>
               <div class="row g-3">
                 <div class="col-md-6">
@@ -87,7 +141,7 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Téléphone *</label>
-                  <input type="tel" class="form-control" id="contactPhone" placeholder="+225 00 00 00 00" required>
+                  <input type="tel" class="form-control" id="contactPhone" placeholder="+228 90 00 00 00" required>
                   <div class="invalid-feedback">Veuillez entrer un numéro valide.</div>
                 </div>
                 <div class="col-12">
@@ -112,13 +166,13 @@
                   <div class="invalid-feedback">Veuillez entrer un message.</div>
                 </div>
                 <div class="col-12">
-                  <button type="submit" class="btn btn-lg w-100 text-white fw-bold" style="background:var(--blue-mid); border-radius:24px;">
+                  <button type="submit" class="btn btn-cta w-100">
                     <i class="bi bi-send me-2"></i>Envoyer le message
                   </button>
                 </div>
               </div>
             </form>
-            <div id="contactSuccess" class="alert mt-3" style="display:none; background:var(--blue-pale); color:var(--blue-dark); border:none; border-radius:12px;">
+            <div id="contactSuccess" class="alert mt-3" style="display:none;">
               <i class="bi bi-check-circle-fill me-2"></i>Merci ! Votre message a été envoyé avec succès.
             </div>
           </div>
@@ -129,26 +183,27 @@
       <div class="col-lg-5">
         <div class="contact-info-card mb-4">
           <h5><i class="bi bi-geo-alt me-2"></i>Adresse</h5>
-          <p class="mb-0">Zone Industrielle, Rue des Lavages<br>Lome-TOGO, ADIDOGOME</p>
+          <p class="mb-0">Zone Industrielle, Rue des Lavages<br>Lomé-TOGO, ADIDOGOME</p>
         </div>
 
         <div class="contact-info-card mb-4">
           <h5><i class="bi bi-telephone me-2"></i>Téléphone</h5>
           <p class="mb-0">
-            <a href="tel:+228 98 02 22 20" style="color:var(--blue-dark);">+228 98 02 22 200</a><br>
-            <a href="tel:+228 91 11 21 11" style="color:var(--blue-dark);">+228 91 11 21 11</a>
+            <a href="tel:+22890000000">+228 90 00 00 00</a><br>
+            <a href="tel:+22891112111">+228 91 11 21 11</a>
           </p>
         </div>
 
         <div class="contact-info-card mb-4">
           <h5><i class="bi bi-envelope me-2"></i>Email</h5>
-          <p class="mb-0"><a href="mailto:contact@bide.tg" style="color:var(--blue-dark);">contact@bide.tg</a></p>
-          <p class="mb-0"><a href="mailto:info@bide.tg" style="color:var(--blue-dark);">info@bide.tg</a></p>
+          <p class="mb-0"><a href="mailto:contact@bide.tg">contact@bide.tg</a></p>
+          <p class="mb-0"><a href="mailto:info@bide.tg">info@bide.tg</a></p>
         </div>
 
         <div class="contact-info-card mb-4">
           <h5><i class="bi bi-clock me-2"></i>Horaires d'Ouverture</h5>
-          <table class="table table-borderless mb-0" style="color:var(--blue-dark);">
+          <div id="openingStatus" class="opening-status mb-3" aria-live="polite"><span class="opening-dot"></span><strong id="openingLabel">Vérification en cours...</strong></div>
+          <table class="table table-borderless mb-0">
             <tbody>
               <tr><td>Lundi – Vendredi</td><td class="text-end fw-bold">7h – 19h</td></tr>
               <tr><td>Samedi</td><td class="text-end fw-bold">8h – 17h</td></tr>
@@ -161,10 +216,10 @@
         <div class="contact-info-card">
           <h5><i class="bi bi-chat-dots me-2"></i>Réseaux Sociaux</h5>
           <div class="d-flex gap-3 mt-2">
-            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-instagram"></i></a>
-            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-whatsapp"></i></a>
-            <a href="#" class="fs-4" style="color:var(--blue-dark);"><i class="bi bi-tiktok"></i></a>
+            <a href="#"><i class="bi bi-facebook fs-4"></i></a>
+            <a href="#"><i class="bi bi-instagram fs-4"></i></a>
+            <a href="#"><i class="bi bi-whatsapp fs-4"></i></a>
+            <a href="#"><i class="bi bi-tiktok fs-4"></i></a>
           </div>
         </div>
       </div>
@@ -173,13 +228,62 @@
 </section>
 
 <!-- ===== CARTE ===== -->
-<section style="background:var(--off-white);">
+<section>
   <div class="container">
     <div class="section-title">
       <h2><i class="bi bi-map me-2"></i>Notre Localisation</h2>
       <div class="underline"></div>
     </div>
-   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253865.21345428986!2d0.8869055867187507!3d6.178390899999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1023e227e48fffff%3A0x8755336f62347ed7!2sLe%20Champion%20Supermarch%C3%A9%20Adidogome!5e0!3m2!1sfr!2stg!4v1787219154691!5m2!1sfr!2stg" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253865.21345428986!2d0.8869055867187507!3d6.178390899999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1023e227e48fffff%3A0x8755336f62347ed7!2sLe%20Champion%20Supermarch%C3%A9%20Adidogome!5e0!3m2!1sfr!2stg!4v1787219154691!5m2!1sfr!2stg" width="100%" height="450" style="border:0; border-radius:var(--radius);" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+</section>
+
+<!-- ===== AVANTAGES RAPIDES ===== -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>Pourquoi <strong>nous contacter</strong> ?</h2>
+      <div class="underline"></div>
+    </div>
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-6">
+        <div class="card formule-card">
+          <div class="card-body p-4">
+            <div style="width:56px;height:56px;border-radius:50%;background:rgba(14,165,233,.1);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;"><i class="bi bi-headset" style="font-size:1.5rem;color:var(--primary);"></i></div>
+            <h6 style="color:#fff;font-weight:700;">Support 7j/7</h6>
+            <small style="color:var(--text-muted);">Une question ? On vous répond rapidement.</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card formule-card">
+          <div class="card-body p-4">
+            <div style="width:56px;height:56px;border-radius:50%;background:rgba(6,214,160,.1);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;"><i class="bi bi-calendar-check" style="font-size:1.5rem;color:var(--accent);"></i></div>
+            <h6 style="color:#fff;font-weight:700;">Réservation</h6>
+            <small style="color:var(--text-muted);">Réservez en ligne ou par téléphone.</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card formule-card">
+          <div class="card-body p-4">
+            <div style="width:56px;height:56px;border-radius:50%;background:rgba(251,191,36,.1);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;"><i class="bi bi-geo-alt" style="font-size:1.5rem;color:#fbbf24;"></i></div>
+            <h6 style="color:#fff;font-weight:700;">Facile d'accès</h6>
+            <small style="color:var(--text-muted);">Zone Industrielle, Adidogome, Lomé.</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card formule-card">
+          <div class="card-body p-4">
+            <div style="width:56px;height:56px;border-radius:50%;background:rgba(244,63,94,.1);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;"><i class="bi bi-whatsapp" style="font-size:1.5rem;color:#f43f5e;"></i></div>
+            <h6 style="color:#fff;font-weight:700;">WhatsApp</h6>
+            <small style="color:var(--text-muted);">Envoyez-nous un message direct.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ===== FOOTER ===== -->
@@ -188,8 +292,8 @@
     <div class="row g-4">
       <div class="col-lg-4">
         <div class="d-flex align-items-center gap-2 mb-3">
-          <img src="IMAGE/laverie.jpeg" alt="BIDE" class="rounded-circle" style="height:42px;width:42px;object-fit:cover;">
-          <h5 class="mb-0 fw-bold">BIDE</h5>
+          <img src="IMAGE/laverie.jpeg" alt="BIDÈ" class="rounded-circle" style="height:42px;width:42px;object-fit:cover;">
+          <h5 class="mb-0 fw-bold">LAVAGE BIDÈ</h5>
         </div>
         <p>Lavage auto écologique et premium. Économisez l'eau, prenez soin de votre véhicule.</p>
       </div>
@@ -197,31 +301,35 @@
         <h6 class="fw-bold mb-3">Navigation</h6>
         <ul class="list-unstyled">
           <li class="mb-2"><a href="index.html">Accueil</a></li>
-          <li class="mb-2"><a href="a-propos.html">À Propos</a></li>
+          <li class="mb-2"><a href="../lavage1/lavage/a-propos.html">À Propos</a></li>
+          <li class="mb-2"><a href="../lavage1/lavage/services.html">Services</a></li>
           <li class="mb-2"><a href="tarifs.html">Tarifs</a></li>
+          <li class="mb-2"><a href="../lavage1/lavage/client.html">Clients</a></li>
           <li class="mb-2"><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="col-lg-3">
         <h6 class="fw-bold mb-3">Horaires</h6>
-        <ul class="list-unstyled" style="color:var(--blue-pale);">
+        <ul class="list-unstyled">
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Lun – Ven : 7h – 19h</li>
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Samedi : 8h – 17h</li>
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Dimanche : 9h – 15h</li>
         </ul>
       </div>
       <div class="col-lg-3">
-        <h6 class="fw-bold mb-3">Suivez-nous</h6>
+        <h6 class="fw-bold mb-3">Contactez-nous</h6>
+        <a href="https://wa.me/22890000000?text=Bonjour%20BID%C3%88%2C%20je%20souhaite%20r%C3%A9server%20un%20lavage." target="_blank" rel="noopener" class="btn btn-whatsapp mb-3">
+          <i class="bi bi-whatsapp me-2"></i>WhatsApp
+        </a>
         <div class="d-flex gap-3">
-          <a href="#" class="fs-4"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-whatsapp"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 BIDE – Tous droits réservés. Lavage écologique premium.
+      &copy; 2026 BIDÈ – Tous droits réservés. Lavage écologique premium.
     </div>
   </div>
 </footer>

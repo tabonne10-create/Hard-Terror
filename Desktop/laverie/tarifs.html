@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIDE – Tarifs & Offres</title>
+  <title>BIDÈ – Tarifs & Offres</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
@@ -11,11 +11,11 @@
 <body>
 
 <!-- ===== NAVBAR ===== -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:var(--white);">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-      <img src="IMAGE/laverie.jpeg" alt="BIDE Logo" class="rounded-circle" style="height:48px; width:48px; object-fit:cover;">
-      <span class="fw-bold fs-4" style="color:var(--blue-dark);">BIDE</span>
+      <img src="IMAGE/laverie.jpeg" alt="BIDÈ Logo" class="rounded-circle" style="height:40px; width:40px; object-fit:cover;">
+      <span class="fw-bold fs-4">LAVAGE BIDÈ</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
       <span class="navbar-toggler-icon"></span>
@@ -23,8 +23,10 @@
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-        <li class="nav-item"><a class="nav-link" href="a-propos.html">À Propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/a-propos.html">À Propos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/services.html">Services</a></li>
         <li class="nav-item"><a class="nav-link active" href="tarifs.html">Tarifs</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/client.html">Clients</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
       <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
@@ -37,22 +39,74 @@
 <!-- ===== LOGIN MODAL ===== -->
 <div class="modal fade" id="loginModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius:16px; overflow:hidden;">
-      <div class="modal-header" style="background:var(--blue-mid); color:var(--white); border:none;">
+    <div class="modal-content">
+      <div class="modal-header">
         <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Connexion</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <form novalidate>
+        <form id="loginForm" novalidate>
           <div class="mb-3">
             <label class="form-label fw-semibold">Email</label>
-            <input type="email" class="form-control" placeholder="votre@email.com" required>
+            <input type="email" class="form-control" id="loginEmail" placeholder="votre@email.com" required>
           </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">Mot de passe</label>
-            <input type="password" class="form-control" placeholder="••••••••" required>
+            <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
           </div>
-          <button type="submit" class="btn w-100 text-white fw-bold" style="background:var(--blue-mid); border-radius:24px;">Se connecter</button>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe">
+              <label class="form-check-label" for="rememberMe">Se souvenir</label>
+            </div>
+            <a href="#" style="font-size:.9rem;">Mot de passe oublié ?</a>
+          </div>
+          <button type="submit" class="btn btn-cta w-100">Se connecter</button>
+          <hr style="border-color:var(--border);">
+          <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+            Pas encore de compte ? <a href="#" id="openRegisterLink" style="font-weight:600;">Créer un compte</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REGISTER MODAL ===== -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Créer un compte</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="registerForm" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nom complet</label>
+            <input type="text" class="form-control" id="registerName" placeholder="Votre nom" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" id="registerEmail" placeholder="votre@email.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Téléphone</label>
+            <input type="tel" class="form-control" id="registerPhone" placeholder="+228 90 00 00 00" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mot de passe</label>
+            <input type="password" class="form-control" id="registerPassword" placeholder="Min. 6 caractères" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Confirmer le mot de passe</label>
+            <input type="password" class="form-control" id="registerPasswordConfirm" placeholder="••••••••" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-cta w-100">Créer mon compte</button>
+          <hr style="border-color:var(--border);">
+          <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+            Déjà un compte ? <a href="#" id="openLoginLink" style="font-weight:600;">Se connecter</a>
+          </p>
         </form>
       </div>
     </div>
@@ -60,10 +114,10 @@
 </div>
 
 <!-- ===== HERO ===== -->
-<section class="hero" style="margin-top:72px;">
+<section class="hero" style="margin-top:62px;">
   <div class="container text-center">
-    <h1><i class="bi bi-tag me-2"></i>Nos <span style="color:var(--blue-light);">Tarifs</span></h1>
-    <p class="lead mt-3">Des formules adaptées à chaque type de véhicule. Trouvez l'offre idéale !</p>
+    <h1><i class="bi bi-tag me-2"></i>Nos <span>Tarifs</span></h1>
+    <p class="lead mt-3">Choisissez votre engin et trouvez rapidement la formule adaptée.</p>
   </div>
 </section>
 
@@ -73,308 +127,293 @@
     <div class="text-center mb-4">
       <div class="d-inline-flex flex-wrap justify-content-center gap-2" id="filterContainer">
         <button class="filter-btn active" data-filter="all"><i class="bi bi-grid me-1"></i>Tous</button>
-        <button class="filter-btn" data-filter="citadine">🚗 Citadines</button>
-        <button class="filter-btn" data-filter="berline">🚘 Berlines</button>
-        <button class="filter-btn" data-filter="suv">🚙 SUV / 4×4</button>
-        <button class="filter-btn" data-filter="moto">🏍️ Motos / Tricycles</button>
-        <button class="filter-btn" data-filter="camion">🚐 Camionnettes</button>
+        <button class="filter-btn" data-filter="2roues">🚲 2 Roues</button>
+        <button class="filter-btn" data-filter="3roues">🛺 3 Roues</button>
+        <button class="filter-btn" data-filter="4roues">🚗 4 Roues</button>
+        <button class="filter-btn" data-filter="6roues">🚛 6+ Roues</button>
+        <button class="filter-btn" data-filter="special">⚙️ Spécial</button>
       </div>
     </div>
 
-    <!-- ===== GRILLE TARIFS ===== -->
+    <div class="price-calculator mb-5" id="priceCalculator">
+      <div>
+        <span class="section-kicker">ESTIMATION RAPIDE</span>
+        <h2>Calculez votre prix</h2>
+        <p>Choisissez un engin et une formule pour obtenir une estimation immédiate.</p>
+      </div>
+      <div class="row g-3 align-items-end">
+        <div class="col-md-5">
+          <label for="calculatorVehicle" class="form-label">Type de véhicule</label>
+          <select id="calculatorVehicle" class="form-select">
+            <option value="velo">Vélo / VTT</option>
+            <option value="moto">Moto / Scooter</option>
+            <option value="tricycle">Tricycle / Tuk-Tuk</option>
+            <option value="berline" selected>Berline / BMW</option>
+            <option value="suv">SUV / 4x4 / Pick-up</option>
+            <option value="minibus">Minibus / Fourgon</option>
+            <option value="camion6">Camion Moyen / Benne</option>
+            <option value="poidslourd">Poids Lourd / Semi</option>
+            <option value="chantier">Engin Chantier</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="calculatorFormula" class="form-label">Formule</label>
+          <select id="calculatorFormula" class="form-select">
+            <option value="simple">Lavage simple</option>
+            <option value="complet" selected>Lavage complet - Populaire</option>
+            <option value="premium">Premium</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <div class="calculator-result" aria-live="polite">
+            <span>Estimation</span>
+            <strong id="calculatorPrice">4 000 FCFA</strong>
+          </div>
+        </div>
+      </div>
+      <a href="../../lavage1/lavage/client.html" class="btn btn-cta mt-3"><i class="bi bi-calendar-check me-2"></i>Réserver ce service</a>
+    </div>
+
     <div class="row g-4" id="tarifGrid">
 
-      <!-- CITADINE -->
-      <div class="col-md-4 tarif-item" data-category="citadine">
+      <!-- 1. Vélo / VTT -->
+      <div class="col-md-4 tarif-item" data-category="2roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚗 Citadine – Express</span>
-            <span class="badge badge-citadine">Citadine</span>
+            <span><i class="bi bi-bicycle me-2"></i>Vélo / VTT</span>
+            <span class="badge badge-citadine">2 Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">3 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Lavage extérieur</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Essuyage microfibre</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>500 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>1 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>1 500 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-4 tarif-item" data-category="citadine">
+      <!-- 2. Moto / Scooter -->
+      <div class="col-md-4 tarif-item" data-category="2roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚗 Citadine – Confort</span>
-            <span class="badge badge-citadine">Citadine</span>
+            <span><i class="bi bi-scooter me-2"></i>Moto / Scooter</span>
+            <span class="badge badge-moto">2 Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">6 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Extérieur + Intérieur</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Aspiration</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Cire légère</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>1 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>1 500 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>2 500 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-4 tarif-item" data-category="citadine">
+      <!-- 3. Tricycle / Tuk-Tuk -->
+      <div class="col-md-4 tarif-item" data-category="3roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚗 Citadine – Premium</span>
-            <span class="badge badge-citadine">Citadine</span>
+            <span><i class="bi bi-ev-front me-2"></i>Tricycle / Tuk-Tuk</span>
+            <span class="badge badge-berline">3 Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">10 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Tout Confort +</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Polish</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Protection céramique</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>1 500 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>2 500 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>3 500 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <!-- BERLINE -->
-      <div class="col-md-4 tarif-item" data-category="berline">
+      <!-- 4. Berline / BMW -->
+      <div class="col-md-4 tarif-item" data-category="4roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚘 Berline – Express</span>
-            <span class="badge badge-berline">Berline</span>
+            <span><i class="bi bi-car-front-fill me-2"></i>Berline / BMW</span>
+            <span class="badge badge-citadine">4 Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">5 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Lavage extérieur</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Essuyage</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>2 500 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>4 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>6 000 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-4 tarif-item" data-category="berline">
+      <!-- 5. SUV / 4x4 -->
+      <div class="col-md-4 tarif-item" data-category="4roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚘 Berline – Confort</span>
-            <span class="badge badge-berline">Berline</span>
+            <span><i class="bi bi-truck-front-fill me-2"></i>SUV / 4x4 / Pick-up</span>
+            <span class="badge badge-suv">4 Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">10 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Complet ext/int</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Aspiration</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Cire protectrice</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>3 500 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>5 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>8 000 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-4 tarif-item" data-category="berline">
+      <!-- 6. Minibus / Fourgon -->
+      <div class="col-md-4 tarif-item" data-category="4roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚘 Berline – Premium</span>
-            <span class="badge badge-berline">Berline</span>
+            <span><i class="bi bi-bus-front-fill me-2"></i>Minibus / Fourgon</span>
+            <span class="badge badge-camion">4 Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">18 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Tout Confort +</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Polish & Correction</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Cerne pneus</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>4 500 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>6 500 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>10 000 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <!-- SUV / 4x4 -->
-      <div class="col-md-4 tarif-item" data-category="suv">
+      <!-- 7. Camion Moyen -->
+      <div class="col-md-4 tarif-item" data-category="6roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚙 SUV – Express</span>
-            <span class="badge badge-suv">SUV / 4×4</span>
+            <span><i class="bi bi-truck me-2"></i>Camion Moyen / Benne</span>
+            <span class="badge badge-camion">6 Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">7 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Lavage extérieur</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Essuyage</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>7 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>10 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>15 000 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-4 tarif-item" data-category="suv">
+      <!-- 8. Poids Lourd / Semi -->
+      <div class="col-md-4 tarif-item" data-category="6roues">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚙 SUV – Confort</span>
-            <span class="badge badge-suv">SUV / 4×4</span>
+            <span><i class="bi bi-train-freight-front me-2"></i>Poids Lourd / Semi</span>
+            <span class="badge badge-suv">8+ Roues</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">14 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Complet ext/int</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Aspiration complète</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Cire protectrice</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>12 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>18 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>25 000 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-4 tarif-item" data-category="suv">
+      <!-- 9. Engin Chantier -->
+      <div class="col-md-4 tarif-item" data-category="special">
         <div class="card tarif-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚙 SUV – Premium</span>
-            <span class="badge badge-suv">SUV / 4×4</span>
+            <span><i class="bi bi-gear-wide-connected me-2"></i>Engin Chantier</span>
+            <span class="badge badge-camion">Spécial</span>
           </div>
           <div class="card-body text-center">
-            <div class="price">22 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Tout Confort +</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Polish & Céramique</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Cerne pneus</li>
-            </ul>
+            <span class="popular-choice"><i class="bi bi-star-fill me-1"></i>Complet : formule populaire</span>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage simple</span><strong>15 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between mb-2"><span class="text-muted">Lavage complet</span><strong>22 000 FCFA</strong></div>
+            <div class="d-flex justify-content-between"><span class="text-muted">Premium</span><strong>30 000 FCFA</strong></div>
+            <a href="../../lavage1/lavage/client.html" class="btn btn-sm btn-cta mt-3"><i class="bi bi-calendar-check me-1"></i>Réserver ce service</a>
           </div>
         </div>
       </div>
 
-      <!-- MOTO / TRICYCLE -->
-      <div class="col-md-4 tarif-item" data-category="moto">
-        <div class="card tarif-card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🏍️ Moto – Express</span>
-            <span class="badge badge-moto">Moto</span>
-          </div>
-          <div class="card-body text-center">
-            <div class="price">2 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Lavage rapide</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Séchage</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4 tarif-item" data-category="moto">
-        <div class="card tarif-card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🏍️ Moto – Premium</span>
-            <span class="badge badge-moto">Moto</span>
-          </div>
-          <div class="card-body text-center">
-            <div class="price">5 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Lavage complet</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Cire chrome</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Soin cuir</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- CAMIONNETTE -->
-      <div class="col-md-4 tarif-item" data-category="camion">
-        <div class="card tarif-card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚐 Camionnette – Express</span>
-            <span class="badge badge-camion">Camionnette</span>
-          </div>
-          <div class="card-body text-center">
-            <div class="price">8 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Lavage extérieur</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Essuyage</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4 tarif-item" data-category="camion">
-        <div class="card tarif-card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🚐 Camionnette – Premium</span>
-            <span class="badge badge-camion">Camionnette</span>
-          </div>
-          <div class="card-body text-center">
-            <div class="price">20 000 <small>FCFA</small></div>
-            <ul class="list-unstyled mt-3 text-start">
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Tout Complet</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Polish</li>
-              <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Cerne pneus</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- #tarifGrid -->
-
+    </div>
   </div>
 </section>
+
 <!-- ========== FAQ ========== -->
-  <section class="section-padding bg-blue-light">
-    <div class="container">
-      <div class="text-center reveal">
-        <h2 class="section-title">Questions Fréquentes</h2>
-        <div class="divider"></div>
-      </div>
-      <div class="row justify-content-center mt-4">
-        <div class="col-lg-8">
-          <div class="accordion" id="faqAccordion">
-            <div class="accordion-item border-0 mb-3 shadow-sm reveal" style="border-radius:var(--radius) !important;overflow:hidden">
-              <h2 class="accordion-header">
-                <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="color:var(--blue-700)">
-                  Combien de temps dure un lavage ?
-                </button>
-              </h2>
-              <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                <div class="accordion-body text-muted">
-                  Notre service Essentiel dure environ 20 minutes. La formule Confort prend 30-40 minutes, 
-                  et le Premium peut aller jusqu'à 50 minutes pour un résultat parfait.
-                </div>
+<section class="section-padding bg-blue-light">
+  <div class="container">
+    <div class="text-center reveal">
+      <h2 class="section-title">Questions Fréquentes</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="row justify-content-center mt-4">
+      <div class="col-lg-8">
+        <div class="accordion" id="faqAccordion">
+          <div class="accordion-item border-0 mb-3 reveal">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                Combien de temps dure un lavage ?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Le Lavage Simple dure environ 15-20 minutes. Le Lavage Complet prend 30-40 minutes,
+                et le Premium peut aller jusqu'à 50 minutes pour un résultat parfait.
               </div>
             </div>
-            <div class="accordion-item border-0 mb-3 shadow-sm reveal" style="border-radius:var(--radius) !important;overflow:hidden">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="color:var(--blue-700)">
-                  Faut-il prendre rendez-vous ?
-                </button>
-              </h2>
-              <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                <div class="accordion-body text-muted">
-                  La réservation est recommandée pour garantir votre créneau, mais nous acceptons aussi 
-                  les visites sans rendez-vous selon disponibilité.
-                </div>
+          </div>
+          <div class="accordion-item border-0 mb-3 reveal">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                Faut-il prendre rendez-vous ?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                La réservation est recommandée pour garantir votre créneau, mais nous acceptons aussi
+                les visites sans rendez-vous selon disponibilité.
               </div>
             </div>
-            <div class="accordion-item border-0 mb-3 shadow-sm reveal" style="border-radius:var(--radius) !important;overflow:hidden">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="color:var(--blue-700)">
-                  Quels modes de paiement acceptez-vous ?
-                </button>
-              </h2>
-              <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                <div class="accordion-body text-muted">
-                  Nous acceptons les espèces, Orange Money, MTN Mobile Money et les cartes bancaires. 
-                  Paiement possible avant ou après le service.
-                </div>
+          </div>
+          <div class="accordion-item border-0 mb-3 reveal">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Quels modes de paiement acceptez-vous ?
+              </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Nous acceptons les espèces, Orange Money, MTN Mobile Money et les cartes bancaires.
+                Paiement possible avant ou après le service.
               </div>
             </div>
-            <div class="accordion-item border-0 shadow-sm reveal" style="border-radius:var(--radius) !important;overflow:hidden">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="color:var(--blue-700)">
-                  Le lavage sans eau est-il vraiment efficace ?
-                </button>
-              </h2>
-              <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                <div class="accordion-body text-muted">
-                  Absolument ! Notre produit encapsule la saleté sans touching la peinture. C'est une technique 
-                  utilisée par les concessionnaires premium pour les véhicules neufs. Zéro rayure garantie.
-                </div>
+          </div>
+          <div class="accordion-item border-0 reveal">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                Le lavage écologique est-il vraiment efficace ?
+              </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Absolument ! Notre produit encapsule la saleté sans abîmer la peinture. C'est une technique
+                utilisée par les concessionnaires premium. Zéro rayure garantie.
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===== CTA RÉSERVATION ===== -->
+<section>
+  <div class="container">
+    <div class="reservation-banner">
+      <h2 class="mb-3"><i class="bi bi-calendar-event me-2"></i>Prêt à réserver ?</h2>
+      <p class="mb-4">Choisissez votre formule et réservez votre créneau en ligne.</p>
+      <div class="d-flex flex-wrap justify-content-center gap-3">
+        <a href="../../lavage1/lavage/client.html" class="btn"><i class="bi bi-person-fill me-2"></i>Espace Client</a>
+        <a href="../../lavage1/lavage/services.html" class="btn" style="background:rgba(255,255,255,.2); color:#fff;"><i class="bi bi-info-circle me-2"></i>Découvrir nos services</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
@@ -382,8 +421,8 @@
     <div class="row g-4">
       <div class="col-lg-4">
         <div class="d-flex align-items-center gap-2 mb-3">
-          <img src="IMAGE/laverie.jpeg" alt="BIDE" class="rounded-circle" style="height:42px;width:42px;object-fit:cover;">
-          <h5 class="mb-0 fw-bold">BIDE</h5>
+          <img src="IMAGE/laverie.jpeg" alt="BIDÈ" class="rounded-circle" style="height:42px;width:42px;object-fit:cover;">
+          <h5 class="mb-0 fw-bold">LAVAGE BIDÈ</h5>
         </div>
         <p>Lavage auto écologique et premium. Économisez l'eau, prenez soin de votre véhicule.</p>
       </div>
@@ -391,31 +430,35 @@
         <h6 class="fw-bold mb-3">Navigation</h6>
         <ul class="list-unstyled">
           <li class="mb-2"><a href="index.html">Accueil</a></li>
-          <li class="mb-2"><a href="a-propos.html">À Propos</a></li>
+          <li class="mb-2"><a href="../../lavage1/lavage/a-propos.html">À Propos</a></li>
+          <li class="mb-2"><a href="../../lavage1/lavage/services.html">Services</a></li>
           <li class="mb-2"><a href="tarifs.html">Tarifs</a></li>
+          <li class="mb-2"><a href="../../lavage1/lavage/client.html">Clients</a></li>
           <li class="mb-2"><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="col-lg-3">
         <h6 class="fw-bold mb-3">Horaires</h6>
-        <ul class="list-unstyled" style="color:var(--blue-pale);">
+        <ul class="list-unstyled">
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Lun – Ven : 7h – 19h</li>
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Samedi : 8h – 17h</li>
           <li class="mb-2"><i class="bi bi-clock me-2"></i>Dimanche : 9h – 15h</li>
         </ul>
       </div>
       <div class="col-lg-3">
-        <h6 class="fw-bold mb-3">Suivez-nous</h6>
+        <h6 class="fw-bold mb-3">Contactez-nous</h6>
+        <a href="https://wa.me/22890000000?text=Bonjour%20BID%C3%88%2C%20je%20souhaite%20r%C3%A9server%20un%20lavage." target="_blank" rel="noopener" class="btn btn-whatsapp mb-3">
+          <i class="bi bi-whatsapp me-2"></i>WhatsApp
+        </a>
         <div class="d-flex gap-3">
-          <a href="#" class="fs-4"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-whatsapp"></i></a>
-          <a href="#" class="fs-4"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 BIDE – Tous droits réservés. Lavage écologique premium.
+      &copy; 2026 BIDÈ – Tous droits réservés. Lavage écologique premium.
     </div>
   </div>
 </footer>

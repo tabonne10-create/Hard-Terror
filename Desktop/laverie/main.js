@@ -1,153 +1,310 @@
-/* ===== BIDÀ – main.js ===== */
+/* ============================================
+   BIDÈ — main.js unifié v2
+   Login / Inscription / Mot de passe sécurisés
+   Compatible toutes les pages
+   ============================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
 
-  /* ============================================================
-     1. NAVBAR – active link + solid background on scroll
-     ============================================================ */
-  const navbar = document.querySelector('.navbar');
-  if (navbar) {
-    window.addEventListener('scroll', () => {
-      navbar.style.background = window.scrollY > 60
-        ? 'rgba(255,255,255,.97)' : 'var(--white)';
-    });
+  /* ============================================
+     UTILITAIRES — SHA-256 HASH
+     ============================================ */
+  async function hashPassword(password) {
+    var encoder = new TextEncoder();
+    var data = encoder.encode(password);
+    var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
   }
 
-  /* ============================================================
-     2. TARIFS – filter buttons
-     ============================================================ */
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const tarifItems = document.querySelectorAll('.tarif-item');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-
-      tarifItems.forEach(item => {
-        if (filter === 'all' || item.dataset.category === filter) {
-          item.style.display = '';
-          item.style.animation = 'fadeIn .4s ease';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    });
-  });
-
-  /* ============================================================
-     3. CONTACT FORM – validation
-     ============================================================ */
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', e => {
+  /* ============================================
+     1. INSCRIPTION (modal register)
+     ============================================ */
+  var registerForm = document.getElementById('registerForm');
+  if (registerForm) {
+    registerForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      e.stopPropagation();
+      var name = document.getElementById('registerName').value.trim();
+      var email = document.getElementById('registerEmail').value.trim().toLowerCase();
+      var phone = document.getElementById('registerPhone').value.trim();
+      var password = document.getElementById('registerPassword').value;
+      var passwordConfirm = document.getElementById('registerPasswordConfirm').value;
 
-      const name = document.getElementById('contactName');
-      const phone = document.getElementById('contactPhone');
-      const email = document.getElementById('contactEmail');
-      const message = document.getElementById('contactMessage');
-      let valid = true;
-
-      [name, phone, email, message].forEach(f => f.classList.remove('is-invalid'));
-
-      if (!name.value.trim()) { name.classList.add('is-invalid'); valid = false; }
-      if (!phone.value.trim() || phone.value.trim().length < 8) { phone.classList.add('is-invalid'); valid = false; }
-      if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.classList.add('is-invalid'); valid = false; }
-      if (!message.value.trim()) { message.classList.add('is-invalid'); valid = false; }
-
-      if (valid) {
-        contactForm.classList.add('d-none');
-        document.getElementById('contactSuccess').style.display = '';
+      if (!name || !email || !phone || !password || !passwordConfirm) {
+        alert('Veuillez remplir tous les champs.');
+        return;
       }
-    });
-  }
-
-  /* ============================================================
-     4. ANONYMOUS FEEDBACK – localStorage
-     ============================================================ */
-  const feedbackForm = document.getElementById('feedbackForm');
-  if (feedbackForm) {
-    feedbackForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const type = document.getElementById('feedbackType');
-      const message = document.getElementById('feedbackMessage');
-
-      if (!type.value || !message.value.trim()) {
-        type.classList.add('is-invalid');
-        message.classList.add('is-invalid');
+      if (password.length < 6) {
+        alert('Le mot de passe doit contenir au moins 6 caractères.');
+        return;
+      }
+      if (password !== passwordConfirm) {
+        alert('Les mots de passe ne correspondent pas.');
         return;
       }
 
-      type.classList.remove('is-invalid');
-      message.classList.remove('is-invalid');
+      var users = JSON.parse(localStorage.getItem('bideUsers') || '[]');
+      if (users.some(function(u) { return u.email === email; })) {
+        alert('Un compte existe déjà avec cet email.');
+        return;
+      }
 
-      // Retrieve existing feedbacks
-      const feedbacks = JSON.parse(localStorage.getItem('bide_feedbacks') || '[]');
+      var hashedPassword = await hashPassword(password);
+      var user = {
+        name: name,
+        email: email,
+        phone: phone,
+        password: hashedPassword,
+        createdAt: new Date().toISOString()
+      };
+      users.push(user);
+      localStorage.setItem('bideUsers', JSON.stringify(users));
+      localStorage.setItem('bideCurrentUser', JSON.stringify(user));
+
+      alert('Compte créé avec succès ! Bienvenue ' + name);
+      window.location.href = getWindowBase() + 'lavage1/lavage/client.html';
+    });
+  }
+
+  /* ============================================
+     2. LOGIN MODAL
+     ============================================ */
+  var loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      var password = document.getElementById('loginPassword').value.trim();
+      if (!email || !password) {
+        alert('Veuillez remplir tous les champs.');
+        return;
+      }
+
+      var users = JSON.parse(localStorage.getItem('bideUsers') || '[]');
+      var hashedPassword = await hashPassword(password);
+      var user = users.find(function(u) {
+        return u.email === email && u.password === hashedPassword;
+      });
+
+      if (!user) {
+        alert('Email ou mot de passe incorrect.');
+        return;
+      }
+
+      localStorage.setItem('bideCurrentUser', JSON.stringify(user));
+      var loginModal = document.getElementById('loginModal');
+      var modal = loginModal && window.bootstrap
+        ? bootstrap.Modal.getInstance(loginModal)
+        : null;
+      if (modal) modal.hide();
+      loginForm.reset();
+      window.location.href = getWindowBase() + 'lavage1/lavage/client.html';
+    });
+  }
+
+  /* ============================================
+     3. OUVRIR MODAL INSCRIPTION DEPUIS LOGIN
+     ============================================ */
+  var openRegisterLink = document.getElementById('openRegisterLink');
+  if (openRegisterLink) {
+    openRegisterLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      var loginModal = document.getElementById('loginModal');
+      var registerModal = document.getElementById('registerModal');
+      if (!registerModal || !window.bootstrap) return;
+      var showRegister = function () {
+        bootstrap.Modal.getOrCreateInstance(registerModal).show();
+      };
+      if (loginModal) {
+        loginModal.addEventListener('hidden.bs.modal', showRegister, { once: true });
+        bootstrap.Modal.getOrCreateInstance(loginModal).hide();
+      } else {
+        showRegister();
+      }
+    });
+  }
+
+  /* ============================================
+     4. DÉTECTION CHEMIN BASE
+     ============================================ */
+  function getWindowBase() {
+    var path = window.location.pathname;
+    if (path.includes('/lavage1/lavage/')) return '../../';
+    if (path.includes('/Desktop/laverie/')) return '../';
+    return './';
+  }
+
+  /* ============================================
+     5. TARIF FILTER
+     ============================================ */
+  var filterBtns = document.querySelectorAll('.filter-btn');
+  var tarifItems = document.querySelectorAll('.tarif-item');
+  if (filterBtns.length > 0) {
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filterBtns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var filter = btn.getAttribute('data-filter');
+        tarifItems.forEach(function (item) {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  var calculatorVehicle = document.getElementById('calculatorVehicle');
+  var calculatorFormula = document.getElementById('calculatorFormula');
+  var calculatorPrice = document.getElementById('calculatorPrice');
+  var calculatorPrices = {
+    velo: { simple: 500, complet: 1000, premium: 1500 },
+    moto: { simple: 1000, complet: 1500, premium: 2500 },
+    tricycle: { simple: 1500, complet: 2500, premium: 3500 },
+    berline: { simple: 2500, complet: 4000, premium: 6000 },
+    suv: { simple: 3500, complet: 5000, premium: 8000 },
+    minibus: { simple: 4500, complet: 6500, premium: 10000 },
+    camion6: { simple: 7000, complet: 10000, premium: 15000 },
+    poidslourd: { simple: 12000, complet: 18000, premium: 25000 },
+    chantier: { simple: 15000, complet: 22000, premium: 30000 }
+  };
+
+  function updateCalculator() {
+    if (!calculatorVehicle || !calculatorFormula || !calculatorPrice) return;
+    var vehiclePrices = calculatorPrices[calculatorVehicle.value] || calculatorPrices.berline;
+    var amount = vehiclePrices[calculatorFormula.value] || vehiclePrices.complet;
+    calculatorPrice.textContent = amount.toLocaleString('fr-FR') + ' FCFA';
+  }
+
+  if (calculatorVehicle && calculatorFormula) {
+    calculatorVehicle.addEventListener('change', updateCalculator);
+    calculatorFormula.addEventListener('change', updateCalculator);
+    updateCalculator();
+  }
+
+  var openingStatus = document.getElementById('openingStatus');
+  var openingLabel = document.getElementById('openingLabel');
+  function updateOpeningStatus() {
+    if (!openingStatus || !openingLabel) return;
+    var now = new Date();
+    var day = now.getDay();
+    var minutes = now.getHours() * 60 + now.getMinutes();
+    var opening = day === 0 ? 9 * 60 : day === 6 ? 8 * 60 : 7 * 60;
+    var closing = day === 0 ? 15 * 60 : day === 6 ? 17 * 60 : 19 * 60;
+    var isOpen = minutes >= opening && minutes < closing;
+    openingStatus.classList.toggle('is-open', isOpen);
+    openingStatus.classList.toggle('is-closed', !isOpen);
+    openingLabel.textContent = isOpen ? 'Ouvert maintenant' : 'Fermé actuellement';
+  }
+
+  if (openingStatus) {
+    updateOpeningStatus();
+    window.setInterval(updateOpeningStatus, 60000);
+  }
+
+  /* ============================================
+     6. CONTACT FORM
+     ============================================ */
+  var contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    var contactSuccess = document.getElementById('contactSuccess');
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('contactName').value.trim();
+      var phone = document.getElementById('contactPhone').value.trim();
+      var email = document.getElementById('contactEmail').value.trim();
+      var message = document.getElementById('contactMessage').value.trim();
+      if (!name || !phone || !email || !message) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+      }
+      contactForm.reset();
+      if (contactSuccess) contactSuccess.style.display = 'block';
+      setTimeout(function () {
+        if (contactSuccess) contactSuccess.style.display = 'none';
+      }, 5000);
+    });
+  }
+
+  /* ============================================
+     7. FEEDBACK ANONYME
+     ============================================ */
+  var feedbackForm = document.getElementById('feedbackForm');
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var type = document.getElementById('feedbackType');
+      var message = document.getElementById('feedbackMessage');
+      if (!type || !message || !type.value || !message.value.trim()) {
+        if (type) type.classList.add('is-invalid');
+        if (message) message.classList.add('is-invalid');
+        return;
+      }
+      if (type) type.classList.remove('is-invalid');
+      if (message) message.classList.remove('is-invalid');
+      var feedbacks = JSON.parse(localStorage.getItem('bide_feedbacks') || '[]');
       feedbacks.push({
         type: type.value,
         message: message.value.trim(),
         date: new Date().toISOString()
       });
       localStorage.setItem('bide_feedbacks', JSON.stringify(feedbacks));
-
       feedbackForm.reset();
-      feedbackForm.classList.add('d-none');
-      document.getElementById('feedbackSuccess').style.display = '';
+      var successMsg = document.getElementById('feedbackSuccess');
+      if (successMsg) successMsg.style.display = '';
+      setTimeout(function () {
+        if (successMsg) successMsg.style.display = 'none';
+      }, 4000);
     });
   }
 
-  /* ============================================================
-     5. LEAFLET MAP – contact page
-     ============================================================ */
-  const mapEl = document.getElementById('map');
-  if (mapEl && typeof L !== 'undefined') {
-    // Abidjan coordinates (adjust to your actual location)
-    const map = L.map('map').setView([5.3600, -4.0083], 14);
+  /* ============================================
+     8. SCROLL REVEAL
+     ============================================ */
+  var reveals = document.querySelectorAll('.reveal');
+  if (reveals.length > 0) {
+    function checkReveal() {
+      reveals.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 60) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', checkReveal);
+    checkReveal();
+  }
 
+  /* ============================================
+     9. LEAFLET MAP (contact page)
+     ============================================ */
+  var mapEl = document.getElementById('map');
+  if (mapEl && typeof L !== 'undefined') {
+    var map = L.map('map').setView([6.1256, 1.2254], 14);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-
-    L.marker([5.3600, -4.0083]).addTo(map)
-      .bindPopup('<strong>BIDÀ – Lavage Auto</strong><br>Zone Industrielle, Abidjan')
+    L.marker([6.1256, 1.2254]).addTo(map)
+      .bindPopup('<strong>BIDÈ – Lavage Auto</strong><br>Lomé, Togo')
       .openPopup();
   }
 
-  /* ============================================================
-     6. LOGIN MODAL – demo handler
-     ============================================================ */
-  const loginForms = document.querySelectorAll('#loginForm, #loginForm2');
-  loginForms.forEach(form => {
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const email = form.querySelector('input[type="email"]');
-      const password = form.querySelector('input[type="password"]');
-      if (!email.value.trim() || !password.value.trim()) {
-        alert('Veuillez remplir tous les champs.');
-        return;
-      }
-      // Demo login
-      alert('Connexion réussie ! Bienvenue, ' + email.value);
-      const modal = bootstrap.Modal.getInstance(form.closest('.modal'));
-      if (modal) modal.hide();
-    });
-  });
-
-});
-
-/* ============================================================
-   CSS animation keyframes injected once
-   ============================================================ */
-(function injectStyles() {
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+  /* ============================================
+     10. CHECK HASH FOR MODALS
+     ============================================ */
+  if (window.location.hash === '#loginModal') {
+    var loginModal = document.getElementById('loginModal');
+    if (loginModal && window.bootstrap) {
+      bootstrap.Modal.getOrCreateInstance(loginModal).show();
     }
-  `;
-  document.head.appendChild(style);
-})();
+  }
+  if (window.location.hash === '#registerModal') {
+    var registerModal = document.getElementById('registerModal');
+    if (registerModal && window.bootstrap) {
+      bootstrap.Modal.getOrCreateInstance(registerModal).show();
+    }
+  }
+
+}); /* fin DOMContentLoaded */

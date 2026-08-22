@@ -19,7 +19,7 @@
     >
 
     <!-- CSS personnalisé -->
-    <link rel="stylesheet" href="lavage.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -50,9 +50,9 @@
                     <li class="nav-item"><a class="nav-link" href="../../Desktop/laverie/index.html">Accueil</a></li>
                     <li class="nav-item"><a class="nav-link active" href="a-propos.html">À propos</a></li>
                     <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../../Desktop/tarifs.html">Tarifs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../Desktop/laverie/tarifs.html">Tarifs</a></li>
                     <li class="nav-item"><a class="nav-link" href="client.html">Clients</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../../Desktop/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../Desktop/laverie/contact.html">Contact</a></li>
 
                 </ul>
 
@@ -61,6 +61,46 @@
     </nav>
 
 
+<!-- REGISTER MODAL -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Créer un compte</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="registerForm" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nom complet</label>
+            <input type="text" class="form-control" id="registerName" placeholder="Votre nom" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" id="registerEmail" placeholder="votre@email.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Téléphone</label>
+            <input type="tel" class="form-control" id="registerPhone" placeholder="+228 90 00 00 00" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mot de passe</label>
+            <input type="password" class="form-control" id="registerPassword" placeholder="Min. 6 caractères" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Confirmer le mot de passe</label>
+            <input type="password" class="form-control" id="registerPasswordConfirm" placeholder="••••••••" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-cta w-100">Créer mon compte</button>
+          <hr style="border-color:var(--border);">
+          <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+            Déjà un compte ? <a href="#" id="openLoginLink" style="font-weight:600;">Se connecter</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
     <!-- ================= HERO ================= -->
     <section class="hero-apropos">
 
@@ -748,6 +788,57 @@
     <br><br>
     
 
+    <!-- ================= NOTRE EQUIPE ================= -->
+    <section class="section-padding" style="background:#0d1117;">
+        <div class="container">
+            <div class="section-title text-center">
+                <span>NOTRE ÉQUIPE</span>
+                <h2>Des passionnés au <strong>service de votre véhicule</strong></h2>
+                <div class="underline"></div>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4 col-lg-3">
+                    <div class="card formule-card text-center">
+                        <div class="card-body p-4">
+                            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:2rem;color:#fff;font-weight:800;">AD</div>
+                            <h6 style="color:#fff;font-weight:700;">Amadou D.</h6>
+                            <small style="color:var(--text-muted);">Fondateur & Directeur</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="card formule-card text-center">
+                        <div class="card-body p-4">
+                            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#f43f5e,#fb923c);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:2rem;color:#fff;font-weight:800;">FK</div>
+                            <h6 style="color:#fff;font-weight:700;">Fatima K.</h6>
+                            <small style="color:var(--text-muted);">Responsable Qualité</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="card formule-card text-center">
+                        <div class="card-body p-4">
+                            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#3b82f6);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:2rem;color:#fff;font-weight:800;">KM</div>
+                            <h6 style="color:#fff;font-weight:700;">Kofi M.</h6>
+                            <small style="color:var(--text-muted);">Chef d'équipe Lavage</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section>
+        <div class="container">
+            <div class="reservation-banner">
+                <h2 class="mb-3"><i class="bi bi-calendar-event me-2"></i>Envie d'essayer BIDÈ ?</h2>
+                <p class="mb-4">Réservez votre premier lavage et profitez de -20% avec le code BIDE2026.</p>
+                <a href="../../Desktop/laverie/contact.html" class="btn"><i class="bi bi-arrow-right-circle me-2"></i>Nous contacter</a>
+            </div>
+        </div>
+    </section>
+
     <!-- ================= FOOTER ================= -->
    
 <footer class="footer">
@@ -765,8 +856,8 @@
         <ul class="list-unstyled">
           <li class="mb-2"><a href="../../Desktop/laverie/index.html">Accueil</a></li>
           <li class="mb-2"><a href="a-propos.html">À Propos</a></li>
-          <li class="mb-2"><a href="../../Desktop/tarifs.html">Tarifs</a></li>
-          <li class="mb-2"><a href="../../Desktop/contact.html">Contact</a></li>
+          <li class="mb-2"><a href="../../Desktop/laverie/tarifs.html">Tarifs</a></li>
+          <li class="mb-2"><a href="../../Desktop/laverie/contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="col-lg-3">
@@ -778,12 +869,14 @@
         </ul>
       </div>
       <div class="col-lg-3">
-        <h6 class="fw-bold mb-3">Suivez-nous</h6>
+        <h6 class="fw-bold mb-3">Contactez-nous</h6>
+        <a href="https://wa.me/22890000000?text=Bonjour%20BID%C3%88%2C%20je%20souhaite%20r%C3%A9server%20un%20lavage." target="_blank" rel="noopener" class="btn btn-whatsapp mb-3">
+            <i class="bi bi-whatsapp me-2"></i>WhatsApp
+        </a>
         <div class="d-flex gap-3">
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="fs-4" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="fs-4" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-          <a href="https://www.whatsapp.com/" target="_blank" rel="noopener" class="fs-4" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
-          <a href="https://www.tiktok.com/" target="_blank" rel="noopener" class="fs-4" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-tiktok"></i></a>
         </div>
       </div>
     </div>
@@ -800,7 +893,7 @@
     ></script>
 
     <!-- JavaScript personnalisé -->
-    <script src="lavage.js"></script>
+    <script src="main.js"></script>
 
 </body>
 </html>

@@ -331,6 +331,12 @@ const currentUser = JSON.parse(
     localStorage.getItem("bideCurrentUser") || "null"
 );
 
+/* === PROTECTION D'ACCÈS === */
+if (!currentUser || !currentUser.email) {
+    window.location.href = "../../Desktop/laverie/index.html#loginModal";
+    throw new Error("Non connecté — redirection vers la connexion.");
+}
+
 const accountId = currentUser && currentUser.email
     ? currentUser.email.toLowerCase()
     : "guest";
@@ -1009,26 +1015,11 @@ if (logoutBtn) {
 logoutBtn.addEventListener(
     "click",
     function() {
-
-        const confirmation =
-            confirm(
-                "Voulez-vous vous déconnecter ?"
-            );
-
-
+        const confirmation = confirm("Voulez-vous vous déconnecter ?");
         if (confirmation) {
-
             localStorage.removeItem("bideCurrentUser");
-
-            alert(
-                "Vous êtes déconnecté."
-            );
-
-            window.location.href =
-                "../../Desktop/laverie/index.html";
-
+            window.location.href = "../../Desktop/laverie/index.html";
         }
-
     }
 );
 }
@@ -1085,5 +1076,64 @@ updateReservationCount();
 displayNextAppointment();
 
 startVehicleTracking();
+
+/* ==========================================
+   MODIFICATION MOT DE PASSE
+========================================== */
+
+const changePasswordForm = document.getElementById("changePasswordForm");
+if (changePasswordForm) {
+    changePasswordForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const currentPwd = document.getElementById("currentPassword").value;
+        const newPwd = document.getElementById("newPassword").value;
+        const confirmPwd = document.getElementById("confirmPassword").value;
+        const successEl = document.getElementById("passwordSuccess");
+        const errorEl = document.getElementById("passwordError");
+        const errorMsg = document.getElementById("passwordErrorMsg");
+
+        successEl.style.display = "none";
+        errorEl.style.display = "none";
+
+        if (newPwd.length < 6) {
+            errorEl.style.display = "block";
+            errorMsg.textContent = "Le mot de passe doit contenir au moins 6 caractères.";
+            return;
+        }
+        if (newPwd !== confirmPwd) {
+            errorEl.style.display = "block";
+            errorMsg.textContent = "Les mots de passe ne correspondent pas.";
+            return;
+        }
+
+        /* Hash SHA-256 */
+        async function hashPwd(pwd) {
+            const data = new TextEncoder().encode(pwd);
+            const buf = await crypto.subtle.digest("SHA-256", data);
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+        }
+
+        const hashedCurrent = await hashPwd(currentPwd);
+        const users = JSON.parse(localStorage.getItem("bideUsers") || "[]");
+        const userIndex = users.findIndex(u => u.email === currentUser.email);
+
+        if (userIndex === -1 || users[userIndex].password !== hashedCurrent) {
+            errorEl.style.display = "block";
+            errorMsg.textContent = "Le mot de passe actuel est incorrect.";
+            return;
+        }
+
+        const hashedNew = await hashPwd(newPwd);
+        users[userIndex].password = hashedNew;
+        localStorage.setItem("bideUsers", JSON.stringify(users));
+
+        currentUser.password = hashedNew;
+        localStorage.setItem("bideCurrentUser", JSON.stringify(currentUser));
+
+        changePasswordForm.reset();
+        successEl.style.display = "block";
+        setTimeout(() => { successEl.style.display = "none"; }, 5000);
+    });
+}
 
 } /* fin du guard reservationForm */
