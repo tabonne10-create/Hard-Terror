@@ -31,9 +31,12 @@
         <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/client.html">Clients</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
-      <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
+      <button class="btn btn-login" id="loginButton">
         <i class="bi bi-person-circle me-1"></i> Login
       </button>
+      <!-- <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
+        <i class="bi bi-person-circle me-1"></i> Login
+      </button> -->
     </div>
   </div>
 </nav>
@@ -304,7 +307,7 @@
               <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Séchage microfibre</li>
               <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Vitrage intérieur</li>
             </ul>
-            <a href="../lavage1/lavage/services.html" class="btn btn-outline-light mt-3 w-100" style="border-radius:24px;"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
+            <a href="../../lavage1/lavage/services.html" class="btn btn-outline-light mt-3 w-100" style="border-radius:24px;"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
           </div>
         </div>
       </div>
@@ -322,7 +325,7 @@
               <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Nettoyage tableau de bord</li>
               <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Parfum d'ambiance</li>
             </ul>
-            <a href="../lavage1/lavage/services.html" class="btn btn-cta mt-3 w-100"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
+            <a href="../../lavage1/lavage/services.html" class="btn btn-cta mt-3 w-100"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
           </div>
         </div>
       </div>
@@ -339,7 +342,7 @@
               <li class="py-1 border-bottom"><i class="bi bi-check-circle text-success me-2"></i>Traitement cuir & plastique</li>
               <li class="py-1"><i class="bi bi-check-circle text-success me-2"></i>Parfum premium</li>
             </ul>
-            <a href="../lavage1/lavage/services.html" class="btn btn-outline-light mt-3 w-100" style="border-radius:24px;"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
+            <a href="../../lavage1/lavage/services.html" class="btn btn-outline-light mt-3 w-100" style="border-radius:24px;"><i class="bi bi-info-circle me-1"></i>En savoir plus</a>
           </div>
         </div>
       </div>
@@ -681,6 +684,10 @@
 <!-- ===== ANIMATIONS SPÉCIALES INDEX ===== -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Redirection vers le login
+  document.getElementById('loginButton').addEventListener('click', function() {
+    window.location.href = "../../login.html";
+  })
 
   /* --- POPUP BIENVENUE (1ère visite) --- */
   if (!localStorage.getItem('bide_welcomed')) {
