@@ -243,10 +243,11 @@ section + section { padding-top: 0; }
 .bg-blue-light { background: var(--bg-card); }
 .accordion { --bs-accordion-bg: var(--bg-card); --bs-accordion-border-color: var(--border); }
 .accordion-item { background: var(--bg-card) !important; border-color: var(--border) !important; border-radius: var(--radius) !important; margin-bottom: 12px; overflow: hidden; }
-.accordion-button { color: var(--text) !important; font-weight: 600; background: var(--bg-card) !important; }
-.accordion-button:not(.collapsed) { background: rgba(14,165,233,.08) !important; color: #fff !important; }
+.accordion-button { color: var(--text) !important; font-weight: 600; background: #fff !important; }
+.accordion-button:not(.collapsed) { background: rgba(14,165,233,.08) !important; color: var(--text) !important; }
 .accordion-button::after { filter: invert(1); }
-.accordion-body { color: var(--text-muted); }
+.accordion-body { color: var(--text-muted); line-height: 1.7; padding: 18px 24px; }
+.accordion-body strong, .accordion-body p { color: var(--text) !important; }
 .divider { width: 60px; height: 3px; background: var(--gradient); margin: 12px auto; border-radius: 2px; }
 
 /* ===== FORMS ===== */
@@ -658,12 +659,14 @@ body { background: var(--bg); color: var(--text); }
 .navbar-toggler-icon { filter: brightness(0); }
 .hero, .hero-apropos { background: linear-gradient(rgba(244, 250, 255, .35), rgba(244, 250, 255, .35)), url("../../lavage1/lavage/voiture1.jpg") center / cover; border-bottom-color: var(--border); }
 .hero, .hero-apropos, .dash-hero { position: relative; overflow: hidden; background: #dff3fc; }
-.hero::after, .hero-apropos::after, .dash-hero::after { content: ''; position: absolute; inset: 0; background: rgba(244, 250, 255, .25); z-index: 0; }
+.hero::after, .hero-apropos::after, .dash-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 100%); z-index: 2; }
 .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-.hero > .container, .hero-apropos > .hero-overlay, .dash-hero > .container { position: relative; z-index: 1; }
-.hero h1, .hero-apropos h1, .section-title h2, .card-header h5, .concept-content h3, .ecologie h2, .equipment-card h4, .photo-title, .advantage-card h5, .step-card h5, .stat-item .stat-num, .footer h5, .footer h6, .dash-hero h1, .section-heading h2, .profile strong, .vehicle-info h3, .progress-header strong, .appointment-content h4, .history-info h3, .history-price strong, .saved-vehicle h3, .loyalty-points, .notification-item h3 { color: var(--text) !important; }
+.hero > .container, .hero-apropos > .hero-overlay, .dash-hero > .container { position: relative; z-index: 3; }
+.hero h1, .section-title h2, .card-header h5, .concept-content h3, .ecologie h2, .equipment-card h4, .photo-title, .advantage-card h5, .step-card h5, .stat-item .stat-num, .footer h5, .footer h6, .dash-hero h1, .section-heading h2, .profile strong, .vehicle-info h3, .progress-header strong, .appointment-content h4, .history-info h3, .history-price strong, .saved-vehicle h3, .loyalty-points, .notification-item h3 { color: var(--text) !important; }
+.hero h1 { color: #fff !important; text-shadow: 0 2px 8px rgba(0,0,0,.4); }
 .hero h1 span, .hero-apropos h1 span, .section-title h2 strong, .section-title span, .section-label, .section-kicker { color: var(--primary) !important; }
-.hero .lead, .hero-apropos p, .section-title p, .concept-content p, .ecologie p, .equipment-card p, .testimonial-card > p, .step-card p, .stat-item .stat-label, .quick-contact-card p, .footer p, .footer li, .dash-hero p, .vehicle-info p, .appointment-content p, .history-info p, .saved-vehicle p, .loyalty-card p, .notification-item p, .notification-item small { color: var(--text-muted) !important; }
+.hero .lead, .section-title p, .concept-content p, .ecologie p, .equipment-card p, .testimonial-card > p, .step-card p, .stat-item .stat-label, .quick-contact-card p, .footer p, .footer li, .dash-hero p, .vehicle-info p, .appointment-content p, .history-info p, .saved-vehicle p, .loyalty-card p, .notification-item p, .notification-item small { color: var(--text-muted) !important; }
+.hero .lead { color: #e2e8f0 !important; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
 .badge-custom { color: var(--primary); border-color: var(--primary); }
 .btn-primary-custom, .btn-feedback { background: var(--gradient); color: #fff; }
 .btn-primary-custom:hover, .btn-feedback:hover { background: var(--primary-dark); color: #fff; }
@@ -683,9 +686,12 @@ section + section { padding-top: 24px; }
 .form-control, .form-select, .reservation-card .form-control, .reservation-card .form-select, .vehicle-form .form-control { background-color: #fff !important; color: var(--text) !important; border-color: #b9d8e9 !important; padding: 13px 16px; }
 .form-label, .reservation-card label, .vehicle-form label { color: var(--text) !important; }
 .table > :not(caption) > * > * { color: var(--text); border-color: var(--border); }
-.reservation-banner, .price-calculator { background: linear-gradient(135deg, #0284c7, #38bdf8); border-color: #7dd3fc; padding: 58px 46px; }
-.reservation-banner p, .reservation-banner h2, .price-calculator h2, .price-calculator p { color: #fff; }
-.price-calculator .section-kicker { color: #e0f2fe !important; }
+.reservation-banner { background: linear-gradient(135deg, #0284c7, #38bdf8); border-color: #7dd3fc; padding: 58px 46px; }
+.reservation-banner p, .reservation-banner h2 { color: #fff; }
+.price-calculator { background: #fff; border: 2px solid var(--border); padding: 58px 46px; }
+.price-calculator h2 { color: var(--text) !important; }
+.price-calculator p { color: var(--text-muted) !important; }
+.price-calculator .section-kicker { color: var(--primary) !important; }
 .filter-btn { background: #fff; color: var(--text); border-color: #b9d8e9; padding: 10px 20px; }
 .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 .modal-content { background: #fff; border-color: var(--border); }
@@ -704,9 +710,7 @@ section + section { padding-top: 24px; }
 .reservation-card, .next-appointment { padding: 34px; }
 .loyalty-card { padding: 30px; }
 .notification-item { padding: 20px 22px; }
-.hero .row > .col-lg-6:first-child { flex: 0 0 43%; max-width: 43%; }
-.hero .row > .col-lg-6:last-child { flex: 0 0 57%; max-width: 57%; }
-@media (max-width: 991px) { .hero .row > .col-lg-6:first-child, .hero .row > .col-lg-6:last-child { flex: 0 0 100%; max-width: 100%; } }
+
 @media (max-width: 575px) { section { padding: 58px 0; } .section-padding, .ecologie, .feedback-section, .testimonials { padding: 70px 0; } .card-body, .contact-info-card, .advantage-card, .step-card, .equipment-card, .testimonial-card, .quick-contact-card { padding: 22px !important; } .dashboard-section { padding: 24px 18px; } .reservation-banner, .price-calculator { padding: 36px 22px; } }
 
 /* ===== VERSION PLUS LÉGÈRE — TARIFS ===== */
@@ -714,6 +718,8 @@ section + section { padding-top: 24px; }
 .tarifs-page section + section { padding-top: 12px; }
 .tarifs-page .section-title { margin-bottom: 28px; }
 .tarifs-page .price-calculator { margin-bottom: 32px !important; padding: 34px 30px; box-shadow: 0 6px 18px rgba(2, 132, 199, .08); }
+.tarifs-page .price-calculator .btn-cta { background: linear-gradient(135deg, #0284c7, #0ea5e9); color: #fff !important; font-weight: 700; padding: 12px 28px; border-radius: 30px; }
+.tarifs-page .price-calculator .btn-cta:hover { background: linear-gradient(135deg, #0284c7, #06d6a0); box-shadow: 0 4px 16px rgba(2, 132, 199, .3); }
 .tarifs-page .tarif-card { box-shadow: 0 4px 14px rgba(2, 132, 199, .05); }
 .tarifs-page .tarif-card .card-body { padding: 22px !important; }
 .tarifs-page .tarif-card .card-header { padding: 16px 20px; }
