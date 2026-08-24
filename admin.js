@@ -563,7 +563,7 @@ function loadFeedbacks() {
         <div class="feedback-item">
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <span class="fw-bold text-navy">${escapeHTML(fb.author)}</span>
-                <span class="stars">${'★'.repeat(fb.rating)}${'☆'.repeat(5 - fb.rating)}</span>
+                <span class="stars">${'<i class="bi bi-star-fill"></i>'.repeat(fb.rating)}${'<i class="bi bi-star"></i>'.repeat(5 - fb.rating)}</span>
             </div>
             <div class="small text-muted mb-2">
                 <span class="badge bg-light text-dark border me-1">${escapeHTML(fb.vehicle || 'Engin')}</span>

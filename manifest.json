@@ -1,0 +1,36 @@
+{
+  "name": "LAVAGE BIDÈ – Lavage Auto Premium",
+  "short_name": "BIDÈ",
+  "description": "Application de lavage automobile écologique premium. Réservez votre créneau, suivez votre lavage et gérez votre compte.",
+  "start_url": "Desktop/laverie/index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4faff",
+  "theme_color": "#0284c7",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["business", "lifestyle"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

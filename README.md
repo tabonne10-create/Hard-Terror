@@ -7,6 +7,7 @@ Application web statique de gestion d'une station de lavage automobile et d'engi
 ## Sommaire
 
 - [Fonctionnalités](#fonctionnalités)
+- [Nouveautés récentes](#nouveautés-récentes)
 - [Architecture](#architecture)
 - [Cohérence de la plateforme](#cohérence-de-la-plateforme)
 - [Installation et lancement](#installation-et-lancement)
@@ -35,10 +36,12 @@ La partie publique présente les services de LAVAGE BIDÈ et permet de :
 - consulter les services de lavage ;
 - consulter la page À propos ;
 - consulter les informations de contact et la localisation ;
-- ouvrir une connexion client ou une connexion à un portail interne ;
+- ouvrir une connexion client ou un accès direct à l'espace client ;
 - effectuer une réservation rapide depuis l'accueil ;
 - envoyer un formulaire de contact ;
+- consulter les retours anonymes d'autres clients ;
 - accéder au lien WhatsApp de la station ;
+- afficher des vidéos en arrière-plan dans les sections hero ;
 - afficher des animations, compteurs et sections révélées au défilement.
 
 ### Espace client
@@ -54,7 +57,8 @@ L'espace client permet de :
 - consulter les notifications ;
 - marquer les notifications comme lues ;
 - modifier le mot de passe du compte client ;
-- se déconnecter.
+- afficher un profil enrichi (email, téléphone, avatar avec initiales) ;
+- se déconnecter proprement (nettoyage de `localStorage` et `sessionStorage`).
 
 ### Gestion des opérations
 
@@ -120,16 +124,85 @@ Le portail laveur permet de :
 - modifier le mot de passe ;
 - se déconnecter.
 
+## Nouveautés récentes
+
+La dernière mise à jour a apporté des modifications significatives sur l'ensemble de la vitrine publique et de l'espace client :
+
+### Refonte visuelle claire
+
+Toutes les pages publiques et l'espace client ont été migrés vers un thème clair bleu/blanc. Les anciens styles sombres cyan/vert sont remplacés par une palette cohérente :
+
+- **Fond principal :** `#f4faff` (bleu très pâle)
+- **Couleur d'accent :** `#0284c7` → `#0ea5e9` (dégradé bleu)
+- **Cartes :** blanc avec bordures `#d7eaf5` et ombres bleutées légères
+- **Texte :** `#17324d` (primaire) / `#5d7488` (secondaire)
+
+Chaque type de page dispose de sa propre classe CSS ciblée :
+
+| Classe | Page |
+|---|---|
+| `.tarifs-page` | Tarifs publics (`Desktop/laverie/tarifs.html`) |
+| `.services-page` | Services (`lavage1/lavage/services.html`) |
+| `.client-page` | Espace client (`lavage1/lavage/client.html`) |
+
+### Vidéos en arrière-plan
+
+Les sections hero des pages Accueil, Contact, Tarifs, À propos, Services et Espace client intègrent désormais une vidéo de lavage en lecture automatique (muette, en boucle). La vidéo est fournie dans `Desktop/laverie/IMAGE/video.mp4` et `Desktop/laverie/IMAGE/video2.mp4` avec une image de secours (`poster`) pour les navigateurs ne supportant pas la lecture vidéo.
+
+### Bouton « Espace client » unifié
+
+Les barres de navigation des pages publiques présentent désormais un bouton **« Espace client »** au lieu du bouton « Login » ouvrant une modale. Ce bouton redirige directement vers `lavage1/lavage/client.html`. L'ancien flux modale est conservé uniquement sur la page d'accueil pour les nouveaux utilisateurs.
+
+### Affichage des retours clients
+
+Les pages publiques affichent désormais les **6 derniers retours anonymes** soumis via le formulaire de feedback. Les avis sont rendus dynamiquement sous forme de cartes avec type, message et date.
+
+### Icônes Bootstrap dans les filtres tarifs et les étoiles
+
+Les boutons de filtre par catégorie utilisent désormais des **icônes Bootstrap Icons** au lieu d'emojis pour une meilleure cohérence visuelle et un affichage plus professionnel.
+
+Les étoiles de notation (avis clients) dans `admin.js` et `a-propos.html` utilisent également des icônes `bi-star-fill` / `bi-star` au lieu des caractères Unicode ★☆.
+
+### Informations de contact mises à jour
+
+Les numéros de téléphone et le lien WhatsApp ont été mis à jour avec les vrais coordonnées de la station :
+
+- Téléphone 1 : `+228 70 45 70 07`
+- Téléphone 2 : `+228 93 39 53 77`
+- WhatsApp : `+228 71 02 65 75`
+
+### Profil client amélioré
+
+L'espace client affiche désormais :
+
+- L'**email** et le **téléphone** du client dans la zone de profil
+- Un **avatar avec initiales** générées automatiquement à partir du nom
+- Une **déconnexion propre** qui nettoie à la fois `localStorage` et `sessionStorage`
+
+### Liens réseaux sociaux dans le footer
+
+Tous les footers des pages publiques contiennent des liens vers les réseaux sociaux de BIDÈ (Facebook, Instagram, TikTok) qui s'ouvrent dans un nouvel onglet avec `target="_blank"` et `rel="noopener"`.
+
+### Progressive Web App (PWA)
+
+Le projet est désormais installable comme application sur mobile et ordinateur grâce à :
+
+- Un fichier `manifest.json` déclarant le nom, les icônes, le thème et le mode d'affichage
+- Un service worker `sw.js` qui met en cache les pages visitées et les vidéos hero
+- Une icône SVG `icon.svg` pour la barre d'adresse et l'écran d'accueil
+- Le bouton **« Installer »** apparaît automatiquement sur Chrome/Edge Android
+
 ## Architecture
 
 Le projet est une application HTML/CSS/JavaScript sans framework front-end.
 
 - **Bootstrap 5.3.3** : mise en page et composants d'interface.
-- **Bootstrap Icons** : icônes de navigation et d'actions.
+- **Bootstrap Icons 1.11.3** : icônes de navigation et d'actions (utilisées dans les filtres tarifs et les boutons).
 - **Leaflet** : carte de localisation lorsqu'elle est chargée.
 - **Chart.js** : graphiques du tableau de bord administrateur.
 - **QRCode.js** : génération des tickets QR du gestionnaire.
 - **JavaScript natif** : logique métier, navigation, stockage et rendu dynamique.
+- **Service Worker** : cache intelligent des pages et vidéos pour la PWA et le mode hors ligne.
 
 Le projet contient deux ensembles publics historiques qui ont été reliés par des chemins relatifs :
 
@@ -137,6 +210,15 @@ Le projet contient deux ensembles publics historiques qui ont été reliés par 
 - `lavage1/lavage/` contient À propos, Services et Client.
 
 Les liens entre ces deux ensembles ont été corrigés pour pointer vers les fichiers réellement présents.
+
+### Organisation CSS
+
+Chaque ensemble public dispose de son propre fichier `style.css` contenant :
+
+- Les variables CSS du thème clair (déclarées dans `:root`)
+- Les styles de base partagés (navbar, hero, cartes, formulaires)
+- Les styles spécifiques à chaque type de page (`.tarifs-page`, `.services-page`, `.client-page`)
+- Les animations et transitions responsives
 
 ## Cohérence de la plateforme
 
@@ -152,7 +234,7 @@ La vitrine et les portails internes partagent une partie de leur modèle métier
 | Comptes | Les clients utilisent `bideUsers`/`bideCurrentUser`, tandis que les employés utilisent `bide_users`/`bide_current_user`. | Il existe deux systèmes d'identité séparés. |
 | Catégories | L'admin et la vitrine présentent 9 catégories, tandis que le modèle du gestionnaire contient aussi `citadine`. | Les listes et statistiques peuvent présenter des nombres différents. |
 | Point d'entrée | Le `index.html` situé à la racine redirige vers `login.html`. La vitrine est dans `Desktop/laverie/index.html`. | Un visiteur arrivant à la racine voit le portail interne au lieu de l'accueil public. |
-| Design | La vitrine est sombre cyan/vert ; les portails internes sont majoritairement clairs bleu/blanc. | L'identité visuelle n'est pas totalement homogène. |
+| Design | La vitrine et les portails publics utilisent désormais un thème claire bleu/blanc cohérent. Les portails internes sont majoritairement clairs bleu/blanc. | L'identité visuelle est en cours d'harmonisation. |
 
 ### Plan d'amélioration priorisé
 
@@ -264,7 +346,10 @@ Le projet ne contient pas encore de suite de tests automatisés. La validation a
 - la modification des tarifs et leur lecture dans la caisse ;
 - la création d'une réservation, d'un véhicule et d'un reçu ;
 - la sauvegarde et la restauration des données locales ;
-- l'affichage sur ordinateur et mobile.
+- l'affichage sur ordinateur et mobile ;
+- la lecture automatique des vidéos hero ;
+- l'affichage des feedbacks anonymes dans les pages publiques ;
+- le fonctionnement du bouton « Espace client » dans la navbar.
 
 Avant une mise en production, ajouter des tests automatisés de navigation, d'authentification, de permissions, de calcul des prix et de paiement.
 
@@ -275,11 +360,21 @@ Le projet peut être déployé comme site statique sur GitHub Pages, Netlify, Ve
 1. Publier l'intégralité du dossier `Hard-Terror` en conservant l'arborescence.
 2. Configurer la racine du site sur le dossier du projet.
 3. Vérifier que `index.html`, `login.html`, `Desktop/laverie/` et `lavage1/lavage/` sont accessibles.
-4. Vérifier les chemins relatifs et le chargement des images.
+4. Vérifier les chemins relatifs et le chargement des images et vidéos.
 5. Tester les CDN Bootstrap, Bootstrap Icons, Chart.js, Leaflet et QRCode.js.
 6. Activer HTTPS sur l'hébergement.
+7. Vérifier que les vidéos hero se chargent correctement (formats MP4, taille ~45 Mo et ~17 Mo).
 
 Le déploiement statique ne transforme pas l'application en solution serveur : les données restent propres au navigateur de chaque utilisateur et ne sont pas partagées entre appareils.
+
+### Installation PWA sur mobile
+
+Une fois déployé avec HTTPS, les utilisateurs Android peuvent installer l'application :
+1. Ouvrir le site dans Chrome
+2. Appuyer sur « Installer l'application » ou le menu ⋮ → « Installer l'application »
+3. L'icône BIDÈ apparaît sur l'écran d'accueil
+4. Le site s'ouvre en mode application (sans barre d'adresse)
+5. Les pages visitées fonctionnent **hors ligne** grâce au service worker
 
 ### Dépendances externes
 
@@ -288,19 +383,28 @@ Les bibliothèques suivantes sont actuellement chargées depuis des CDN :
 | Dépendance | Utilisation |
 |---|---|
 | Bootstrap 5.3.3 | Mise en page, formulaires, modales et composants |
-| Bootstrap Icons 1.11.3 | Icônes de l'interface |
+| Bootstrap Icons 1.11.3 | Icônes de l'interface et des filtres tarifs |
 | Leaflet 1.9.4 | Carte et localisation, lorsqu'elle est utilisée |
 | Chart.js | Graphiques administrateur et caisse |
 | QRCode.js 1.0.0 | Génération des tickets QR |
 
 Une connexion Internet est donc nécessaire pour disposer de toutes les fonctionnalités lorsqu'elles ne sont pas embarquées localement.
 
+### Ressources multimédia
+
+| Fichier | Taille | Utilisation |
+|---|---|---|
+| `Desktop/laverie/IMAGE/video.mp4` | ~45 Mo | Vidéo hero principale (pages Accueil, Contact, Tarifs, Services, À propos) |
+| `Desktop/laverie/IMAGE/video2.mp4` | ~17 Mo | Vidéo hero secondaire |
+| `Desktop/laverie/Génération Vidéo Lavage Voiture.mp4` | ~4 Mo | Ressource vidéo de démonstration |
+| `Desktop/laverie/img/` | Divers | Images avant/après de véhicules |
+
 ## Parcours utilisateur
 
 ### Client
 
 1. Ouvrir la vitrine.
-2. Cliquer sur `Login` ou sur `Connexion client`.
+2. Cliquer sur `Espace client` dans la navbar ou sur `Login` puis créer un compte.
 3. Créer un compte avec un nom, un email, un téléphone et un mot de passe d'au moins six caractères.
 4. Après inscription, l'utilisateur est redirigé vers `lavage1/lavage/client.html`.
 5. Ajouter un véhicule puis effectuer une réservation.
@@ -369,10 +473,12 @@ Les données sont stockées localement dans le navigateur. Les principales clés
 | `reconciliations` | Rapprochements de caisse |
 | `bide_laveurs` | Liste des laveurs |
 | `bide_notifications` | Notifications internes |
+| `bide_feedbacks` | Retours anonymes clients (affichés sur les pages publiques) |
 | `bideVehicles_<email>` | Véhicules d'un client |
 | `bideReservations_<email>` | Réservations d'un client |
 | `bideHistory_<email>` | Historique d'un client |
 | `bideWashCount_<email>` | Compteur de lavages d'un client |
+| `bide_welcomed` | Flag de première visite (popup de bienvenue) |
 
 La synchronisation entre les écrans ouverts dans le même navigateur utilise principalement l'événement `storage`.
 
@@ -407,6 +513,10 @@ Hard-Terror/
 ├── index.html                 # Point d'entrée et redirection
 ├── login.html                 # Connexion des employés
 ├── auth.js                    # Sessions, rôles et gardes d'accès
+├── manifest.json              # Métadonnées PWA (nom, icônes, thème)
+├── sw.js                      # Service Worker (cache pages et vidéos)
+├── icon.svg                   # Icône SVG pour la PWA et le favicon
+├── logo.jpg                   # Logo JPEG pour les icônes PWA
 ├── admin.html                 # Tableau de bord administrateur
 ├── admin.js                   # Tarifs, statistiques, graphiques et sauvegarde
 ├── admin.css                  # Styles administrateur
@@ -436,14 +546,19 @@ Hard-Terror/
 │   ├── tarifs.html            # Tarifs publics
 │   ├── contact.html           # Contact et localisation
 │   ├── main.js                # Connexion client et interactions publiques
-│   └── style.css              # Styles de la vitrine
+│   ├── style.css              # Styles de la vitrine (thème clair)
+│   ├── IMAGE/
+│   │   ├── video.mp4          # Vidéo hero principale
+│   │   ├── video2.mp4         # Vidéo hero secondaire
+│   │   └── voiture1.jpg (1).jpeg  # Image de secours pour vidéo
+│   └── img/                   # Images avant/après véhicules
 ├── lavage1/lavage/
 │   ├── a-propos.html          # Présentation de BIDÈ
 │   ├── services.html          # Services et formules
 │   ├── client.html            # Espace client
 │   ├── main.js                # Logique publique partagée
 │   ├── lavage.js              # Fonctionnalités de l'espace client
-│   └── style.css              # Styles publics et client
+│   └── style.css              # Styles publics et client (thème clair)
 └── images/                    # Ressources graphiques du projet
 ```
 
@@ -469,6 +584,22 @@ Vérifier la clé `tariffs` dans le stockage du navigateur et recharger les écr
 
 Les bibliothèques sont chargées depuis des CDN. Vérifier la connexion Internet ou utiliser une version locale des dépendances.
 
+### La vidéo hero ne se lit pas
+
+Vérifier que le fichier `video.mp4` est présent dans `Desktop/laverie/IMAGE/` et que le serveur local est utilisé (certains navigateurs bloquent la lecture vidéo depuis `file://`). Vérifier également que l'autorisation de lecture automatique n'est pas bloquée par le navigateur.
+
+### Les feedbacks ne s'affichent pas
+
+Les retours sont stockés dans la clé `bide_feedbacks` du `localStorage`. Si aucun feedback n'a été soumis, un message « Aucun retour n'a encore été enregistré » est affiché.
+
+### La PWA ne s'installe pas
+
+Vérifier que le site est accessible en HTTPS (requis pour le service worker). Ouvrir Chrome DevTools → onglet **Application** → **Service Workers** pour vérifier l'état. Vider le cache du navigateur si le SW est bloqué sur une ancienne version.
+
+### Le service worker affiche des erreurs
+
+Vérifier que `sw.js` est bien accessible depuis la racine du serveur. Les erreurs de chemin (404) empêchent l'enregistrement. Consulter la console du navigateur pour les détails.
+
 ## Limites connues
 
 - Les modules publics historiques sont répartis entre `Desktop/laverie/` et `lavage1/lavage/`.
@@ -476,8 +607,9 @@ Les bibliothèques sont chargées depuis des CDN. Vérifier la connexion Interne
 - Les feedbacks utilisent plusieurs clés historiques : `bideFeedbacks`, `bide_feedbacks` et `feedbacks`.
 - Les pages publiques ne partagent pas toujours exactement les mêmes formulaires et composants de connexion.
 - Les données de démonstration peuvent apparaître au premier lancement.
-- Les bibliothèques CDN, les cartes et les QR codes dépendent de la connexion Internet.
+- Les bibliothèques CDN, les cartes, les QR codes et les vidéos dépendent de la connexion Internet.
 - Les tests automatisés, l'intégration continue et la journalisation ne sont pas encore configurés.
+- Les vidéos hero pèsent environ 45 Mo et 17 Mo, ce qui peut ralentir le chargement initial sur des connexions lentes.
 
 ## Limites et sécurité
 

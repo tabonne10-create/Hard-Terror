@@ -643,14 +643,14 @@ body {
 .navbar-toggler-icon { filter: brightness(0); }
 
 .hero, .hero-apropos {
-    background: linear-gradient(rgba(244, 250, 255, .88), rgba(244, 250, 255, .88)), url("voiture1.jpg") center / cover;
+    background: linear-gradient(rgba(244, 250, 255, .35), rgba(244, 250, 255, .35)), url("voiture1.jpg") center / cover;
     border-bottom-color: var(--border);
 }
 .hero, .hero-apropos, .dash-hero { position: relative; overflow: hidden; background: #dff3fc; }
-.hero::after, .hero-apropos::after, .dash-hero::after { content: ''; position: absolute; inset: 0; background: rgba(244, 250, 255, .64); z-index: 0; }
-.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.hero::after, .hero-apropos::after, .dash-hero::after { content: ''; position: absolute; inset: 0; background: rgba(244, 250, 255, .25); z-index: 0; }
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 .hero > .container, .hero-apropos > .hero-overlay, .dash-hero > .container { position: relative; z-index: 1; }
-.hero-apropos { background-image: linear-gradient(rgba(244, 250, 255, .88), rgba(244, 250, 255, .88)), url("moto2.jpg"); }
+.hero-apropos { background-image: linear-gradient(rgba(244, 250, 255, .35), rgba(244, 250, 255, .35)), url("moto2.jpg"); }
 .hero h1, .hero-apropos h1, .section-title h2, .card-header h5,
 .concept-content h3, .ecologie h2, .equipment-card h4, .photo-title,
 .advantage-card h5, .step-card h5, .stat-item .stat-num, .footer h5, .footer h6,
