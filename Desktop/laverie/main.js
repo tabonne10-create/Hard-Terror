@@ -232,6 +232,25 @@ document.addEventListener('DOMContentLoaded', function () {
      7. FEEDBACK ANONYME
      ============================================ */
   var feedbackForm = document.getElementById('feedbackForm');
+  var localFeedbackList = document.getElementById('localFeedbackList');
+  function renderLocalFeedbacks() {
+    if (!localFeedbackList) return;
+    var feedbacks = JSON.parse(localStorage.getItem('bide_feedbacks') || '[]');
+    localFeedbackList.innerHTML = '';
+    if (feedbacks.length === 0) {
+      localFeedbackList.innerHTML = '<div class="col-12"><div class="feedback-empty"><i class="bi bi-chat-square-text"></i><p>Aucun retour n\'a encore été enregistré.</p></div></div>';
+      return;
+    }
+    feedbacks.slice(-6).reverse().forEach(function (feedback) {
+      var card = document.createElement('div');
+      card.className = 'col-md-6 col-lg-4';
+      card.innerHTML = '<article class="feedback-item"><span class="feedback-type"></span><p class="feedback-message"></p><small class="feedback-date"><i class="bi bi-calendar3 me-1"></i></small></article>';
+      card.querySelector('.feedback-type').textContent = feedback.type || 'Avis client';
+      card.querySelector('.feedback-message').textContent = '"' + (feedback.message || '') + '"';
+      card.querySelector('.feedback-date').append(document.createTextNode(feedback.date ? new Date(feedback.date).toLocaleDateString('fr-FR') : '')); 
+      localFeedbackList.appendChild(card);
+    });
+  }
   if (feedbackForm) {
     feedbackForm.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -251,6 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         date: new Date().toISOString()
       });
       localStorage.setItem('bide_feedbacks', JSON.stringify(feedbacks));
+      renderLocalFeedbacks();
       feedbackForm.reset();
       var successMsg = document.getElementById('feedbackSuccess');
       if (successMsg) successMsg.style.display = '';
@@ -259,6 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 4000);
     });
   }
+  renderLocalFeedbacks();
 
   /* ============================================
      8. SCROLL REVEAL

@@ -326,6 +326,14 @@ section + section { padding-top: 0; }
 .anonymous-info { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; padding: 12px; background: rgba(0,242,254,0.05); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-muted); font-size: 14px; }
 .anonymous-info i { color: var(--neon-cyan); font-size: 20px; }
 .local-feedback { padding: 60px 0; }
+.feedback-item, .feedback-empty { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 6px 18px rgba(2, 132, 199, .06); }
+.feedback-item { height: 100%; }
+.feedback-type { display: inline-block; color: var(--primary); font-size: .75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.feedback-message { color: var(--text); margin: 0 0 18px; }
+.feedback-date { color: var(--text-muted); }
+.feedback-empty { text-align: center; color: var(--text-muted); }
+.feedback-empty i { display: block; color: var(--primary); font-size: 2rem; margin-bottom: 8px; }
+.feedback-empty p { margin: 0; }
 
 /* ===== AVANTAGES / HOW IT WORKS / STATS (index) ===== */
 .advantages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
@@ -594,4 +602,236 @@ section + section { padding-top: 0; }
     border-color: var(--primary);
     transform: translateY(-2px);
     background: rgba(14,165,233,.08);
+}
+
+/* ===== REFONTE CLAIRE — PAGES PUBLIQUES ET ESPACE CLIENT ===== */
+:root {
+    --primary: #0284c7;
+    --primary-dark: #0369a1;
+    --accent: #0ea5e9;
+    --bg: #f4faff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f0f9ff;
+    --border: #d7eaf5;
+    --text: #17324d;
+    --text-muted: #5d7488;
+    --text-light: #7890a3;
+    --gradient: linear-gradient(135deg, #0284c7, #38bdf8);
+    --neon-cyan: #0284c7;
+    --neon-blue: #38bdf8;
+    --card-bg: #ffffff;
+    --blue-pale: #e0f2fe;
+    --off-white: #f4faff;
+    --gray: #5d7488;
+    --border-color: #bae6fd;
+    --border-hover: #38bdf8;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.navbar {
+    background: rgba(255, 255, 255, .96) !important;
+    border-bottom-color: var(--border);
+}
+.navbar-brand small, .navbar-brand span { color: var(--text) !important; }
+.nav-link { color: #4b6478 !important; }
+.nav-link:hover, .nav-link.active { color: var(--primary) !important; background: #e0f2fe; }
+.navbar-toggler { border-color: #111827; }
+.navbar-toggler-icon { filter: brightness(0); }
+
+.hero, .hero-apropos {
+    background: linear-gradient(rgba(244, 250, 255, .88), rgba(244, 250, 255, .88)), url("voiture1.jpg") center / cover;
+    border-bottom-color: var(--border);
+}
+.hero, .hero-apropos, .dash-hero { position: relative; overflow: hidden; background: #dff3fc; }
+.hero::after, .hero-apropos::after, .dash-hero::after { content: ''; position: absolute; inset: 0; background: rgba(244, 250, 255, .64); z-index: 0; }
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.hero > .container, .hero-apropos > .hero-overlay, .dash-hero > .container { position: relative; z-index: 1; }
+.hero-apropos { background-image: linear-gradient(rgba(244, 250, 255, .88), rgba(244, 250, 255, .88)), url("moto2.jpg"); }
+.hero h1, .hero-apropos h1, .section-title h2, .card-header h5,
+.concept-content h3, .ecologie h2, .equipment-card h4, .photo-title,
+.advantage-card h5, .step-card h5, .stat-item .stat-num, .footer h5, .footer h6,
+.dash-hero h1, .section-heading h2, .profile strong, .vehicle-info h3,
+.progress-header strong, .appointment-content h4, .history-info h3, .history-price strong,
+.saved-vehicle h3, .loyalty-points, .notification-item h3 {
+    color: var(--text) !important;
+}
+.hero h1 span, .hero-apropos h1 span, .section-title h2 strong,
+.section-title span, .section-label, .section-kicker { color: var(--primary) !important; }
+.hero .lead, .hero-apropos p, .section-title p, .concept-content p,
+.ecologie p, .equipment-card p, .testimonial-card > p, .step-card p,
+.stat-item .stat-label, .quick-contact-card p, .footer p, .footer li,
+.dash-hero p, .vehicle-info p, .appointment-content p, .history-info p,
+.saved-vehicle p, .loyalty-card p, .notification-item p, .notification-item small { color: var(--text-muted) !important; }
+
+.badge-custom { color: var(--primary); border-color: var(--primary); }
+.btn-primary-custom, .btn-feedback { background: var(--gradient); color: #fff; }
+.btn-primary-custom:hover, .btn-feedback:hover { background: var(--primary-dark); color: #fff; }
+
+section { padding: 84px 0; }
+section + section { padding-top: 24px; }
+.section-padding, .ecologie, .feedback-section, .testimonials { padding: 104px 0; }
+.ecologie, .equipment-section, .testimonials, .feedback-section { background: #eaf6fd; color: var(--text); }
+
+.card, .formule-card, .tarif-card, .advantage-card, .step-card, .stats-bar,
+.contact-info-card, .testimonial-card, .equipment-card, .feedback-card,
+.reservation-section, .quick-contact-card, .dashboard-section, .profile,
+.stat-card, .vehicle-card, .reservation-card, .next-appointment, .loyalty-card,
+.saved-vehicle, .notification-item, .vehicle-form {
+    background: #fff !important;
+    border-color: var(--border) !important;
+    box-shadow: 0 8px 24px rgba(2, 132, 199, .07);
+}
+.card:hover, .formule-card:hover, .tarif-card:hover, .advantage-card:hover,
+.equipment-card:hover, .quick-contact-card:hover, .testimonial-card:hover {
+    border-color: #7dd3fc !important;
+    box-shadow: 0 12px 28px rgba(2, 132, 199, .13);
+}
+.card-body, .contact-info-card, .advantage-card, .step-card, .equipment-card,
+.testimonial-card, .quick-contact-card { padding: 30px !important; }
+.card-header { background: #f0f9ff !important; border-bottom-color: var(--border) !important; padding: 20px 24px; }
+.concept-content { padding: 42px; }
+.concept-points { margin-top: 38px; }
+.point { gap: 18px; margin-bottom: 26px; }
+.point i, .eco-list i, .icon-box i, .feedback-icon { color: var(--primary); }
+.eco-card { background: #fff; border-color: var(--border-color); padding: 58px; }
+.form-control, .form-select, .reservation-card .form-control, .reservation-card .form-select,
+.vehicle-form .form-control { background-color: #fff !important; color: var(--text) !important; border-color: #b9d8e9 !important; padding: 13px 16px; }
+.form-label, .reservation-card label, .vehicle-form label { color: var(--text) !important; }
+.table > :not(caption) > * > * { color: var(--text); border-color: var(--border); }
+.reservation-banner, .price-calculator { background: linear-gradient(135deg, #0284c7, #38bdf8); border-color: #7dd3fc; padding: 58px 46px; }
+.reservation-banner p, .reservation-banner h2, .price-calculator h2, .price-calculator p { color: #fff; }
+.price-calculator .section-kicker { color: #e0f2fe !important; }
+.filter-btn { background: #fff; color: var(--text); border-color: #b9d8e9; padding: 10px 20px; }
+.filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.modal-content { background: #fff; border-color: var(--border); }
+.modal-header { background: #e0f2fe; border-bottom-color: var(--border); }
+.modal-header .modal-title, .modal-body .form-label { color: var(--text); }
+.modal-header .btn-close-white { filter: none; }
+.dash-hero { background: linear-gradient(135deg, #e0f2fe, #f8fdff); border-bottom-color: var(--border); padding: 64px 0 54px; }
+.stats { margin-top: -34px; margin-bottom: 52px; gap: 22px; }
+.dashboard-section { padding: 36px; margin-bottom: 30px; }
+.section-heading { margin-bottom: 30px; }
+.profile { padding: 16px 22px; }
+.vehicle-info { background: #f8fcff; border-bottom-color: var(--border); padding: 30px 34px; }
+.wash-progress { padding: 34px; }
+.progress { background: #e6f2f8; }
+.history-list, .notifications-list, .vehicles-grid { gap: 18px; }
+.reservation-card, .next-appointment { padding: 34px; }
+.loyalty-card { padding: 30px; }
+.notification-item { padding: 20px 22px; }
+
+.hero .row > .col-lg-6:first-child { flex: 0 0 43%; max-width: 43%; }
+.hero .row > .col-lg-6:last-child { flex: 0 0 57%; max-width: 57%; }
+
+@media (max-width: 991px) {
+    .hero .row > .col-lg-6:first-child, .hero .row > .col-lg-6:last-child { flex: 0 0 100%; max-width: 100%; }
+}
+@media (max-width: 575px) {
+    section { padding: 58px 0; }
+    .section-padding, .ecologie, .feedback-section, .testimonials { padding: 70px 0; }
+    .card-body, .contact-info-card, .advantage-card, .step-card, .equipment-card,
+    .testimonial-card, .quick-contact-card { padding: 22px !important; }
+    .dashboard-section { padding: 24px 18px; }
+    .reservation-banner, .price-calculator { padding: 36px 22px; }
+}
+
+/* ===== VERSION PLUS LÉGÈRE — SERVICES ET ESPACE CLIENT ===== */
+.services-page section { padding: 64px 0; }
+.services-page section + section { padding-top: 12px; }
+.services-page .section-title { margin-bottom: 28px; }
+.services-page .card, .services-page .formule-card { box-shadow: 0 4px 14px rgba(2, 132, 199, .05); }
+.services-page .card-body { padding: 24px !important; }
+.services-page .card-header { padding: 16px 20px; }
+.services-page .row.g-4 { --bs-gutter-y: 1.25rem; }
+
+.client-page .dash-hero { padding: 48px 0 40px; }
+.client-page .stats { margin-bottom: 36px; gap: 16px; }
+.client-page .stat-card { padding: 18px 16px; box-shadow: 0 4px 14px rgba(2, 132, 199, .05); }
+.client-page .dashboard-section { padding: 26px; margin-bottom: 22px; box-shadow: 0 4px 14px rgba(2, 132, 199, .05); }
+.client-page .section-heading { margin-bottom: 22px; }
+.client-page .vehicle-info, .client-page .wash-progress, .client-page .reservation-card, .client-page .next-appointment { padding: 24px; }
+.client-page .history-list, .client-page .notifications-list, .client-page .vehicles-grid { gap: 12px; }
+.client-page .saved-vehicle, .client-page .notification-item { padding: 15px 17px; }
+
+@media (max-width: 575px) {
+    .services-page section { padding: 48px 0; }
+    .client-page .dashboard-section { padding: 20px 16px; }
+    .client-page .stats { margin-bottom: 28px; }
+}
+
+/* ===== CONTRASTE SUR FONDS CLAIRS ===== */
+.card:not(.reservation-banner) h5,
+.card:not(.reservation-banner) h6,
+.formule-card h5,
+.formule-card h6,
+.tarif-card h5,
+.tarif-card h6,
+.contact-info-card h5,
+.contact-info-card h6,
+.contact-info-card h5 i,
+.section-title h2,
+.section-title h2 i,
+.photo-title,
+.modal-content h3 {
+    color: #111827 !important;
+}
+
+.services-page .card-body h6,
+.services-page .card-body h6[style],
+.client-page .card-body h5,
+.client-page .card-body h6,
+.tarifs-page .card-body h5,
+.tarifs-page .card-body h6 {
+    color: #111827 !important;
+}
+
+.btn-outline-light {
+    color: #17324d !important;
+    border-color: #7c9aae !important;
+}
+.btn-outline-light:hover {
+    color: #fff !important;
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+.footer {
+    background: #eaf6fd !important;
+    border-top-color: #c5e4f3;
+    color: #334155;
+}
+.footer h5,
+.footer h6 {
+    color: #111827 !important;
+}
+.footer p,
+.footer li,
+.footer-bottom {
+    color: #334155 !important;
+}
+.footer a:not(.btn-whatsapp) {
+    color: #334155 !important;
+}
+.footer a:not(.btn-whatsapp):hover {
+    color: var(--primary) !important;
+}
+.footer .d-flex.gap-3 a:not(.btn-whatsapp) {
+    border-color: #9fc8dc;
+}
+.footer-bottom {
+    border-top-color: #c5e4f3;
+}
+
+.reservation-banner .btn {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border-color: #ffffff !important;
+}
+.reservation-banner .btn:hover {
+    background: #e0f2fe !important;
+    color: #111827 !important;
 }

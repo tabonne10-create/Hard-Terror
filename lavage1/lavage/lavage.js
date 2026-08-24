@@ -437,8 +437,21 @@ if (currentUser) {
     const displayName = currentUser.name || "Client";
     const clientName = document.getElementById("clientName");
     const profileName = document.getElementById("profileName");
+    const profileEmail = document.getElementById("profileEmail");
+    const profilePhone = document.getElementById("profilePhone");
+    const profileAvatar = document.querySelector(".profile-avatar");
     if (clientName) clientName.textContent = displayName;
     if (profileName) profileName.textContent = displayName;
+    if (profileEmail) profileEmail.textContent = currentUser.email || "Client BIDÈ";
+    if (profilePhone) profilePhone.textContent = currentUser.phone || "";
+    if (profileAvatar) {
+        profileAvatar.textContent = displayName
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(function(part) { return part.charAt(0).toUpperCase(); })
+            .join("");
+    }
 } else {
     window.location.href = "../../Desktop/laverie/index.html#loginModal";
 }
@@ -1018,6 +1031,7 @@ logoutBtn.addEventListener(
         const confirmation = confirm("Voulez-vous vous déconnecter ?");
         if (confirmation) {
             localStorage.removeItem("bideCurrentUser");
+            sessionStorage.removeItem("bideCurrentUser");
             window.location.href = "../../Desktop/laverie/index.html";
         }
     }

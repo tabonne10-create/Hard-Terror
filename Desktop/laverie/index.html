@@ -31,12 +31,12 @@
         <li class="nav-item"><a class="nav-link" href="../../lavage1/lavage/client.html">Clients</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
-      <button class="btn btn-login" id="loginButton">
+      <a class="btn btn-login" id="loginButton" href="../../login.html">
         <i class="bi bi-person-circle me-1"></i> Login
+      </a>
+      <button class="btn btn-cta ms-lg-2 mt-2 mt-lg-0" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">
+        <i class="bi bi-person-badge me-1"></i> Espace client
       </button>
-      <!-- <button class="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
-        <i class="bi bi-person-circle me-1"></i> Login
-      </button> -->
     </div>
   </div>
 </nav>
@@ -123,7 +123,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content" style="border:2px solid var(--accent); background:var(--bg-card);">
       <div class="modal-body text-center p-5">
-        <div style="font-size:3rem; margin-bottom:10px;">🎉</div>
+        <div style="font-size:3rem; margin-bottom:10px;"><i class="bi bi-stars" aria-hidden="true"></i></div>
         <h3 style="color:#fff; font-weight:800;">Bienvenue chez BIDÈ !</h3>
         <p style="color:var(--text-muted); font-size:1.1rem; margin:15px 0;">Profitez de <strong style="color:var(--accent);">-20%</strong> sur votre premier lavage</p>
         <div style="background:rgba(6,214,160,.1); border:1px dashed var(--accent); border-radius:12px; padding:15px; margin:20px 0;">
@@ -140,6 +140,9 @@
 
 <!-- ===== HERO ===== -->
 <section class="hero" style="margin-top:62px;">
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="IMAGE/voiture1.jpg (1).jpeg" aria-hidden="true">
+    <source src="IMAGE/video.mp4" type="video/mp4">
+  </video>
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-6 mb-4 mb-lg-0">
@@ -160,6 +163,10 @@
 <!-- ===== 1. COMPTEUR ANIMÉ ===== -->
 <section style="padding-top:0;">
   <div class="container">
+    <div class="section-title mb-4">
+      <h2>Nos <strong>chiffres clés</strong></h2>
+      <div class="underline"></div>
+    </div>
     <div class="stats-bar">
       <div class="row text-center">
         <div class="col-6 col-md-3 stat-item">
@@ -468,7 +475,7 @@
         </div>
         <div class="contact-info-card">
           <h5><i class="bi bi-telephone me-2"></i>Contact</h5>
-          <p class="mb-0"><a href="tel:+22890000000">+228 90 00 00 00</a></p>
+          <p class="mb-0"><a href="tel:+22870457007">+228 70 45 70 07</a><br><a href="tel:+22893395377">+228 93 39 53 77</a></p>
         </div>
       </div>
     </div>
@@ -660,7 +667,7 @@
       </div>
       <div class="col-lg-3">
         <h6 class="fw-bold mb-3">Contactez-nous</h6>
-        <a href="https://wa.me/22890000000?text=Bonjour%20BID%C3%88%2C%20je%20souhaite%20r%C3%A9server%20un%20lavage." target="_blank" rel="noopener" class="btn btn-whatsapp mb-3">
+        <a href="https://wa.me/22871026575?text=Bonjour%20BID%C3%88%2C%20je%20souhaite%20r%C3%A9server%20un%20lavage." target="_blank" rel="noopener" class="btn btn-whatsapp mb-3">
           <i class="bi bi-whatsapp me-2"></i>WhatsApp
         </a>
         <div class="d-flex gap-3">
@@ -684,11 +691,6 @@
 <!-- ===== ANIMATIONS SPÉCIALES INDEX ===== -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Redirection vers le login
-  document.getElementById('loginButton').addEventListener('click', function() {
-    window.location.href = "../../login.html";
-  })
-
   /* --- POPUP BIENVENUE (1ère visite) --- */
   if (!localStorage.getItem('bide_welcomed')) {
     setTimeout(function() {
