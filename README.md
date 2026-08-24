@@ -559,6 +559,11 @@ Hard-Terror/
 │   ├── main.js                # Logique publique partagée
 │   ├── lavage.js              # Fonctionnalités de l'espace client
 │   └── style.css              # Styles publics et client (thème clair)
+├── redmeimg/
+│   ├── AKB13.jpeg            # Photo - Koffi Brice ALY
+│   ├── Jeovani (2).jpeg      # Photo - Koffi José-Jéovani SOVON
+│   ├── priscille 5.jpeg      # Photo - Adjo Priscille DZIWONU
+│   └── valentin.jpeg         # Photo - Koami Valentin TAGA
 └── images/                    # Ressources graphiques du projet
 ```
 
@@ -645,12 +650,37 @@ Pour passer à une version production :
 
 La conception de LAVAGE BIDÈ a été réalisée collectivement, depuis la maquette et la rédaction des cahiers des charges jusqu'à l'écriture du code dans l'éditeur Nano, aux tests et au déploiement de l'application.
 
-| Développeur | Responsabilités principales |
-|---|---|
-| **Koffi José-Jéovani SOVON** | Conception et développement de la partie **Administration** et **Caisse** ; participation aux cahiers des charges, aux tests et au déploiement. |
-| **Adjo Priscille DZIWONU** | Conception et développement de l'**Accueil**, de la page **Contact** et de la page **Tarifs** ; participation aux cahiers des charges, aux tests et au déploiement. |
-| **Koffi Brice ALY** | Conception et développement des portails **Gestionnaire** et **Laveur** ; participation aux cahiers des charges, aux tests et au déploiement. |
-| **Koami Valentin TAGA** | Conception et développement des pages **À propos**, **Services** et **Clients** ; participation aux cahiers des charges, aux tests et au déploiement. |
+<table>
+  <thead>
+    <tr>
+      <th>Développeur</th>
+      <th>Photo</th>
+      <th>Responsabilités principales</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Koffi José-Jéovani SOVON</strong></td>
+      <td align="center"><img src="redmeimg/Jeovani%20(2).jpeg" alt="Koffi José-Jéovani SOVON" width="120" height="120" style="border-radius:50%;object-fit:cover;"></td>
+      <td>Conception et développement de la partie <strong>Administration</strong> et <strong>Caisse</strong> ; participation aux cahiers des charges, aux tests et au déploiement.</td>
+    </tr>
+    <tr>
+      <td><strong>Adjo Priscille DZIWONU</strong></td>
+      <td align="center"><img src="redmeimg/priscille%205.jpeg" alt="Adjo Priscille DZIWONU" width="120" height="120" style="border-radius:50%;object-fit:cover;"></td>
+      <td>Conception et développement de l'<strong>Accueil</strong>, de la page <strong>Contact</strong> et de la page <strong>Tarifs</strong> ; participation aux cahiers des charges, aux tests et au déploiement.</td>
+    </tr>
+    <tr>
+      <td><strong>Koffi Brice ALY</strong></td>
+      <td align="center"><img src="redmeimg/AKB13.jpeg" alt="Koffi Brice ALY" width="120" height="120" style="border-radius:50%;object-fit:cover;"></td>
+      <td>Conception et développement des portails <strong>Gestionnaire</strong> et <strong>Laveur</strong> ; participation aux cahiers des charges, aux tests et au déploiement.</td>
+    </tr>
+    <tr>
+      <td><strong>Koami Valentin TAGA</strong></td>
+      <td align="center"><img src="redmeimg/valentin.jpeg" alt="Koami Valentin TAGA" width="120" height="120" style="border-radius:50%;object-fit:cover;"></td>
+      <td>Conception et développement des pages <strong>À propos</strong>, <strong>Services</strong> et <strong>Clients</strong> ; participation aux cahiers des charges, aux tests et au déploiement.</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Répartition du travail
 
